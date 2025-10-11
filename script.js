@@ -18,6 +18,8 @@ const messagesDiv = document.getElementById('messages');
 const recipientInput = document.getElementById('recipient');
 const themeToggle = document.getElementById('theme-toggle');
 
+let currentMessage = ""; // For share popup
+
 // Generate category buttons
 Object.keys(categories).forEach(cat => {
   const btn = document.createElement('button');
@@ -40,12 +42,18 @@ function showMessages(cat){
   categories[cat].forEach(msg => {
     const div = document.createElement('div');
     div.className = 'message';
-    div.innerHTML = `<p>${personalize(msg)}</p><div class='btns'><button onclick="share('${msg.replace(/'/g,"\\\\'")}')">Share</button><button onclick="copyMsg('${msg.replace(/'/g,"\\\\'")}')">Copy</button></div>`;
+    div.innerHTML = `
+      <p>${personalize(msg)}</p>
+      <div class='btns'>
+        <button onclick="share('${msg.replace(/'/g,"\\\\'")}')">Share (Device)</button>
+        <button onclick="copyMsg('${msg.replace(/'/g,"\\\\'")}')">Copy</button>
+        <button onclick="openSharePopup('${msg.replace(/'/g,"\\\\'")}')">More</button>
+      </div>`;
     messagesDiv.appendChild(div);
   });
 }
 
-// Share
+// Device share
 function share(text){
   const message = personalize(text);
   if(navigator.share){ navigator.share({text: message}); }
@@ -76,23 +84,47 @@ function confetti(){
   setTimeout(()=>confettiDiv.remove(),2500);
 }
 
-// Light/Dark mode toggle
+// Light/Dark mode
 function setTheme(theme){
   if(theme==='dark'){ document.body.classList.add('dark-mode'); themeToggle.textContent='🌜'; }
   else { document.body.classList.remove('dark-mode'); themeToggle.textContent='🌞'; }
 }
 
-// Load saved theme
 const savedTheme = localStorage.getItem('theme');
 if(savedTheme) setTheme(savedTheme);
 
-// Toggle button
 themeToggle.addEventListener('click',()=>{
   if(document.body.classList.contains('dark-mode')){
-    setTheme('light');
-    localStorage.setItem('theme','light');
+    setTheme('light'); localStorage.setItem('theme','light');
   } else {
-    setTheme('dark');
-    localStorage.setItem('theme','dark');
+    setTheme('dark'); localStorage.setItem('theme','dark');
   }
+});
+
+// Share popup functions
+function openSharePopup(msg){
+  currentMessage = personalize(msg);
+  document.getElementById('share-popup').classList.remove('hidden');
+}
+
+document.getElementById('close-btn').addEventListener('click',()=>{
+  document.getElementById('share-popup').classList.add('hidden');
+});
+
+document.getElementById('whatsapp-btn').addEventListener('click',()=>{
+  window.open(`https://wa.me/?text=${encodeURIComponent(currentMessage)}`,'_blank');
+});
+document.getElementById('twitter-btn').addEventListener('click',()=>{
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentMessage)}`,'_blank');
+});
+document.getElementById('facebook-btn').addEventListener('click',()=>{
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentMessage)}`,'_blank');
+});
+document.getElementById('tiktok-btn').addEventListener('click',()=>{
+  alert("TikTok sharing is not direct. Copy the message to share there.");
+});
+document.getElementById('copy-btn').addEventListener('click',()=>{
+  navigator.clipboard.writeText(currentMessage);
+  alert('Message copied!');
+  confetti();
 });
