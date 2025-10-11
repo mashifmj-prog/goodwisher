@@ -1,10 +1,15 @@
 let currentBaseMessage = '';
 
 function updateMessageWithName() {
-  const name = document.getElementById('recipientName').value.trim();
+  const recipientName = document.getElementById('recipientName').value.trim();
+  const senderName = document.getElementById('senderName').value.trim();
   const customMessage = document.getElementById('customMessage');
-  if (currentBaseMessage && name) {
-    customMessage.value = `${name}\n${currentBaseMessage}`;
+  if (currentBaseMessage && recipientName && senderName) {
+    customMessage.value = `${recipientName}\n\n${currentBaseMessage}\n\nRegards\n${senderName}`;
+  } else if (currentBaseMessage && recipientName) {
+    customMessage.value = `${recipientName}\n\n${currentBaseMessage}`;
+  } else if (currentBaseMessage && senderName) {
+    customMessage.value = `${currentBaseMessage}\n\nRegards\n${senderName}`;
   } else if (currentBaseMessage) {
     customMessage.value = currentBaseMessage;
   }
@@ -15,20 +20,69 @@ function displayMessage() {
   const messageDiv = document.getElementById('message');
   const customMessage = document.getElementById('customMessage');
   const messages = {
-    birthday: 'Wishing you a fantastic birthday filled with joy! 🎉',
-    anniversary: 'Cheers to your love and another year together! 💕',
-    'get-well': 'Sending you warm wishes for a speedy recovery! 🌻',
-    congrats: 'Big congrats on your amazing achievement! 🏆',
-    'thank-you': 'Thank you for your amazing support and kindness! 🙏',
-    'good-luck': 'Wishing you the best of luck in your next adventure! 🍀',
-    motivation: 'Keep shining, you’ve got this! 🚀',
-    appreciation: 'Your efforts are truly appreciated! 🌟',
-    farewell: 'Wishing you all the best on your new journey! 👋',
-    encouragement: 'You’re stronger than you know, keep pushing forward! 💪',
-    love: 'You make every moment special with your love! ❤️',
-    condolences: 'Sending heartfelt condolences in this time of loss. 🕊️'
+    birthday: [
+      'Wishing you a fantastic birthday filled with joy! 🎉',
+      'Happy birthday! May your day be full of laughter and love! 🎂',
+      'Celebrating you today! Have an amazing birthday! 🥳'
+    ],
+    anniversary: [
+      'Cheers to your love and another year together! 💕',
+      'Happy anniversary! Here’s to many more shared moments! 💑',
+      'Congratulations on your milestone! Love grows stronger! 💖'
+    ],
+    'get-well': [
+      'Sending you warm wishes for a speedy recovery! 🌻',
+      'Get well soon! Thinking of you with care and warmth! 💊',
+      'Wishing you strength and health in no time! 🌿'
+    ],
+    congrats: [
+      'Big congrats on your amazing achievement! 🏆',
+      'Well done! Your success is truly inspiring! 🎈',
+      'Congratulations! Keep shining bright! 🌟'
+    ],
+    'thank-you': [
+      'Thank you for your amazing support and kindness! 🙏',
+      'Grateful for you! Your help means the world! 😊',
+      'Thank you from the heart for all you do! 💝'
+    ],
+    'good-luck': [
+      'Wishing you the best of luck in your next adventure! 🍀',
+      'Good luck! You’re going to do great things! 🌈',
+      'All the best for your journey ahead! 🚪'
+    ],
+    motivation: [
+      'Keep shining, you’ve got this! 🚀',
+      'You’re unstoppable! Keep pushing forward! 💥',
+      'Believe in yourself, you’re on the right path! 🌟'
+    ],
+    appreciation: [
+      'Your efforts are truly appreciated! 🌟',
+      'Thank you for your incredible work and dedication! 👏',
+      'You make a difference, and it’s noticed! 💛'
+    ],
+    farewell: [
+      'Wishing you all the best on your new journey! 👋',
+      'Farewell, but not goodbye! Shine in your next chapter! 🌍',
+      'Best wishes as you embark on new adventures! 🚶'
+    ],
+    encouragement: [
+      'You’re stronger than you know, keep pushing forward! 💪',
+      'You’ve got this! Keep going with courage! 🦁',
+      'Stay strong, you’re capable of amazing things! 🌼'
+    ],
+    love: [
+      'You make every moment special with your love! ❤️',
+      'My heart is yours, always and forever! 💞',
+      'Your love lights up my world! 🌹'
+    ],
+    condolences: [
+      'Sending heartfelt condolences in this time of loss. 🕊️',
+      'With you in spirit, offering deepest sympathy. 🌹',
+      'May love and memories bring you comfort. 🙏'
+    ]
   };
-  currentBaseMessage = messages[occasion] || '';
+  const messageList = messages[occasion] || [''];
+  currentBaseMessage = messageList[Math.floor(Math.random() * messageList.length)];
   messageDiv.textContent = currentBaseMessage;
   updateMessageWithName();
 }
@@ -186,5 +240,13 @@ function submitFeedback() {
   alert('Thanks for your feedback! It helps us improve. 😊');
 }
 
-// Load saved messages on page load
-window.onload = displaySavedMessages;
+// Load saved messages and log feedback button status
+window.onload = function() {
+  displaySavedMessages();
+  const feedbackButton = document.getElementById('feedbackButton');
+  if (feedbackButton) {
+    console.log('Feedback button loaded successfully');
+  } else {
+    console.error('Feedback button not found in DOM');
+  }
+};
