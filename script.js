@@ -1,4 +1,3 @@
-// script.js
 function displayMessage() {
   const occasion = document.getElementById('occasion').value;
   const messageDiv = document.getElementById('message');
@@ -40,6 +39,41 @@ function displaySavedMessages() {
   savedMessagesDiv.innerHTML = saved.length ? '<h2 class="text-lg font-semibold mb-2">Saved Messages:</h2>' + saved.map((msg, i) => `<p class="text-gray-600 mb-1">${i + 1}. ${msg}</p>`).join('') : '';
 }
 
+function getMessageWithPromo() {
+  const customMessage = document.getElementById('customMessage').value;
+  if (!customMessage) return '';
+  return `${customMessage}\n\nCreated with GoodWisher! Make your own message: https://mashifmj-prog.github.io/goodwisher/`;
+}
+
+function shareWhatsApp() {
+  const message = getMessageWithPromo();
+  if (!message) return;
+  const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
+function shareFacebook() {
+  const message = getMessageWithPromo();
+  if (!message) return;
+  const url = `https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
+function shareTwitter() {
+  const message = getMessageWithPromo();
+  if (!message) return;
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
+function shareEmail() {
+  const message = getMessageWithPromo();
+  if (!message) return;
+  const subject = encodeURIComponent('A Special Message from GoodWisher');
+  const body = encodeURIComponent(message);
+  const url = `mailto:?subject=${subject}&body=${body}`;
+  window.location.href = url;
+}
+
 // Load saved messages on page load
 window.onload = displaySavedMessages;
-
