@@ -92,6 +92,28 @@ header p {
   transform: scale(1.05);
 }
 
+/* Message card improvements */
+.message {
+  background: var(--btn-bg);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.message:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.message .btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
 .message-section { border-top: 1px solid #ddd; padding-top: 20px; }
 .message-section h2 { color: var(--btn-text); margin-bottom: 10px; }
 
@@ -103,32 +125,6 @@ header p {
   margin-bottom: 15px;
   background: var(--bg-color);
   color: var(--text-color);
-}
-
-.message {
-  background: var(--btn-bg);
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  transition: background 0.3s, color 0.3s;
-}
-
-.message button {
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  cursor: pointer;
-  background: var(--btn-text);
-  color: var(--btn-bg);
-  transition: 0.2s;
-}
-
-.message button:hover {
-  background: var(--btn-bg);
-  color: var(--btn-text);
 }
 
 footer {
@@ -146,6 +142,7 @@ footer a {
 footer a:hover { text-decoration: underline; }
 .hidden { display: none; }
 
+/* Confetti */
 .confetti {
   position: fixed;
   top: 0;
@@ -166,4 +163,46 @@ footer a:hover { text-decoration: underline; }
 @keyframes fall {
   from { transform: translateY(0) rotate(0deg); opacity: 1; }
   to { transform: translateY(500px) rotate(720deg); opacity: 0; }
+}
+
+/* Share popup */
+#share-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-color);
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+#share-popup.hidden { display: none; }
+
+#share-popup h3 { margin-top: 0; text-align: center; color: var(--btn-text); }
+
+.popup-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.popup-buttons button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  transition: 0.2s;
+}
+
+.popup-buttons button:hover {
+  background: var(--btn-text);
+  color: var(--btn-bg);
 }
