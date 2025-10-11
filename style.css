@@ -1,7 +1,7 @@
 /* Custom styles for GoodWisher with gender-neutral theme */
 body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(180deg, #F3F4F6 0%, #E6FFFA 100%); /* Soft gray to light teal gradient */
+  background: linear-gradient(180deg, #F3F4F6 0%, #E6FFFA 100%);
   min-height: 100vh;
   margin: 0;
 }
@@ -11,8 +11,8 @@ body {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Style for the select dropdown and input */
-select#occasion, input#recipientName {
+/* Style for the select dropdown and inputs */
+select#occasion, input#recipientName, input#senderName {
   background-color: #fff;
   border-color: #d1d5db;
   font-size: 1rem;
@@ -21,8 +21,8 @@ select#occasion, input#recipientName {
 
 /* Hover effect for textarea */
 textarea#customMessage {
-  resize: vertical; /* Allow vertical resize only */
-  min-height: 80px;
+  resize: vertical;
+  min-height: 100px;
   max-height: 200px;
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -40,15 +40,22 @@ button {
 }
 
 button:hover {
-  transform: translateY(-2px); /* Slight lift effect on hover */
+  transform: translateY(-2px);
+}
+
+/* Feedback button styling for visibility */
+#feedbackButton {
+  z-index: 10;
+  border: 2px solid #1f7661;
+  font-size: 1rem;
 }
 
 /* Telegram button colors */
 .bg-telegram-500 {
-  background-color: #0088CC; /* Telegram's official blue */
+  background-color: #0088CC;
 }
 .bg-telegram-600 {
-  background-color: #0077B3; /* Slightly darker for hover */
+  background-color: #0077B3;
 }
 
 /* Style for saved messages section */
@@ -113,7 +120,7 @@ button:hover {
   button {
     padding: 0.5rem 0.75rem;
     font-size: 0.85rem;
-    flex: 1 1 48%; /* Buttons wrap nicely in two columns */
+    flex: 1 1 48%;
   }
   .flex-wrap {
     gap: 0.5rem;
