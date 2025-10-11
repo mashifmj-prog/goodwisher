@@ -1,11 +1,10 @@
-// script.js (updated with feedback functions and GA4 event)
 let currentBaseMessage = '';
 
 function updateMessageWithName() {
   const name = document.getElementById('recipientName').value.trim();
   const customMessage = document.getElementById('customMessage');
   if (currentBaseMessage && name) {
-    customMessage.value = `${name}, ${currentBaseMessage}`;
+    customMessage.value = `${name}\n${currentBaseMessage}`;
   } else if (currentBaseMessage) {
     customMessage.value = currentBaseMessage;
   }
@@ -19,7 +18,15 @@ function displayMessage() {
     birthday: 'Wishing you a fantastic birthday filled with joy! 🎉',
     anniversary: 'Cheers to your love and another year together! 💕',
     'get-well': 'Sending you warm wishes for a speedy recovery! 🌻',
-    congrats: 'Big congrats on your amazing achievement! 🏆'
+    congrats: 'Big congrats on your amazing achievement! 🏆',
+    'thank-you': 'Thank you for your amazing support and kindness! 🙏',
+    'good-luck': 'Wishing you the best of luck in your next adventure! 🍀',
+    motivation: 'Keep shining, you’ve got this! 🚀',
+    appreciation: 'Your efforts are truly appreciated! 🌟',
+    farewell: 'Wishing you all the best on your new journey! 👋',
+    encouragement: 'You’re stronger than you know, keep pushing forward! 💪',
+    love: 'You make every moment special with your love! ❤️',
+    condolences: 'Sending heartfelt condolences in this time of loss. 🕊️'
   };
   currentBaseMessage = messages[occasion] || '';
   messageDiv.textContent = currentBaseMessage;
@@ -78,7 +85,6 @@ function getMessageWithPromo() {
   return `${customMessage}\n\nCreated with GoodWisher! Make your own message: https://mashifmj-prog.github.io/goodwisher/`;
 }
 
-// Sharing functions (unchanged from previous)
 function shareWhatsApp() {
   const message = getMessageWithPromo();
   if (!message) return alert('Please generate a message first!');
@@ -170,7 +176,7 @@ function submitFeedback() {
   gtag('event', 'feedback_submitted', { 
     'event_category': 'Action', 
     'event_label': 'Feedback', 
-    'value': feedback.length  // Track length for sentiment analysis
+    'value': feedback.length
   });
   const subject = encodeURIComponent('GoodWisher Feedback from User');
   const body = encodeURIComponent(`Comment: ${feedback}\n\nFrom: ${navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'} User`);
