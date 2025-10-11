@@ -1,38 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌸 GoodWisher</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-</head>
-<body class="bg-gray-100">
-  <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
-    <h1 class="text-2xl font-bold text-pink-600 text-center mb-2">🌸 GoodWisher</h1>
-    <p class="text-gray-600 text-center mb-6">Choose an occasion and share a warm message instantly.</p>
-    
-    <select id="occasion" aria-label="Select an occasion" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-pink-300" onchange="displayMessage()">
-      <option value="" disabled selected>Choose an occasion</option>
-      <option value="birthday">Birthday</option>
-      <option value="anniversary">Anniversary</option>
-      <option value="get-well">Get Well Soon</option>
-      <option value="congrats">Congratulations</option>
-    </select>
-    
-    <div id="message" class="text-lg text-gray-800 mb-4"></div>
-    
-    <textarea id="customMessage" rows="4" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-pink-300"></textarea>
-    
-    <div class="flex justify-between mb-4">
-      <button onclick="copyMessage()" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition duration-300">Copy to Clipboard</button>
-      <button onclick="saveMessage()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Save Message</button>
-    </div>
-    
-    <div id="savedMessages" class="mt-4"></div>
-  </div>
+/* Custom styles for GoodWisher with gender-neutral theme */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(180deg, #F3F4F6 0%, #E6FFFA 100%); /* Soft gray to light teal gradient */
+  min-height: 100vh;
+  margin: 0;
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+/* Ensure the main container has a smooth fade-in effect */
+.max-w-md {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Style for the select dropdown */
+select#occasion {
+  background-color: #fff;
+  border-color: #d1d5db;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect for textarea */
+textarea#customMessage {
+  resize: vertical; /* Allow vertical resize only */
+  min-height: 80px;
+  max-height: 200px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Button styling for consistency */
+button {
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover {
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+/* Style for saved messages section */
+#savedMessages p {
+  background-color: #f9fafb;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  word-break: break-word; /* Prevent overflow for long messages */
+}
+
+/* Animation for container fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Improve accessibility for focus states */
+:focus {
+  outline: none;
+}
+
+/* Adjust button layout for smaller screens */
+@media (max-width: 640px) {
+  .max-w-md {
+    padding: 1rem;
+  }
+  button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    flex: 1 1 48%; /* Buttons wrap nicely in two columns */
+  }
+  .flex-wrap {
+    gap: 0.5rem;
+  }
+}
