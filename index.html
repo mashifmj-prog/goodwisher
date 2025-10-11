@@ -1,46 +1,37 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GoodWisher - Share Kind Wishes</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="https://emojiapi.dev/api/v1/blossom/64.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌸 GoodWisher</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-<body>
-  <div class="app">
-    <header>
-      <h1>🌸 GoodWisher</h1>
-      <p>Choose an occasion and share a warm message instantly.</p>
-      <button id="theme-toggle" class="theme-btn">🌞</button>
-    </header>
-
-    <section id="category-buttons" class="category-buttons"></section>
-
-    <section id="message-section" class="message-section hidden">
-      <h2 id="category-title"></h2>
-      <input type="text" id="recipient" placeholder="Recipient name (optional)" />
-      <div id="messages"></div>
-    </section>
-
-    <footer>
-      <p>🌸 Visit the app: <a href="https://mashifmj-prog.github.io/goodwisher/" target="_blank">GoodWisher</a></p>
-    </footer>
-  </div>
-
-  <!-- Share Popup -->
-  <div id="share-popup" class="hidden">
-    <div class="popup-content">
-      <h3>Share via</h3>
-      <div class="popup-buttons">
-        <button id="whatsapp-btn">WhatsApp</button>
-        <button id="twitter-btn">Twitter</button>
-        <button id="facebook-btn">Facebook</button>
-        <button id="tiktok-btn">TikTok</button>
-        <button id="copy-btn">Copy</button>
-        <button id="close-btn">Close</button>
-      </div>
+<body class="bg-gray-100">
+  <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+    <h1 class="text-2xl font-bold text-pink-600 text-center mb-2">🌸 GoodWisher</h1>
+    <p class="text-gray-600 text-center mb-6">Choose an occasion and share a warm message instantly.</p>
+    
+    <select id="occasion" aria-label="Select an occasion" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-pink-300" onchange="displayMessage()">
+      <option value="" disabled selected>Choose an occasion</option>
+      <option value="birthday">Birthday</option>
+      <option value="anniversary">Anniversary</option>
+      <option value="get-well">Get Well Soon</option>
+      <option value="congrats">Congratulations</option>
+    </select>
+    
+    <div id="message" class="text-lg text-gray-800 mb-4"></div>
+    
+    <textarea id="customMessage" rows="4" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-pink-300"></textarea>
+    
+    <div class="flex justify-between mb-4">
+      <button onclick="copyMessage()" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition duration-300">Copy to Clipboard</button>
+      <button onclick="saveMessage()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Save Message</button>
     </div>
+    
+    <div id="savedMessages" class="mt-4"></div>
   </div>
 
   <script src="script.js"></script>
