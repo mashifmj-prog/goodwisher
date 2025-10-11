@@ -143,7 +143,7 @@ function shareWhatsApp() {
   const message = getMessageWithPromo();
   if (!message) return alert('Please generate a message first!');
   try {
-    const url = `https://wa.me/?text=${encodeURIComponent(message)}&app_absent=1`;
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'width=600,height=800');
     gtag('event', 'share_whatsapp_click', { 'event_category': 'Button', 'event_label': 'WhatsApp' });
     console.log('WhatsApp share opened:', url);
