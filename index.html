@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +14,8 @@
   <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
     <h1 class="text-2xl font-bold text-teal-700 text-center mb-2">⭐ GoodWisher</h1>
     <p class="text-gray-600 text-center mb-6">Choose an occasion and share a warm message instantly.</p>
+    
+    <input id="recipientName" type="text" placeholder="Recipient's name (optional)" class="w-full p-2 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-300" oninput="updateMessageWithName()">
     
     <select id="occasion" aria-label="Select an occasion" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-300" onchange="displayMessage()">
       <option value="" disabled selected>Choose an occasion</option>
