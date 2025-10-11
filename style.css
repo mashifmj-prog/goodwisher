@@ -1,0 +1,182 @@
+/* ========== GoodWisher Styles with Light/Dark Mode ========== */
+:root {
+  --bg-color: #f9f9ff;
+  --text-color: #333;
+  --btn-bg: #eef2ff;
+  --btn-text: #4f46e5;
+}
+
+body.dark-mode {
+  --bg-color: #1f2937;
+  --text-color: #f3f4f6;
+  --btn-bg: #374151;
+  --btn-text: #f3f4f6;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-color);
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+
+.app {
+  width: 100%;
+  max-width: 900px;
+  background: var(--bg-color);
+  margin: 20px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: background 0.3s;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+header h1 {
+  color: var(--btn-text);
+  font-size: 2.2em;
+  margin: 0;
+}
+
+header p {
+  font-size: 1em;
+  color: var(--text-color);
+}
+
+.theme-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.theme-btn:hover {
+  transform: scale(1.05);
+}
+
+.category-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.category-buttons button {
+  padding: 12px;
+  background: var(--btn-bg);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--btn-text);
+  transition: 0.2s;
+}
+
+.category-buttons button:hover {
+  background: var(--btn-text);
+  color: var(--btn-bg);
+  transform: scale(1.05);
+}
+
+.message-section {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.message-section h2 {
+  color: var(--btn-text);
+  margin-bottom: 10px;
+}
+
+#recipient {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.message {
+  background: var(--btn-bg);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.message button {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  background: var(--btn-text);
+  color: var(--btn-bg);
+  transition: 0.2s;
+}
+
+.message button:hover {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+}
+
+footer {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 0.9em;
+  color: var(--text-color);
+}
+
+footer a {
+  color: var(--btn-text);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+.hidden { display: none; }
+
+.confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
+}
+
+.confetti span {
+  position: absolute;
+  font-size: 24px;
+  animation: fall 2.5s linear forwards;
+}
+
+@keyframes fall {
+  from { transform: translateY(0) rotate(0deg); opacity: 1; }
+  to { transform: translateY(500px) rotate(720deg); opacity: 0; }
+}

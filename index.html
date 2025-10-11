@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoodWisher - Share Kind Wishes</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- 🌸 Favicon -->
+  <link rel="icon" href="https://emojiapi.dev/api/v1/blossom/64.png" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>🌸 GoodWisher</h1>
+      <p>Choose an occasion and share a warm message instantly.</p>
+      <button id="theme-toggle" class="theme-btn">🌞</button>
+    </header>
+
+    <section id="category-buttons" class="category-buttons"></section>
+
+    <section id="message-section" class="message-section hidden">
+      <h2 id="category-title"></h2>
+      <input type="text" id="recipient" placeholder="Recipient name (optional)" />
+      <div id="messages"></div>
+    </section>
+
+    <footer>
+      <p>
+        Made with ❤️ by <a href="https://github.com/mashifmj-prog" target="_blank">Mashif MJ</a> • Hosted on <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
