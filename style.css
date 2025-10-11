@@ -1,208 +1,38 @@
-:root {
-  --bg-color: #f9f9ff;
-  --text-color: #333;
-  --btn-bg: #eef2ff;
-  --btn-text: #4f46e5;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌸 GoodWisher</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+    <h1 class="text-2xl font-bold text-pink-600 text-center mb-2">🌸 GoodWisher</h1>
+    <p class="text-gray-600 text-center mb-6">Choose an occasion and share a warm message instantly.</p>
+    
+    <select id="occasion" aria-label="Select an occasion" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-pink-300" onchange="displayMessage()">
+      <option value="" disabled selected>Choose an occasion</option>
+      <option value="birthday">Birthday</option>
+      <option value="anniversary">Anniversary</option>
+      <option value="get-well">Get Well Soon</option>
+      <option value="congrats">Congratulations</option>
+    </select>
+    
+    <div id="message" class="text-lg text-gray-800 mb-4"></div>
+    
+    <textarea id="customMessage" rows="4" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-pink-300"></textarea>
+    
+    <div class="flex justify-between mb-4">
+      <button onclick="copyMessage()" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition duration-300">Copy to Clipboard</button>
+      <button onclick="saveMessage()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Save Message</button>
+    </div>
+    
+    <div id="savedMessages" class="mt-4"></div>
+  </div>
 
-body.dark-mode {
-  --bg-color: #1f2937;
-  --text-color: #f3f4f6;
-  --btn-bg: #374151;
-  --btn-text: #f3f4f6;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-color);
-  margin: 0;
-  padding: 0;
-  color: var(--text-color);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
-}
-
-.app {
-  width: 100%;
-  max-width: 900px;
-  background: var(--bg-color);
-  margin: 20px;
-  border-radius: 16px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  transition: background 0.3s;
-}
-
-header {
-  text-align: center;
-  margin-bottom: 20px;
-  position: relative;
-}
-
-header h1 {
-  color: var(--btn-text);
-  font-size: 2.2em;
-  margin: 0;
-}
-
-header p {
-  font-size: 1em;
-  color: var(--text-color);
-}
-
-.theme-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 10px;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.theme-btn:hover { transform: scale(1.05); }
-
-.category-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.category-buttons button {
-  padding: 12px;
-  background: var(--btn-bg);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--btn-text);
-  transition: 0.2s;
-}
-
-.category-buttons button:hover {
-  background: var(--btn-text);
-  color: var(--btn-bg);
-  transform: scale(1.05);
-}
-
-/* Message card improvements */
-.message {
-  background: var(--btn-bg);
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.message:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-.message .btns {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.message-section { border-top: 1px solid #ddd; padding-top: 20px; }
-.message-section h2 { color: var(--btn-text); margin-bottom: 10px; }
-
-#recipient {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  background: var(--bg-color);
-  color: var(--text-color);
-}
-
-footer {
-  text-align: center;
-  margin-top: 30px;
-  font-size: 0.9em;
-  color: var(--text-color);
-}
-
-footer a {
-  color: var(--btn-text);
-  text-decoration: none;
-}
-
-footer a:hover { text-decoration: underline; }
-.hidden { display: none; }
-
-/* Confetti */
-.confetti {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 999;
-}
-
-.confetti span {
-  position: absolute;
-  font-size: 24px;
-  animation: fall 2.5s linear forwards;
-}
-
-@keyframes fall {
-  from { transform: translateY(0) rotate(0deg); opacity: 1; }
-  to { transform: translateY(500px) rotate(720deg); opacity: 0; }
-}
-
-/* Share popup */
-#share-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--bg-color);
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-  z-index: 1000;
-  transition: opacity 0.3s ease;
-}
-
-#share-popup.hidden { display: none; }
-
-#share-popup h3 { margin-top: 0; text-align: center; color: var(--btn-text); }
-
-.popup-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.popup-buttons button {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  transition: 0.2s;
-}
-
-.popup-buttons button:hover {
-  background: var(--btn-text);
-  color: var(--btn-bg);
-}
+  <script src="script.js"></script>
+</body>
+</html>
