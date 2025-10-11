@@ -1,5 +1,3 @@
-/* ========== GoodWisher Script ========== */
-
 const categories = {
   Birthday: ["Happy Birthday! Wishing you joy and laughter all day long.","May your birthday be as wonderful as you are!"],
   Condolences: ["Sending love and strength during this difficult time.","My deepest sympathy for your loss."],
@@ -42,7 +40,7 @@ function showMessages(cat){
   categories[cat].forEach(msg => {
     const div = document.createElement('div');
     div.className = 'message';
-    div.innerHTML = `<p>${personalize(msg)}</p><div class='btns'><button onclick="share('${msg.replace(/'/g,\"\\\\'\")}')">Share</button><button onclick="copyMsg('${msg.replace(/'/g,\"\\\\'\")}')">Copy</button></div>`;
+    div.innerHTML = `<p>${personalize(msg)}</p><div class='btns'><button onclick="share('${msg.replace(/'/g,"\\\\'")}')">Share</button><button onclick="copyMsg('${msg.replace(/'/g,"\\\\'")}')">Copy</button></div>`;
     messagesDiv.appendChild(div);
   });
 }
@@ -63,4 +61,38 @@ function copyMsg(text){
   confetti();
 }
 
-// Conf
+// Confetti animation
+function confetti(){
+  const confettiDiv = document.createElement('div');
+  confettiDiv.className='confetti';
+  for(let i=0;i<25;i++){
+    const span=document.createElement('span');
+    span.textContent=['🎉','✨','🥳','🎂','🌟'][Math.floor(Math.random()*5)];
+    span.style.left=Math.random()*100+'%';
+    span.style.animationDelay=(Math.random()*0.5)+'s';
+    confettiDiv.appendChild(span);
+  }
+  document.body.appendChild(confettiDiv);
+  setTimeout(()=>confettiDiv.remove(),2500);
+}
+
+// Light/Dark mode toggle
+function setTheme(theme){
+  if(theme==='dark'){ document.body.classList.add('dark-mode'); themeToggle.textContent='🌜'; }
+  else { document.body.classList.remove('dark-mode'); themeToggle.textContent='🌞'; }
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme');
+if(savedTheme) setTheme(savedTheme);
+
+// Toggle button
+themeToggle.addEventListener('click',()=>{
+  if(document.body.classList.contains('dark-mode')){
+    setTheme('light');
+    localStorage.setItem('theme','light');
+  } else {
+    setTheme('dark');
+    localStorage.setItem('theme','dark');
+  }
+});
