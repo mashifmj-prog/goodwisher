@@ -1,12 +1,10 @@
-// script.js
 let currentBaseMessage = '';
 
 function updateMessageWithName() {
   const name = document.getElementById('recipientName').value.trim();
   const customMessage = document.getElementById('customMessage');
   if (currentBaseMessage && name) {
-    const personalized = `${currentBaseMessage.replace(/^[A-Z][a-z]+ you/, `${name}, you`)}`; // Simple personalization
-    customMessage.value = personalized;
+    customMessage.value = `${name}, ${currentBaseMessage}`;
   } else if (currentBaseMessage) {
     customMessage.value = currentBaseMessage;
   }
@@ -24,7 +22,7 @@ function displayMessage() {
   };
   currentBaseMessage = messages[occasion] || '';
   messageDiv.textContent = currentBaseMessage;
-  updateMessageWithName(); // Apply name if entered
+  updateMessageWithName();
 }
 
 function copyMessage() {
@@ -107,7 +105,8 @@ function shareTwitter() {
   const message = getMessageWithPromo();
   if (!message) return alert('Please generate a message first!');
   try {
-    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(message)}`;
+    const truncatedMessage = message.length > 280 ? message.substring(0, 277) + '...' : message;
+    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(truncatedMessage)}`;
     window.open(url, '_blank', 'width=600,height=400');
     console.log('Twitter/X share opened:', url);
   } catch (e) {
@@ -116,12 +115,25 @@ function shareTwitter() {
   }
 }
 
+function shareTelegram() {
+  const message = getMessageWithPromo();
+  if (!message) return alert('Please generate a message first!');
+  try {
+    const url = `https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+    console.log('Telegram share opened:', url);
+  } catch (e) {
+    console.error('Telegram share failed:', e);
+    alert('Failed to open Telegram. Try copying the message instead.');
+  }
+}
+
 function shareEmail() {
   const message = getMessageWithPromo();
   if (!message) return alert('Please generate a message first!');
   try {
     const subject = encodeURIComponent('A Special Message from GoodWisher');
-    const body = encodeURIComponent(message.replace(/\n/g, '%0A')); // Ensure line breaks
+    const body = encodeURIComponent(message.replace(/\n/g, '%0A'));
     const url = `mailto:?subject=${subject}&body=${body}`;
     window.location.href = url;
     console.log('Email share initiated:', url);
