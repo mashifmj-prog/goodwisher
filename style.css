@@ -1,3 +1,4 @@
+/* style.css */
 /* Custom styles for GoodWisher with gender-neutral theme */
 body {
   font-family: 'Arial', sans-serif;
@@ -11,8 +12,8 @@ body {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Style for the select dropdown */
-select#occasion {
+/* Style for the select dropdown and input */
+select#occasion, input#recipientName {
   background-color: #fff;
   border-color: #d1d5db;
   font-size: 1rem;
@@ -44,12 +45,40 @@ button:hover {
 }
 
 /* Style for saved messages section */
-#savedMessages p {
+#savedMessages h2 {
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+#savedMessages .saved-item {
   background-color: #f9fafb;
   padding: 8px 12px;
   border-radius: 6px;
   margin-bottom: 8px;
-  word-break: break-word; /* Prevent overflow for long messages */
+  word-break: break-word;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#savedMessages .saved-text {
+  flex-grow: 1;
+  margin-right: 8px;
+}
+
+#savedMessages .delete-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+}
+
+#savedMessages .delete-btn:hover {
+  background-color: #dc2626;
 }
 
 /* Animation for container fade-in */
