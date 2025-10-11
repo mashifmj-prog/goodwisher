@@ -22,8 +22,8 @@ select#occasion, input#recipientName, input#senderName {
 /* Hover effect for textarea */
 textarea#customMessage {
   resize: vertical;
-  min-height: 100px;
-  max-height: 200px;
+  min-height: 120px;
+  max-height: 250px;
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -43,11 +43,25 @@ button:hover {
   transform: translateY(-2px);
 }
 
-/* Feedback button styling for visibility */
+/* Feedback button styling with watermark */
 #feedbackButton {
   z-index: 10;
   border: 2px solid #1f7661;
   font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#feedbackButton::before {
+  content: 'Feedback';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 2rem;
+  color: rgba(31, 118, 97, 0.2);
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Telegram button colors */
