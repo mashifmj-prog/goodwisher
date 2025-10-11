@@ -1,3 +1,4 @@
+// script.js (updated with feedback functions and GA4 event)
 let currentBaseMessage = '';
 
 function updateMessageWithName() {
@@ -30,6 +31,7 @@ function copyMessage() {
   customMessage.select();
   navigator.clipboard.writeText(customMessage.value)
     .then(() => {
+      gtag('event', 'copy_button_click', { 'event_category': 'Button', 'event_label': 'Copy' });
       alert('Message copied!');
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     })
@@ -42,6 +44,7 @@ function saveMessage() {
   let saved = JSON.parse(localStorage.getItem('savedMessages') || '[]');
   saved.push(customMessage);
   localStorage.setItem('savedMessages', JSON.stringify(saved));
+  gtag('event', 'save_message', { 'event_category': 'Action', 'event_label': 'Save Message' });
   displaySavedMessages();
 }
 
@@ -49,6 +52,7 @@ function deleteMessage(index) {
   let saved = JSON.parse(localStorage.getItem('savedMessages') || '[]');
   saved.splice(index, 1);
   localStorage.setItem('savedMessages', JSON.stringify(saved));
+  gtag('event', 'delete_message', { 'event_category': 'Action', 'event_label': 'Delete Message' });
   displaySavedMessages();
 }
 
@@ -74,12 +78,14 @@ function getMessageWithPromo() {
   return `${customMessage}\n\nCreated with GoodWisher! Make your own message: https://mashifmj-prog.github.io/goodwisher/`;
 }
 
+// Sharing functions (unchanged from previous)
 function shareWhatsApp() {
   const message = getMessageWithPromo();
   if (!message) return alert('Please generate a message first!');
   try {
     const url = `https://wa.me/?text=${encodeURIComponent(message)}&app_absent=1`;
     window.open(url, '_blank', 'width=600,height=800');
+    gtag('event', 'share_whatsapp_click', { 'event_category': 'Button', 'event_label': 'WhatsApp' });
     console.log('WhatsApp share opened:', url);
   } catch (e) {
     console.error('WhatsApp share failed:', e);
@@ -94,6 +100,7 @@ function shareFacebook() {
     const appUrl = encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/');
     const url = `https://www.facebook.com/sharer/sharer.php?u=${appUrl}&quote=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'width=600,height=400');
+    gtag('event', 'share_facebook_click', { 'event_category': 'Button', 'event_label': 'Facebook' });
     console.log('Facebook share opened:', url);
   } catch (e) {
     console.error('Facebook share failed:', e);
@@ -108,6 +115,7 @@ function shareTwitter() {
     const truncatedMessage = message.length > 280 ? message.substring(0, 277) + '...' : message;
     const url = `https://x.com/intent/tweet?text=${encodeURIComponent(truncatedMessage)}`;
     window.open(url, '_blank', 'width=600,height=400');
+    gtag('event', 'share_twitter_click', { 'event_category': 'Button', 'event_label': 'Twitter' });
     console.log('Twitter/X share opened:', url);
   } catch (e) {
     console.error('Twitter/X share failed:', e);
@@ -121,6 +129,7 @@ function shareTelegram() {
   try {
     const url = `https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'width=600,height=400');
+    gtag('event', 'share_telegram_click', { 'event_category': 'Button', 'event_label': 'Telegram' });
     console.log('Telegram share opened:', url);
   } catch (e) {
     console.error('Telegram share failed:', e);
@@ -136,11 +145,39 @@ function shareEmail() {
     const body = encodeURIComponent(message.replace(/\n/g, '%0A'));
     const url = `mailto:?subject=${subject}&body=${body}`;
     window.location.href = url;
+    gtag('event', 'share_email_click', { 'event_category': 'Button', 'event_label': 'Email' });
     console.log('Email share initiated:', url);
   } catch (e) {
     console.error('Email share failed:', e);
     alert('Failed to open email client. Try copying the message instead.');
   }
+}
+
+// Feedback Modal Functions
+function openFeedbackModal() {
+  document.getElementById('feedbackModal').classList.remove('hidden');
+  gtag('event', 'feedback_button_click', { 'event_category': 'Button', 'event_label': 'Feedback' });
+}
+
+function closeFeedbackModal() {
+  document.getElementById('feedbackModal').classList.add('hidden');
+  document.getElementById('feedbackText').value = '';
+}
+
+function submitFeedback() {
+  const feedback = document.getElementById('feedbackText').value.trim();
+  if (!feedback) return alert('Please share your thoughts!');
+  gtag('event', 'feedback_submitted', { 
+    'event_category': 'Action', 
+    'event_label': 'Feedback', 
+    'value': feedback.length  // Track length for sentiment analysis
+  });
+  const subject = encodeURIComponent('GoodWisher Feedback from User');
+  const body = encodeURIComponent(`Comment: ${feedback}\n\nFrom: ${navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'} User`);
+  const url = `mailto:your-email@example.com?subject=${subject}&body=${body}`;  // Replace with your email
+  window.location.href = url;
+  closeFeedbackModal();
+  alert('Thanks for your feedback! It helps us improve. 😊');
 }
 
 // Load saved messages on page load
