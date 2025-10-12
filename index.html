@@ -62,7 +62,10 @@
         <button onclick="openShareModal()" class="btn light">Share</button>
       </div>
 
-      <label class="small"><input type="checkbox" id="deleteAfterTemplate"> Delete saved message after saving as template</label>
+      <label class="delete-label small">
+        Delete saved message after saving as template
+        <input type="checkbox" id="deleteAfterTemplate">
+      </label>
 
       <select id="templateSelect" onchange="loadTemplate()">
         <option value="" disabled selected>Load a Template (optional)</option>
