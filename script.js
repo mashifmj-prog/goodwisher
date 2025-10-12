@@ -1,27 +1,28 @@
 const $ = id => document.getElementById(id);
 let selectedRating = 0;
 
-// Theme
+// THEME
 function setThemeIcon() {
   const path = $('themeIconPath');
   const isDark = document.body.dataset.theme === 'dark';
-  path.setAttribute('d', isDark ? 
+  path.setAttribute('d', isDark ?
     'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z' :
     'M12 2a10 10 0 100 20 10 10 0 000-20z');
 }
 function toggleTheme() {
-  document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.body.dataset.theme =
+    document.body.dataset.theme === 'dark' ? 'light' : 'dark';
   localStorage.setItem('theme', document.body.dataset.theme);
   setThemeIcon();
 }
 
-// Clear names
+// CLEAR NAME
 function clearNameInput(e) {
   $(e.target.dataset.target).value = '';
   generateMessage();
 }
 
-// Generate message
+// MESSAGE
 function generateMessage() {
   const occ = $('occasion').value;
   const r = $('recipientName').value.trim();
@@ -30,17 +31,8 @@ function generateMessage() {
   const messages = {
     birthday: 'Happy Birthday! 🎉',
     anniversary: 'Happy Anniversary! 💕',
-    'get-well': 'Get well soon! 🌻',
-    congrats: 'Congratulations on your achievement! 🏆',
-    'thank-you': 'Thank you for your kindness and support! 🙏',
-    'good-luck': 'Good luck on your journey! 🍀',
-    motivation: 'Keep going — you can do this! 🚀',
-    appreciation: 'You’re appreciated more than you know! 🌟',
-    farewell: 'Wishing you the best in your next adventure! 👋',
-    encouragement: 'You’ve got this! 💪',
-    love: 'You make life beautiful! ❤️',
     condolences: 'Sending heartfelt condolences in this time of loss. 🕊️',
-    vacation: 'Enjoy your well-deserved vacation! 🌴'
+    congrats: 'Congratulations on your achievement! 🏆'
   };
   if (!occ) return;
   let msg = messages[occ] || `Best wishes for your ${occ}!`;
@@ -49,13 +41,28 @@ function generateMessage() {
   $('customMessage').value = msg;
 }
 
-// Feedback modal
+// FEEDBACK MODAL
 function openFeedbackModal() { $('feedbackModal').classList.remove('hidden'); }
-function closeFeedbackModal() { $('feedbackModal').classList.add('hidden'); $('feedbackText').value = ''; selectedRating = 0; document.querySelectorAll('.star').forEach(s => s.classList.remove('selected')); $('ratingScore').textContent = 'Score: 0%'; }
-function setRating(r) { selectedRating = r; document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('selected', i < r)); $('ratingScore').textContent = `Score: ${r * 20}%`; }
-function submitFeedback() { const fb = $('feedbackText').value.trim(); if (!fb && selectedRating === 0) return alert('Please rate or comment!'); alert(`Thanks for rating ${selectedRating}/5 (${selectedRating * 20}%)!`); closeFeedbackModal(); }
+function closeFeedbackModal() {
+  $('feedbackModal').classList.add('hidden');
+  $('feedbackText').value = '';
+  selectedRating = 0;
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('selected'));
+  $('ratingScore').textContent = 'Score: 0%';
+}
+function setRating(r) {
+  selectedRating = r;
+  document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('selected', i < r));
+  $('ratingScore').textContent = `Score: ${r * 20}%`;
+}
+function submitFeedback() {
+  const fb = $('feedbackText').value.trim();
+  if (!fb && selectedRating === 0) return alert('Please rate or comment!');
+  alert(`Thanks for rating ${selectedRating}/5 (${selectedRating * 20}%)!`);
+  closeFeedbackModal();
+}
 
-// Share options
+// SHARE
 function toggleShareOptions() { $('shareOptions').classList.toggle('hidden'); }
 function getMessageForShare() {
   let msg = $('customMessage').value.trim();
@@ -65,9 +72,14 @@ function getMessageForShare() {
   return msg;
 }
 function shareGeneric(urlBase) { window.open(urlBase + encodeURIComponent(getMessageForShare()), '_blank'); }
-function shareDevice() { const text = getMessageForShare(); if (navigator.share) { navigator.share({ text }).catch(() => {}); } else alert('Device share not supported.'); }
+function shareDevice() {
+  const text = getMessageForShare();
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else alert('Device share not supported.');
+}
 
-// Emoji picker
+// EMOJIS
 const emojis = ['😊','😂','❤️','👍','🎉','🌟','💪','🥰','🙏','🌻','🕊️','🍀'];
 function openEmojiPicker() {
   let picker = document.createElement('div');
@@ -112,7 +124,7 @@ function openEmojiPicker() {
   document.addEventListener('click', closePicker);
 }
 
-// Init
+// INIT
 window.addEventListener('DOMContentLoaded', () => {
   document.body.dataset.theme = localStorage.getItem('theme') || 'light';
   setThemeIcon();
@@ -132,10 +144,13 @@ window.addEventListener('DOMContentLoaded', () => {
   $('shareEmail').addEventListener('click', () => {
     const msg = getMessageForShare();
     const subject = encodeURIComponent('A Special Message from GoodWisher');
-    const body = encodeURIComponent(msg.replace(/\n/g, '%0A'));
+    const body = encodeURIComponent(msg);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   });
   $('shareDevice').addEventListener('click', shareDevice);
   $('emojiButton').addEventListener('click', openEmojiPicker);
+
   $('feedbackBtn').addEventListener('click', openFeedbackModal);
+  $('cancelFeedback').addEventListener('click', closeFeedbackModal);
+  $('submitFeedback').addEventListener('click', submitFeedback);
 });
