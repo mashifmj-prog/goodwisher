@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .star-col {
@@ -28,13 +28,13 @@
 .star-col span {
   font-size: 0.8rem;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
-.rating-value {
+.rating-score {
   text-align: center;
   font-weight: 600;
   color: var(--accent);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-size: 0.95rem;
 }
