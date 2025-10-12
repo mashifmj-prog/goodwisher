@@ -4,7 +4,6 @@
   --text-color: #1f2937;
   --muted: #6b7280;
   --accent: #0f766e;
-  --accent-hover: #0d5e58;
   --border: #e5e7eb;
 }
 
@@ -51,7 +50,7 @@ input, select, textarea {
 
 .message-area { margin-bottom: 12px; position: relative; }
 .message-area textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); resize: vertical; }
-.message-area .signature { margin-top: 6px; font-size: 0.85rem; color: var(--muted); }
+.small-icon { position: absolute; top: 8px; right: 8px; border: none; background: none; font-size: 1.1rem; cursor: pointer; }
 
 .share-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 
@@ -64,11 +63,4 @@ input, select, textarea {
 .modal.hidden { display: none; }
 .modal-content { background: var(--card-bg); border-radius: 10px; padding: 16px; width: 90%; max-width: 400px; }
 
-.star-percent-wrap { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.star-col { display: flex; flex-direction: column; align-items: center; width: 18%; }
-.star { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--muted); }
-.star.selected { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.6); }
-.star-col span { font-size: 0.8rem; color: var(--muted); }
-.rating-score { text-align: center; font-weight: 600; color: var(--accent); margin-bottom: 10px; }
-.modal-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.modal-content h2 { text-align: center; margin-top: 0; margin-bottom: 10px; color: var(--accent); }
+.star-percent-wrap { display: flex; justify-content: space-between; margin-bottom: 
