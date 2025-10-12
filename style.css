@@ -63,4 +63,13 @@ input, select, textarea {
 .modal.hidden { display: none; }
 .modal-content { background: var(--card-bg); border-radius: 10px; padding: 16px; width: 90%; max-width: 400px; }
 
-.star-percent-wrap { display: flex; justify-content: space-between; margin-bottom: 
+.star-percent-wrap { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.star-col { display: flex; flex-direction: column; align-items: center; width: 18%; }
+.star { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--muted); }
+.star.selected { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.6); }
+.star-col span { font-size: 0.8rem; color: var(--muted); }
+.rating-score { text-align: center; font-weight: 600; color: var(--accent); margin-bottom: 10px; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.modal-content h2 { text-align: center; margin-top: 0; margin-bottom: 10px; color: var(--accent); }
+
+.hidden { display: none; }
