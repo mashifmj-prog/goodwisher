@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GoodWisher</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body data-theme="light">
   <div class="container">
@@ -20,7 +20,6 @@
     <main class="card">
       <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
-      <label class="sr-only" for="language">Language</label>
       <select id="language" onchange="displayMessage()">
         <option value="en" selected>English</option>
         <option value="zh">中文 (Mandarin)</option>
@@ -29,11 +28,11 @@
         <option value="af">Afrikaans</option>
       </select>
 
-      <input id="recipientName" type="text" placeholder="Recipient's name (optional)" oninput="updateMessageWithName()">
-      <input id="senderName" type="text" placeholder="Your name (optional)" oninput="updateMessageWithName()">
+      <input id="recipientName" type="text" placeholder="Recipient's name (optional)" oninput="updateMessageWithName()" />
+      <input id="senderName" type="text" placeholder="Your name (optional)" oninput="updateMessageWithName()" />
 
       <select id="occasion" onchange="displayMessage()">
-        <option value="" disabled selected>Choose an occasion</option>
+        <option value="" disabled selected>Select an occasion</option>
         <option value="birthday">Birthday</option>
         <option value="anniversary">Anniversary</option>
         <option value="get-well">Get Well Soon</option>
@@ -53,7 +52,7 @@
 
       <div class="textarea-wrap">
         <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
-        <button id="emojiButton" class="small-icon" aria-label="Add emoji" title="Add emoji">😊</button>
+        <button id="emojiButton" class="small-icon" aria-label="Add emoji">😊</button>
       </div>
 
       <div class="actions">
@@ -64,7 +63,7 @@
       </div>
 
       <label class="small">
-        <input type="checkbox" id="deleteAfterTemplate"> Delete saved message after saving as template
+        <input type="checkbox" id="deleteAfterTemplate" /> Delete saved message after saving as template
       </label>
 
       <select id="templateSelect" onchange="loadTemplate()">
@@ -76,7 +75,7 @@
       </div>
 
       <button id="feedbackButton" onclick="openFeedbackModal()" class="btn big">Give Feedback</button>
-      <p class="tiny">Fast & minimal multilingual version (EN, 中文, हिन्दी, Español, Afrikaans)</p>
+      <p class="tiny">Multilingual version (EN, 中文, हिन्दी, Español, Afrikaans)</p>
     </main>
   </div>
 
@@ -106,7 +105,7 @@
         <button onclick="setRating(4)" class="star">★</button>
         <button onclick="setRating(5)" class="star">★</button>
       </div>
-      <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?"></textarea>
+      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
       <div class="modal-actions">
         <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
         <button onclick="submitFeedback()" class="btn">Send</button>
