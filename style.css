@@ -129,7 +129,7 @@ input, select, textarea {
 }
 .modal-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 
-.star-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 8px; }
+.star-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 6px; }
 .star {
   background: transparent;
   border: none;
@@ -138,6 +138,22 @@ input, select, textarea {
   color: var(--muted);
 }
 .star.selected { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.5); }
+
+.percent-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.rating-value {
+  text-align: center;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
 
 @media (max-width: 480px) {
   .title { font-size: 1.2rem; }
