@@ -18,7 +18,7 @@
     </header>
 
     <main class="card">
-      <p class="sub">Choose an occasion and share a warm message instantly.</p>
+      <p class="sub">Choose an occasion, language, and share a warm message instantly.</p>
 
       <div class="form-group">
         <label for="language">Language</label>
@@ -51,9 +51,15 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <input id="recipientName" placeholder="Recipient's name (optional)" />
-        <input id="senderName" placeholder="Your name (optional)" />
+      <div class="form-group names-wrap">
+        <div class="name-input">
+          <input id="senderName" placeholder="Your name (optional)" />
+          <button class="clear-btn" data-target="senderName">×</button>
+        </div>
+        <div class="name-input">
+          <input id="recipientName" placeholder="Recipient's name (optional)" />
+          <button class="clear-btn" data-target="recipientName">×</button>
+        </div>
       </div>
 
       <!-- Live preview card -->
@@ -66,7 +72,7 @@
       </div>
 
       <!-- Template management -->
-      <div class="form-group">
+      <div class="form-group template-wrap">
         <select id="templateSelect">
           <option value="" disabled selected>Load a Template (optional)</option>
         </select>
@@ -76,14 +82,44 @@
       <!-- Sharing -->
       <div class="form-group actions">
         <button id="shareBtn" class="btn small">Share</button>
+        <div id="shareOptions" class="share-options hidden">
+          <button class="btn small" id="shareWhatsApp">WhatsApp</button>
+          <button class="btn small" id="shareFacebook">Facebook</button>
+          <button class="btn small" id="shareX">X (Twitter)</button>
+          <button class="btn small" id="shareTelegram">Telegram</button>
+          <button class="btn small" id="shareEmail">Email</button>
+        </div>
       </div>
+
+      <!-- Feedback -->
+      <button id="feedbackBtn" class="btn big">Give Feedback</button>
 
       <p class="tiny">Multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</p>
     </main>
   </div>
 
-  <!-- Emoji picker popup -->
+  <!-- Emoji picker -->
   <div id="emojiPicker" class="emoji-picker hidden"></div>
+
+  <!-- Feedback modal -->
+  <div id="feedbackModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>We Value Your Feedback!</h2>
+      <div class="star-percent-wrap">
+        <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
+        <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
+        <div class="star-col"><button onclick="setRating(3)" class="star">★</button><span>60%</span></div>
+        <div class="star-col"><button onclick="setRating(4)" class="star">★</button><span>80%</span></div>
+        <div class="star-col"><button onclick="setRating(5)" class="star">★</button><span>100%</span></div>
+      </div>
+      <div id="ratingScore" class="rating-score">Score: 0%</div>
+      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+      <div class="modal-actions">
+        <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+        <button onclick="submitFeedback()" class="btn">Send</button>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="script.js"></script>
 </body>
