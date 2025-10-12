@@ -18,11 +18,6 @@
     </header>
 
     <main class="card">
-      <div id="worldClock" class="clock">
-        <span id="timeIcon" aria-hidden="true">🕒</span>
-        <span id="clockText">Loading time…</span>
-      </div>
-
       <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
       <label class="sr-only" for="language">Language</label>
@@ -81,13 +76,12 @@
       </div>
 
       <button id="feedbackButton" onclick="openFeedbackModal()" class="btn big">Give Feedback</button>
-
-      <p class="tiny">Optimized lightweight version — multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</p>
+      <p class="tiny">Fast & minimal multilingual version (EN, 中文, हिन्दी, Español, Afrikaans)</p>
     </main>
   </div>
 
   <!-- Share Modal -->
-  <div id="shareModal" class="modal hidden" aria-hidden="true">
+  <div id="shareModal" class="modal hidden">
     <div class="modal-content">
       <h2>Share Via</h2>
       <div class="modal-actions">
@@ -102,7 +96,7 @@
   </div>
 
   <!-- Feedback Modal -->
-  <div id="feedbackModal" class="modal hidden" aria-hidden="true">
+  <div id="feedbackModal" class="modal hidden">
     <div class="modal-content">
       <h2>Your Feedback Matters!</h2>
       <div id="starRating" class="star-row">
