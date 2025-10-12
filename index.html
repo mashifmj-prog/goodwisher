@@ -51,6 +51,7 @@
         </select>
       </div>
 
+      <!-- Name Inputs with clear buttons -->
       <div class="form-group names-wrap">
         <div class="name-input">
           <input id="senderName" placeholder="Your name (optional)" />
@@ -62,46 +63,29 @@
         </div>
       </div>
 
-      <!-- Live preview card -->
-      <div class="preview-card">
-        <p id="previewMessage"></p>
-        <div class="preview-actions">
-          <button id="copyBtn" class="btn small">Copy</button>
-          <button id="emojiBtn" class="btn small">😊</button>
-        </div>
+      <!-- Message body with protected signature -->
+      <div class="message-area">
+        <textarea id="customMessage" rows="6" placeholder="Write your message here…"></textarea>
+        <div class="signature">Generated with love using GoodWisher.<br>https://mashifmj-prog.github.io/goodwisher/</div>
       </div>
 
-      <!-- Template management -->
-      <div class="form-group template-wrap">
-        <select id="templateSelect">
-          <option value="" disabled selected>Load a Template (optional)</option>
-        </select>
-        <button id="saveTemplateBtn" class="btn small">Save as Template</button>
+      <!-- Single Share Button -->
+      <button id="shareBtn" class="btn big">Share</button>
+      <div id="shareOptions" class="share-options hidden">
+        <button class="btn small" id="shareWhatsApp">WhatsApp</button>
+        <button class="btn small" id="shareFacebook">Facebook</button>
+        <button class="btn small" id="shareX">X (Twitter)</button>
+        <button class="btn small" id="shareTelegram">Telegram</button>
+        <button class="btn small" id="shareEmail">Email</button>
+        <button class="btn small" id="shareDevice">Share (Device)</button>
       </div>
 
-      <!-- Sharing -->
-      <div class="form-group actions">
-        <button id="shareBtn" class="btn small">Share</button>
-        <div id="shareOptions" class="share-options hidden">
-          <button class="btn small" id="shareWhatsApp">WhatsApp</button>
-          <button class="btn small" id="shareFacebook">Facebook</button>
-          <button class="btn small" id="shareX">X (Twitter)</button>
-          <button class="btn small" id="shareTelegram">Telegram</button>
-          <button class="btn small" id="shareEmail">Email</button>
-        </div>
-      </div>
-
-      <!-- Feedback -->
+      <!-- Feedback Button -->
       <button id="feedbackBtn" class="btn big">Give Feedback</button>
-
-      <p class="tiny">Multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</p>
     </main>
   </div>
 
-  <!-- Emoji picker -->
-  <div id="emojiPicker" class="emoji-picker hidden"></div>
-
-  <!-- Feedback modal -->
+  <!-- Feedback Modal -->
   <div id="feedbackModal" class="modal hidden">
     <div class="modal-content">
       <h2>We Value Your Feedback!</h2>
@@ -121,6 +105,6 @@
     </div>
   </div>
 
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
