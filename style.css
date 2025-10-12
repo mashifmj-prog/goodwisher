@@ -32,6 +32,22 @@ body {
   background-color: var(--modal-bg);
 }
 
+#notificationBanner {
+  z-index: 100;
+}
+
+#worldClock {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#timeIcon {
+  font-size: 1.2rem;
+}
+
 select#occasion, select#language, select#templateSelect, input#recipientName, input#senderName {
   background-color: #fff;
   border-color: var(--border-color);
@@ -155,8 +171,19 @@ button:not(.delete-btn, .edit-btn, #emojiButton):hover {
   background-color: #2563EB;
 }
 
+#starRating button {
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
 #starRating button.selected {
   color: #FBBF24;
+  text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+}
+
+#ratingPercentages {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 @keyframes fadeIn {
