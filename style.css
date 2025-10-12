@@ -12,11 +12,11 @@
 [data-theme="dark"] {
   --bg-gradient-start: #1E3A8A;
   --bg-gradient-end: #1E293B;
-  --text-color: #E0E0E0;
+  --text-color: #E5E7EB;
   --button-bg: #4A9A9B;
   --button-hover: #3A8A8B;
   --border-color: #4B5563;
-  --modal-bg: #1F2937;
+  --modal-bg: #2D3748;
 }
 
 body {
@@ -32,10 +32,6 @@ body {
   background-color: var(--modal-bg);
 }
 
-#notificationBanner {
-  z-index: 100;
-}
-
 #worldClock {
   font-size: 0.9rem;
   display: flex;
@@ -46,6 +42,15 @@ body {
 
 #timeIcon {
   font-size: 1.2rem;
+}
+
+.toggle-theme {
+  font-size: 0.9rem;
+  padding: 0.5rem;
+}
+
+#authSection button, #authSection .text-sm {
+  font-size: 0.85rem;
 }
 
 select#occasion, select#language, select#templateSelect, input#recipientName, input#senderName {
@@ -67,7 +72,7 @@ textarea#customMessage {
   color: #374151;
 }
 
-button {
+button, label[for="importTemplates"] {
   font-weight: 600;
   font-size: 0.9rem;
   letter-spacing: 0.5px;
@@ -77,19 +82,19 @@ button {
   justify-content: center;
 }
 
-button:not(.delete-btn, .edit-btn, #emojiButton) {
+button:not(.delete-btn, .edit-btn, #emojiButton), label[for="importTemplates"] {
   background-color: var(--button-bg);
-  color: white;
+  color: var(--text-color);
 }
 
-button:not(.delete-btn, .edit-btn, #emojiButton):hover {
+button:not(.delete-btn, .edit-btn, #emojiButton):hover, label[for="importTemplates"]:hover {
   background-color: var(--button-hover);
   transform: translateY(-2px);
 }
 
 #emojiButton {
   background-color: var(--button-bg);
-  color: white;
+  color: var(--text-color);
 }
 
 #emojiButton:hover {
@@ -195,6 +200,8 @@ button:not(.delete-btn, .edit-btn, #emojiButton):hover {
 
 @media (max-width: 640px) {
   .max-w-md { padding: 1rem; }
-  button { padding: 0.5rem 0.75rem; font-size: 0.85rem; flex: 1 1 48%; }
+  button, label[for="importTemplates"] { padding: 0.5rem 0.75rem; font-size: 0.85rem; flex: 1 1 48%; }
   .flex-wrap { gap: 0.5rem; }
+  .toggle-theme { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
+  #authSection button, #authSection .text-sm { font-size: 0.8rem; }
 }
