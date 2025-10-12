@@ -1,38 +1,38 @@
 /* Custom styles for GoodWisher with gender-neutral theme */
-body {
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(180deg, #F3F4F6 0%, #E6FFFA 100%);
-  min-height: 100vh;
-  margin: 0;
-}
-
-/* Dark mode variables */
-body[data-theme="light"] {
-  --bg-color: #F3F4F6;
+:root {
+  --bg-gradient-start: #E6F7FF;
+  --bg-gradient-end: #FFFFFF;
   --text-color: #374151;
   --button-bg: #2C7A7B;
   --button-hover: #1F7661;
   --border-color: #d1d5db;
+  --modal-bg: #FFFFFF;
 }
 
-body[data-theme="dark"] {
-  --bg-color: #1a1a1a;
-  --text-color: #e0e0e0;
-  --button-bg: #4a9a9b;
-  --button-hover: #3a8a8b;
-  --border-color: #4a4a4a;
-  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+[data-theme="dark"] {
+  --bg-gradient-start: #1E3A8A;
+  --bg-gradient-end: #1E293B;
+  --text-color: #E0E0E0;
+  --button-bg: #4A9A9B;
+  --button-hover: #3A8A8B;
+  --border-color: #4B5563;
+  --modal-bg: #1F2937;
 }
 
-/* Ensure the main container has a smooth fade-in effect */
-.max-w-md {
-  animation: fadeIn 0.5s ease-in-out;
-  background-color: var(--bg-color);
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  min-height: 100vh;
+  margin: 0;
   color: var(--text-color);
 }
 
-/* Style for the select dropdown and inputs */
-select#occasion, input#recipientName, input#senderName, select#language {
+.max-w-md {
+  animation: fadeIn 0.5s ease-in-out;
+  background-color: var(--modal-bg);
+}
+
+select#occasion, select#language, select#templateSelect, input#recipientName, input#senderName {
   background-color: #fff;
   border-color: var(--border-color);
   font-size: 1rem;
@@ -40,19 +40,17 @@ select#occasion, input#recipientName, input#senderName, select#language {
   color: var(--text-color);
 }
 
-/* Hover effect for textarea */
 textarea#customMessage {
   resize: vertical;
   min-height: 120px;
   max-height: 250px;
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  color: var(--text-color);
   background-color: #fff;
   border-color: var(--border-color);
+  color: #374151;
 }
 
-/* Button styling for consistency */
 button {
   font-weight: 600;
   font-size: 0.9rem;
@@ -61,16 +59,27 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+button:not(.delete-btn, .edit-btn, #emojiButton) {
   background-color: var(--button-bg);
   color: white;
 }
 
-button:hover {
+button:not(.delete-btn, .edit-btn, #emojiButton):hover {
+  background-color: var(--button-hover);
   transform: translateY(-2px);
+}
+
+#emojiButton {
+  background-color: var(--button-bg);
+  color: white;
+}
+
+#emojiButton:hover {
   background-color: var(--button-hover);
 }
 
-/* Feedback button styling with watermark */
 #feedbackButton {
   z-index: 10;
   border: 2px solid #1f7661;
@@ -91,17 +100,11 @@ button:hover {
   pointer-events: none;
 }
 
-/* Telegram button colors */
-.bg-telegram-500 {
-  background-color: #0088CC;
-}
-.bg-telegram-600 {
-  background-color: #0077B3;
-}
+.bg-telegram-500 { background-color: #0088CC; }
+.bg-telegram-600 { background-color: #0077B3; }
 
-/* Style for saved messages section */
 #savedMessages h2 {
-  color: #374151;
+  color: var(--text-color);
   margin-bottom: 0.5rem;
 }
 
@@ -136,34 +139,35 @@ button:hover {
   background-color: #dc2626;
 }
 
-/* Animation for container fade-in */
+#savedMessages .edit-btn {
+  background-color: #3B82F6;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+  margin-left: 4px;
+}
+
+#savedMessages .edit-btn:hover {
+  background-color: #2563EB;
+}
+
+#starRating button.selected {
+  color: #FBBF24;
+}
+
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Improve accessibility for focus states */
-:focus {
-  outline: none;
-}
+:focus { outline: none; }
 
-/* Adjust button layout for smaller screens */
 @media (max-width: 640px) {
-  .max-w-md {
-    padding: 1rem;
-  }
-  button {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-    flex: 1 1 48%;
-  }
-  .flex-wrap {
-    gap: 0.5rem;
-  }
+  .max-w-md { padding: 1rem; }
+  button { padding: 0.5rem 0.75rem; font-size: 0.85rem; flex: 1 1 48%; }
+  .flex-wrap { gap: 0.5rem; }
 }
