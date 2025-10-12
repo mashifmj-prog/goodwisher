@@ -12,11 +12,11 @@
 [data-theme="dark"] {
   --bg-gradient-start: #1E3A8A;
   --bg-gradient-end: #1E293B;
-  --text-color: #E0E0E0;
+  --text-color: #E5E7EB;
   --button-bg: #4A9A9B;
   --button-hover: #3A8A8B;
   --border-color: #4B5563;
-  --modal-bg: #1F2937;
+  --modal-bg: #2D3748;
 }
 
 body {
@@ -30,6 +30,23 @@ body {
 .max-w-md {
   animation: fadeIn 0.5s ease-in-out;
   background-color: var(--modal-bg);
+}
+
+#worldClock {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#timeIcon {
+  font-size: 1.2rem;
+}
+
+.toggle-theme {
+  font-size: 0.9rem;
+  padding: 0.5rem;
 }
 
 select#occasion, select#language, select#templateSelect, input#recipientName, input#senderName {
@@ -63,7 +80,7 @@ button {
 
 button:not(.delete-btn, .edit-btn, #emojiButton) {
   background-color: var(--button-bg);
-  color: white;
+  color: var(--text-color);
 }
 
 button:not(.delete-btn, .edit-btn, #emojiButton):hover {
@@ -73,7 +90,7 @@ button:not(.delete-btn, .edit-btn, #emojiButton):hover {
 
 #emojiButton {
   background-color: var(--button-bg);
-  color: white;
+  color: var(--text-color);
 }
 
 #emojiButton:hover {
@@ -155,8 +172,19 @@ button:not(.delete-btn, .edit-btn, #emojiButton):hover {
   background-color: #2563EB;
 }
 
+#starRating button {
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
 #starRating button.selected {
   color: #FBBF24;
+  text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+}
+
+#ratingPercentages {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 @keyframes fadeIn {
@@ -170,4 +198,5 @@ button:not(.delete-btn, .edit-btn, #emojiButton):hover {
   .max-w-md { padding: 1rem; }
   button { padding: 0.5rem 0.75rem; font-size: 0.85rem; flex: 1 1 48%; }
   .flex-wrap { gap: 0.5rem; }
+  .toggle-theme { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
 }
