@@ -6,17 +6,38 @@ body {
   margin: 0;
 }
 
+/* Dark mode variables */
+body[data-theme="light"] {
+  --bg-color: #F3F4F6;
+  --text-color: #374151;
+  --button-bg: #2C7A7B;
+  --button-hover: #1F7661;
+  --border-color: #d1d5db;
+}
+
+body[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --button-bg: #4a9a9b;
+  --button-hover: #3a8a8b;
+  --border-color: #4a4a4a;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+}
+
 /* Ensure the main container has a smooth fade-in effect */
 .max-w-md {
   animation: fadeIn 0.5s ease-in-out;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Style for the select dropdown and inputs */
-select#occasion, input#recipientName, input#senderName {
+select#occasion, input#recipientName, input#senderName, select#language {
   background-color: #fff;
-  border-color: #d1d5db;
+  border-color: var(--border-color);
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--text-color);
 }
 
 /* Hover effect for textarea */
@@ -26,6 +47,9 @@ textarea#customMessage {
   max-height: 250px;
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--text-color);
+  background-color: #fff;
+  border-color: var(--border-color);
 }
 
 /* Button styling for consistency */
@@ -37,10 +61,13 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--button-bg);
+  color: white;
 }
 
 button:hover {
   transform: translateY(-2px);
+  background-color: var(--button-hover);
 }
 
 /* Feedback button styling with watermark */
