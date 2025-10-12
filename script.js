@@ -25,10 +25,26 @@ window.addEventListener('DOMContentLoaded',()=>{
 function displayMessage(){
   const occ=$('occasion').value;
   if(!occ){$('message').textContent='';$('customMessage').value='';return;}
-  const msg=`Happy ${occ.replace('-', ' ')}! 😊`;
-  $('message').textContent=msg;
-  $('customMessage').value=`${msg}\n\nGenerated with ❤️ using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
+  const messages = {
+    'birthday': 'Happy Birthday! 🎉',
+    'anniversary': 'Happy Anniversary! 💕',
+    'get-well': 'Get well soon! 🌻',
+    'congrats': 'Congratulations on your achievement! 🏆',
+    'thank-you': 'Thank you for your kindness and support! 🙏',
+    'good-luck': 'Good luck on your journey! 🍀',
+    'motivation': 'Keep going — you can do this! 🚀',
+    'appreciation': 'You’re appreciated more than you know! 🌟',
+    'farewell': 'Wishing you the best in your next adventure! 👋',
+    'encouragement': 'You’ve got this! 💪',
+    'love': 'You make life beautiful! ❤️',
+    'condolences': 'Sending my deepest condolences. 🕊️',
+    'vacation': 'Enjoy your well-deserved vacation! 🌴'
+  };
+  const msg = messages[occ] || `Best wishes for your ${occ}!`;
+  $('message').textContent = msg;
+  $('customMessage').value = `${msg}\n\nGenerated with love using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
 }
+
 function updateMessageWithName(){
   const r=$('recipientName').value.trim();
   const s=$('senderName').value.trim();
@@ -37,7 +53,8 @@ function updateMessageWithName(){
   let full=msg;
   if(r)full=`Hi ${r},\n\n${msg}`;
   if(s)full=`${full}\n\nRegards,\n${s}`;
-  $('customMessage').value=`${full}\n\nGenerated with ❤️ using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
+  const clean=full.replace(/Generated with love using GoodWisher[.\s\S]*/gi,'').trim();
+  $('customMessage').value=`${clean}\n\nGenerated with love using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
 }
 
 /* COPY */
@@ -75,7 +92,8 @@ function closeShareModal(){ $('shareModal').classList.add('hidden'); }
 function getMessageWithPromo(){
   const text=$('customMessage').value.trim();
   if(!text){alert('Please generate a message first!');return '';}
-  return `${text}\n\nGenerated with ❤️ using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
+  return text.replace(/Generated with love using GoodWisher[.\s\S]*/gi,'').trim() +
+         `\n\nGenerated with love using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
 }
 function shareWhatsApp(){
   const msg=getMessageWithPromo(); if(!msg)return;
