@@ -99,17 +99,29 @@
     <div class="modal-content">
       <h2>Your Feedback Matters!</h2>
 
-      <div id="starRating" class="star-row">
-        <button onclick="setRating(1)" class="star">★</button>
-        <button onclick="setRating(2)" class="star">★</button>
-        <button onclick="setRating(3)" class="star">★</button>
-        <button onclick="setRating(4)" class="star">★</button>
-        <button onclick="setRating(5)" class="star">★</button>
+      <div id="starPercentWrap" class="star-percent-wrap">
+        <div class="star-col">
+          <button onclick="setRating(1)" class="star">★</button>
+          <span>20%</span>
+        </div>
+        <div class="star-col">
+          <button onclick="setRating(2)" class="star">★</button>
+          <span>40%</span>
+        </div>
+        <div class="star-col">
+          <button onclick="setRating(3)" class="star">★</button>
+          <span>60%</span>
+        </div>
+        <div class="star-col">
+          <button onclick="setRating(4)" class="star">★</button>
+          <span>80%</span>
+        </div>
+        <div class="star-col">
+          <button onclick="setRating(5)" class="star">★</button>
+          <span>100%</span>
+        </div>
       </div>
 
-      <div id="percentRow" class="percent-row">
-        <span>20%</span><span>40%</span><span>60%</span><span>80%</span><span>100%</span>
-      </div>
       <div id="ratingPercent" class="rating-value">0%</div>
 
       <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?"></textarea>
