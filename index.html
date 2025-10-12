@@ -1,141 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GoodWisher</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
 </head>
-<body class="bg-gray-100" data-theme="light">
-  <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md mt-4">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold text-teal-700">GoodWisher</h1>
-      <button onclick="toggleTheme()" class="text-sm text-teal-700 hover:underline toggle-theme">Toggle Theme</button>
-    </div>
-    <div id="worldClock" class="text-gray-600 text-center mb-4">
-      <span id="timeIcon"></span> <span id="clockText">Loading...</span>
-    </div>
-    <p class="text-gray-600 text-center mb-6">Choose an occasion and share a warm message instantly.</p>
-    
-    <select id="language" aria-label="Select language" class="w-full p-2 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-300">
-      <option value="en" selected>English</option>
-      <option value="zh">Mandarin Chinese</option>
-      <option value="hi">Hindi</option>
-      <option value="es">Spanish</option>
-      <option value="fr">French</option>
-      <option value="ar">Standard Arabic</option>
-      <option value="bn">Bengali</option>
-      <option value="pt">Portuguese</option>
-      <option value="ru">Russian</option>
-      <option value="ur">Urdu</option>
-      <option value="af">Afrikaans</option>
-      <option value="zu">Zulu</option>
-      <option value="sn">Shona</option>
-      <option value="nso">Pedi</option>
-    </select>
-    
-    <input id="recipientName" type="text" placeholder="Recipient's name (optional)" class="w-full p-2 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-300" oninput="updateMessageWithName()">
-    <input id="senderName" type="text" placeholder="Your name (optional)" class="w-full p-2 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-300" oninput="updateMessageWithName()">
-    
-    <select id="occasion" aria-label="Select an occasion" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-300" onchange="displayMessage()">
-      <option value="" disabled selected>Choose an occasion</option>
-      <option value="birthday">Birthday</option>
-      <option value="anniversary">Anniversary</option>
-      <option value="get-well">Get Well Soon</option>
-      <option value="congrats">Congratulations</option>
-      <option value="thank-you">Thank You</option>
-      <option value="good-luck">Good Luck</option>
-      <option value="motivation">Motivation</option>
-      <option value="appreciation">Appreciation</option>
-      <option value="farewell">Farewell</option>
-      <option value="encouragement">Encouragement</option>
-      <option value="love">Love</option>
-      <option value="condolences">Condolences</option>
-      <option value="vacation">Vacation</option>
-    </select>
-    
-    <div id="message" class="text-lg text-gray-800 mb-4"></div>
-    
-    <div class="relative">
-      <textarea id="customMessage" rows="8" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-300"></textarea>
-      <button id="emojiButton" class="absolute top-2 right-2 bg-teal-500 text-white p-1 rounded-full hover:bg-teal-600"><i class="fas fa-smile"></i></button>
-    </div>
-    
-    <div class="flex flex-wrap gap-2 mb-4">
-      <button onclick="copyMessage()" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300"><i class="fas fa-copy mr-2"></i>Copy</button>
-      <button onclick="saveMessage()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300"><i class="fas fa-save mr-2"></i>Save Message</button>
-      <button onclick="saveTemplate()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"><i class="fas fa-star mr-2"></i>Save as Template</button>
-      <button onclick="openShareModal()" class="bg-green-400 text-white px-4 py-2 rounded-md hover:bg-green-500 transition duration-300"><i class="fas fa-share-alt mr-2"></i>Share</button>
-    </div>
-    
-    <div class="mb-4">
-      <label class="flex items-center">
-        <input type="checkbox" id="deleteAfterTemplate" class="mr-2">
-        <span class="text-gray-600 text-sm">Delete saved message after saving as template</span>
+<body data-theme="light">
+  <div class="container">
+    <header class="header">
+      <h1 class="title">GoodWisher</h1>
+      <button id="themeToggle" aria-label="Toggle theme" class="icon-btn" title="Toggle theme">
+        <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path id="themeIconPath" d="" fill="currentColor"></path>
+        </svg>
+      </button>
+    </header>
+
+    <main class="card">
+      <div id="worldClock" class="clock">
+        <span id="timeIcon" aria-hidden="true">🕒</span>
+        <span id="clockText">Loading time…</span>
+      </div>
+
+      <p class="sub">Choose an occasion and share a warm message instantly.</p>
+
+      <label class="sr-only" for="language">Language</label>
+      <select id="language" onchange="displayMessage()">
+        <option value="en" selected>English</option>
+        <option value="zh">中文 (Mandarin)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="af">Afrikaans</option>
+      </select>
+
+      <input id="recipientName" type="text" placeholder="Recipient's name (optional)" oninput="updateMessageWithName()">
+      <input id="senderName" type="text" placeholder="Your name (optional)" oninput="updateMessageWithName()">
+
+      <select id="occasion" onchange="displayMessage()">
+        <option value="" disabled selected>Choose an occasion</option>
+        <option value="birthday">Birthday</option>
+        <option value="anniversary">Anniversary</option>
+        <option value="get-well">Get Well Soon</option>
+        <option value="congrats">Congratulations</option>
+        <option value="thank-you">Thank You</option>
+        <option value="good-luck">Good Luck</option>
+        <option value="motivation">Motivation</option>
+        <option value="appreciation">Appreciation</option>
+        <option value="farewell">Farewell</option>
+        <option value="encouragement">Encouragement</option>
+        <option value="love">Love</option>
+        <option value="condolences">Condolences</option>
+        <option value="vacation">Vacation</option>
+      </select>
+
+      <div id="message" class="message"></div>
+
+      <div class="textarea-wrap">
+        <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
+        <button id="emojiButton" class="small-icon" aria-label="Add emoji" title="Add emoji">😊</button>
+      </div>
+
+      <div class="actions">
+        <button onclick="copyMessage()" class="btn">Copy</button>
+        <button onclick="saveMessage()" class="btn alt">Save</button>
+        <button onclick="saveTemplate()" class="btn">Save as Template</button>
+        <button onclick="openShareModal()" class="btn light">Share</button>
+      </div>
+
+      <label class="small">
+        <input type="checkbox" id="deleteAfterTemplate"> Delete saved message after saving as template
       </label>
-    </div>
-    
-    <select id="templateSelect" aria-label="Select template" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-300" onchange="loadTemplate()">
-      <option value="" disabled selected>Load a Template (optional)</option>
-    </select>
-    
-    <div id="savedMessages" class="mt-4">
-      <button onclick="exportSavedMessages()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mb-2"><i class="fas fa-download mr-2"></i>Export Saved Messages</button>
-    </div>
-    
-    <button id="feedbackButton" onclick="openFeedbackModal()" class="w-full bg-teal-500 text-white py-2 rounded-md hover:bg-teal-600 transition duration-300 mt-4 border-2 border-teal-700 text-lg font-semibold"><i class="fas fa-comment mr-2"></i>Give Feedback</button>
-    
-    <p class="text-gray-500 text-xs text-center mt-4">We use analytics to improve your experience. <a href="/privacy.html" class="text-teal-500 hover:underline">Learn more</a>.</p>
-    <p class="text-gray-500 text-xs text-center mt-2">New: World clock, enhanced templates!</p>
+
+      <select id="templateSelect" onchange="loadTemplate()">
+        <option value="" disabled selected>Load a Template (optional)</option>
+      </select>
+
+      <div id="savedMessages" class="saved-area">
+        <button onclick="exportSavedMessages()" class="btn small">Export Saved Messages</button>
+      </div>
+
+      <button id="feedbackButton" onclick="openFeedbackModal()" class="btn big">Give Feedback</button>
+
+      <p class="tiny">Optimized lightweight version — multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</p>
+    </main>
   </div>
 
   <!-- Share Modal -->
-  <div id="shareModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-lg max-w-sm w-full mx-4">
-      <h2 class="text-xl font-bold text-teal-700 mb-4">Share Via</h2>
-      <div class="flex flex-wrap gap-2">
-        <button onclick="shareWhatsApp(); closeShareModal()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"><i class="fab fa-whatsapp mr-2"></i>WhatsApp</button>
-        <button onclick="shareFacebook(); closeShareModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"><i class="fab fa-facebook-f mr-2"></i>Facebook</button>
-        <button onclick="shareTwitter(); closeShareModal()" class="bg-sky-500 text-white px-4 py-2 rounded-md hover:bg-sky-600"><i class="fab fa-twitter mr-2"></i>Twitter</button>
-        <button onclick="shareTelegram(); closeShareModal()" class="bg-telegram-500 text-white px-4 py-2 rounded-md hover:bg-telegram-600"><i class="fab fa-telegram-plane mr-2"></i>Telegram</button>
-        <button onclick="shareEmail(); closeShareModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"><i class="fas fa-envelope mr-2"></i>Email</button>
+  <div id="shareModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h2>Share Via</h2>
+      <div class="modal-actions">
+        <button onclick="shareWhatsApp(); closeShareModal()" class="btn small">WhatsApp</button>
+        <button onclick="shareFacebook(); closeShareModal()" class="btn small">Facebook</button>
+        <button onclick="shareTwitter(); closeShareModal()" class="btn small">X (Twitter)</button>
+        <button onclick="shareTelegram(); closeShareModal()" class="btn small">Telegram</button>
+        <button onclick="shareEmail(); closeShareModal()" class="btn small">Email</button>
       </div>
-      <button onclick="closeShareModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 mt-4 w-full">Cancel</button>
+      <button onclick="closeShareModal()" class="btn light">Cancel</button>
     </div>
   </div>
 
   <!-- Feedback Modal -->
-  <div id="feedbackModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-lg max-w-sm w-full mx-4">
-      <h2 class="text-xl font-bold text-teal-700 mb-4">Your Feedback Matters!</h2>
-      <div class="mb-4">
-        <label class="block text-gray-700 mb-2">Rate your experience:</label>
-        <div id="starRating" class="flex gap-1 justify-center">
-          <button onclick="setRating(1)" class="text-2xl hover:text-yellow-400">★</button>
-          <button onclick="setRating(2)" class="text-2xl hover:text-yellow-400">★</button>
-          <button onclick="setRating(3)" class="text-2xl hover:text-yellow-400">★</button>
-          <button onclick="setRating(4)" class="text-2xl hover:text-yellow-400">★</button>
-          <button onclick="setRating(5)" class="text-2xl hover:text-yellow-400">★</button>
-        </div>
-        <div id="ratingPercentages" class="flex justify-between text-sm text-gray-600 mt-2">
-          <span>20%</span><span>40%</span><span>60%</span><span>80%</span><span>100%</span>
-        </div>
+  <div id="feedbackModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h2>Your Feedback Matters!</h2>
+      <div id="starRating" class="star-row">
+        <button onclick="setRating(1)" class="star">★</button>
+        <button onclick="setRating(2)" class="star">★</button>
+        <button onclick="setRating(3)" class="star">★</button>
+        <button onclick="setRating(4)" class="star">★</button>
+        <button onclick="setRating(5)" class="star">★</button>
       </div>
-      <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-300"></textarea>
-      <div class="flex justify-end gap-2">
-        <button onclick="closeFeedbackModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
-        <button onclick="submitFeedback()" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600">Send</button>
+      <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?"></textarea>
+      <div class="modal-actions">
+        <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+        <button onclick="submitFeedback()" class="btn">Send</button>
       </div>
     </div>
   </div>
