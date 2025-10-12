@@ -1,5 +1,5 @@
 function $(id){return document.getElementById(id);}
-let currentBaseMessage='', selectedRating=0, emojiPickerInitialized=false, confettiLoaded=false;
+let currentBaseMessage='', selectedRating=0;
 
 /* ---------- Theme ---------- */
 function setThemeIcon(){
@@ -9,14 +9,21 @@ function setThemeIcon(){
   path.setAttribute('d',isDark?'M12 4.5a1 1 0 010-2 1 1 0 010 2z':'M12 2a10 10 0 100 20 10 10 0 000-20z');
 }
 function toggleTheme(){
-  const b=document.body;
-  b.dataset.theme=b.dataset.theme==='dark'?'light':'dark';
-  localStorage.setItem('theme',b.dataset.theme);
+  const body=document.body;
+  const newTheme=body.dataset.theme==='dark'?'light':'dark';
+  body.dataset.theme=newTheme;
+  localStorage.setItem('theme',newTheme);
   setThemeIcon();
 }
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=localStorage.getItem('theme')||'light';
+  document.body.dataset.theme=saved;
+  setThemeIcon();
+  $('themeToggle').addEventListener('click',toggleTheme);
+});
 
 /* ---------- Messages ---------- */
-const messages={/* (same multilingual message set from previous version) */};
+const messages={/* (same multilingual messages as before) */};
 const greetings={en:'Hi',zh:'你好',hi:'नमस्ते',es:'Hola',af:'Hallo'};
 
 function displayMessage(){
@@ -38,38 +45,32 @@ function updateMessageWithName(){
   $('customMessage').value=text||currentBaseMessage;
 }
 
-/* ---------- Copy + Confetti ---------- */
-function loadScript(url,cb){const s=document.createElement('script');s.src=url;s.onload=()=>cb&&cb();document.body.appendChild(s);}
-function copyMessage(){
-  const t=$('customMessage').value;if(!t)return alert('Please generate a message first!');
-  navigator.clipboard.writeText(t+"\n\nGenerated with ❤️ using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/").then(()=>{
-    alert('Message copied!');
-    if(!confettiLoaded){confettiLoaded=true;loadScript('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js',()=>confetti({particleCount:80,spread:60,origin:{y:0.6}}));}
-    else confetti({particleCount:80,spread:60,origin:{y:0.6}});
-  });
-}
-
-/* ---------- Helper: add link to shared message ---------- */
+/* ---------- Add app link ---------- */
 function getMessageWithPromo(){
-  const text=$('customMessage').value;
-  if(!text)return'';
-  return `${text}\n\nGenerated with ❤️ using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
+  const t=$('customMessage').value;
+  if(!t)return'';
+  return `${t}\n\nGenerated with ❤️ using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
 }
 
-/* ---------- (Save, Template, Share, Feedback functions identical to previous, 
-   with updated feedback below) ---------- */
+/* ---------- Copy ---------- */
+function copyMessage(){
+  const t=getMessageWithPromo();
+  if(!t.trim())return alert('Please generate a message first!');
+  navigator.clipboard.writeText(t).then(()=>alert('Message copied with GoodWisher link!'));
+}
 
+/* ---------- Feedback ---------- */
 function openFeedbackModal(){$('feedbackModal').classList.remove('hidden');}
 function closeFeedbackModal(){
   $('feedbackModal').classList.add('hidden');
   $('feedbackText').value='';
   selectedRating=0;
-  document.querySelectorAll('#starRating .star').forEach(s=>s.classList.remove('selected'));
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected'));
   $('ratingPercent').textContent='0%';
 }
 function setRating(r){
   selectedRating=r;
-  document.querySelectorAll('#starRating .star').forEach((s,i)=>s.classList.toggle('selected',i<r));
+  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected',i<r));
   $('ratingPercent').textContent=`${r*20}%`;
 }
 function submitFeedback(){
@@ -81,10 +82,3 @@ function submitFeedback(){
   closeFeedbackModal();
   alert('Thanks for your feedback! 😊');
 }
-
-/* ---------- Init ---------- */
-window.addEventListener('DOMContentLoaded',()=>{
-  if(localStorage.getItem('theme')==='dark')document.body.dataset.theme='dark';
-  setThemeIcon();
-  $('themeToggle').addEventListener('click',toggleTheme);
-});
