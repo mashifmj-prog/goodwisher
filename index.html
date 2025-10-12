@@ -1,104 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GoodWisher</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GoodWisher</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
-  <div class="container">
-    <header class="header">
-      <h1 class="title">GoodWisher</h1>
-      <button id="themeToggle" class="icon-btn" title="Toggle theme">
-        <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path id="themeIconPath" fill="currentColor"></path>
-        </svg>
-      </button>
-    </header>
+<div class="container">
+  <header class="header">
+    <h1 class="title">GoodWisher</h1>
+    <button id="themeToggle" class="icon-btn" title="Toggle theme">
+      <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path id="themeIconPath" fill="currentColor"></path>
+      </svg>
+    </button>
+  </header>
 
-    <main class="card">
-      <p class="sub">Choose an occasion, language, and share a warm message instantly.</p>
+  <main class="card">
+    <p class="sub">Choose an occasion, language, and share a warm message instantly.</p>
 
-      <div class="form-group">
-        <label for="language">Language</label>
-        <select id="language">
-          <option value="en" selected>English</option>
-          <option value="zh">中文 (Mandarin)</option>
-          <option value="hi">हिन्दी (Hindi)</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="af">Afrikaans</option>
-        </select>
+    <div class="form-group">
+      <label for="language">Language</label>
+      <select id="language">
+        <option value="en" selected>English</option>
+        <option value="zh">中文 (Mandarin)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="af">Afrikaans</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="occasion">Occasion</label>
+      <select id="occasion">
+        <option value="" disabled selected>Select an occasion</option>
+        <option value="birthday">Birthday</option>
+        <option value="anniversary">Anniversary</option>
+        <option value="get-well">Get Well Soon</option>
+        <option value="congrats">Congratulations</option>
+        <option value="thank-you">Thank You</option>
+        <option value="good-luck">Good Luck</option>
+        <option value="motivation">Motivation</option>
+        <option value="appreciation">Appreciation</option>
+        <option value="farewell">Farewell</option>
+        <option value="encouragement">Encouragement</option>
+        <option value="love">Love</option>
+        <option value="condolences">Condolences</option>
+        <option value="vacation">Vacation</option>
+      </select>
+    </div>
+
+    <div class="names-wrap">
+      <div class="name-input">
+        <input id="senderName" placeholder="Your name (optional)">
+        <button class="clear-btn" data-target="senderName">×</button>
       </div>
-
-      <div class="form-group">
-        <label for="occasion">Occasion</label>
-        <select id="occasion">
-          <option value="" disabled selected>Select an occasion</option>
-          <option value="birthday">Birthday</option>
-          <option value="anniversary">Anniversary</option>
-          <option value="get-well">Get Well Soon</option>
-          <option value="congrats">Congratulations</option>
-          <option value="thank-you">Thank You</option>
-          <option value="good-luck">Good Luck</option>
-          <option value="motivation">Motivation</option>
-          <option value="appreciation">Appreciation</option>
-          <option value="farewell">Farewell</option>
-          <option value="encouragement">Encouragement</option>
-          <option value="love">Love</option>
-          <option value="condolences">Condolences</option>
-          <option value="vacation">Vacation</option>
-        </select>
+      <div class="name-input">
+        <input id="recipientName" placeholder="Recipient's name (optional)">
+        <button class="clear-btn" data-target="recipientName">×</button>
       </div>
+    </div>
 
-      <!-- Name Inputs with clear buttons -->
-      <div class="form-group names-wrap">
-        <div class="name-input">
-          <input id="senderName" placeholder="Your name (optional)" />
-          <button class="clear-btn" data-target="senderName">×</button>
-        </div>
-        <div class="name-input">
-          <input id="recipientName" placeholder="Recipient's name (optional)" />
-          <button class="clear-btn" data-target="recipientName">×</button>
-        </div>
-      </div>
+    <div class="message-area">
+      <textarea id="customMessage" rows="6" placeholder="Write your message here…"></textarea>
+      <button id="emojiButton" class="small-icon">😊</button>
+    </div>
 
-      <!-- Message body with emoji -->
-      <div class="message-area">
-        <textarea id="customMessage" rows="6" placeholder="Write your message here…"></textarea>
-        <button id="emojiButton" class="small-icon">😊</button>
-      </div>
+    <button id="shareBtn" class="btn big">Share</button>
 
-      <!-- Share button -->
-      <button id="shareBtn" class="btn big">Share</button>
+    <div id="shareOptions" class="share-options hidden">
+      <button class="btn small" id="shareWhatsApp">WhatsApp</button>
+      <button class="btn small" id="shareFacebook">Facebook</button>
+      <button class="btn small" id="shareX">X (Twitter)</button>
+      <button class="btn small" id="shareTelegram">Telegram</button>
+      <button class="btn small" id="shareEmail">Email</button>
+      <button class="btn small" id="shareDevice">Share (Device)</button>
+    </div>
 
-      <!-- Share options (hidden by default) -->
-      <div id="shareOptions" class="share-options hidden">
-        <button class="btn small" id="shareWhatsApp">WhatsApp</button>
-        <button class="btn small" id="shareFacebook">Facebook</button>
-        <button class="btn small" id="shareX">X (Twitter)</button>
-        <button class="btn small" id="shareTelegram">Telegram</button>
-        <button class="btn small" id="shareEmail">Email</button>
-        <button class="btn small" id="shareDevice">Share (Device)</button>
-      </div>
+    <button id="feedbackBtn" class="btn big">Give Feedback</button>
+  </main>
+</div>
 
-      <!-- Feedback button -->
-      <button id="feedbackBtn" class="btn big">Give Feedback</button>
-    </main>
+<div id="feedbackModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>We Value Your Feedback!</h2>
+    <div class="star-percent-wrap">
+      <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
+      <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
+      <div class="star-col"><button onclick="setRating(3)" class="star">★</button><span>60%</span></div>
+      <div class="star-col"><button onclick="setRating(4)" class="star">★</button><span>80%</span></div>
+      <div class="star-col"><button onclick="setRating(5)" class="star">★</button><span>100%</span></div>
+    </div>
+    <div id="ratingScore" class="rating-score">Score: 0%</div>
+    <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+    <div class="modal-actions">
+      <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+      <button onclick="submitFeedback()" class="btn">Send</button>
+    </div>
   </div>
+</div>
 
-  <!-- Feedback Modal -->
-  <div id="feedbackModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>We Value Your Feedback!</h2>
-      <div class="star-percent-wrap">
-        <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
-        <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
-        <div class="star-col"><button onclick="setRating(3)" class="star">★</button><span>60%</span></div>
-        <div class="star-col"><button onclick="setRating(4)" class="star">★</button><span>80%</span></div>
-        <div class="star-col"><button onclick="setRating(5)" class="star">★</button><span>100%</span></div>
-      </div>
-      <div id="ratingScore" class="rating-score">Score: 0%</div>
-      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
-      <div class="modal-actions">
-        <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+<script src="script.js"></script>
+</body>
+</html>
