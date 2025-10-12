@@ -17,71 +17,136 @@ function updateMessageWithName() {
 
 function displayMessage() {
   const occasion = document.getElementById('occasion').value;
+  const language = document.getElementById('language').value;
   const messageDiv = document.getElementById('message');
   const customMessage = document.getElementById('customMessage');
   const messages = {
-    birthday: [
-      'Wishing you a fantastic birthday filled with joy! 🎉',
-      'Happy birthday! May your day be full of laughter and love! 🎂',
-      'Celebrating you today! Have an amazing birthday! 🥳'
-    ],
-    anniversary: [
-      'Cheers to your love and another year together! 💕',
-      'Happy anniversary! Here’s to many more shared moments! 💑',
-      'Congratulations on your milestone! Love grows stronger! 💖'
-    ],
-    'get-well': [
-      'Sending you warm wishes for a speedy recovery! 🌻',
-      'Get well soon! Thinking of you with care and warmth! 💊',
-      'Wishing you strength and health in no time! 🌿'
-    ],
-    congrats: [
-      'Big congrats on your amazing achievement! 🏆',
-      'Well done! Your success is truly inspiring! 🎈',
-      'Congratulations! Keep shining bright! 🌟'
-    ],
-    'thank-you': [
-      'Thank you for your amazing support and kindness! 🙏',
-      'Grateful for you! Your help means the world! 😊',
-      'Thank you from the heart for all you do! 💝'
-    ],
-    'good-luck': [
-      'Wishing you the best of luck in your next adventure! 🍀',
-      'Good luck! You’re going to do great things! 🌈',
-      'All the best for your journey ahead! 🚪'
-    ],
-    motivation: [
-      'Keep shining, you’ve got this! 🚀',
-      'You’re unstoppable! Keep pushing forward! 💥',
-      'Believe in yourself, you’re on the right path! 🌟'
-    ],
-    appreciation: [
-      'Your efforts are truly appreciated! 🌟',
-      'Thank you for your incredible work and dedication! 👏',
-      'You make a difference, and it’s noticed! 💛'
-    ],
-    farewell: [
-      'Wishing you all the best on your new journey! 👋',
-      'Farewell, but not goodbye! Shine in your next chapter! 🌍',
-      'Best wishes as you embark on new adventures! 🚶'
-    ],
-    encouragement: [
-      'You’re stronger than you know, keep pushing forward! 💪',
-      'You’ve got this! Keep going with courage! 🦁',
-      'Stay strong, you’re capable of amazing things! 🌼'
-    ],
-    love: [
-      'You make every moment special with your love! ❤️',
-      'My heart is yours, always and forever! 💞',
-      'Your love lights up my world! 🌹'
-    ],
-    condolences: [
-      'Sending heartfelt condolences in this time of loss. 🕊️',
-      'With you in spirit, offering deepest sympathy. 🌹',
-      'May love and memories bring you comfort. 🙏'
-    ]
+    en: {
+      birthday: [
+        'Wishing you a fantastic birthday filled with joy! 🎉',
+        'Happy birthday! May your day be full of laughter and love! 🎂',
+        'Celebrating you today! Have an amazing birthday! 🥳'
+      ],
+      anniversary: [
+        'Cheers to your love and another year together! 💕',
+        'Happy anniversary! Here’s to many more shared moments! 💑',
+        'Congratulations on your milestone! Love grows stronger! 💖'
+      ],
+      'get-well': [
+        'Sending you warm wishes for a speedy recovery! 🌻',
+        'Get well soon! Thinking of you with care and warmth! 💊',
+        'Wishing you strength and health in no time! 🌿'
+      ],
+      congrats: [
+        'Big congrats on your amazing achievement! 🏆',
+        'Well done! Your success is truly inspiring! 🎈',
+        'Congratulations! Keep shining bright! 🌟'
+      ],
+      'thank-you': [
+        'Thank you for your amazing support and kindness! 🙏',
+        'Grateful for you! Your help means the world! 😊',
+        'Thank you from the heart for all you do! 💝'
+      ],
+      'good-luck': [
+        'Wishing you the best of luck in your next adventure! 🍀',
+        'Good luck! You’re going to do great things! 🌈',
+        'All the best for your journey ahead! 🚪'
+      ],
+      motivation: [
+        'Keep shining, you’ve got this! 🚀',
+        'You’re unstoppable! Keep pushing forward! 💥',
+        'Believe in yourself, you’re on the right path! 🌟'
+      ],
+      appreciation: [
+        'Your efforts are truly appreciated! 🌟',
+        'Thank you for your incredible work and dedication! 👏',
+        'You make a difference, and it’s noticed! 💛'
+      ],
+      farewell: [
+        'Wishing you all the best on your new journey! 👋',
+        'Farewell, but not goodbye! Shine in your next chapter! 🌍',
+        'Best wishes as you embark on new adventures! 🚶'
+      ],
+      encouragement: [
+        'You’re stronger than you know, keep pushing forward! 💪',
+        'You’ve got this! Keep going with courage! 🦁',
+        'Stay strong, you’re capable of amazing things! 🌼'
+      ],
+      love: [
+        'You make every moment special with your love! ❤️',
+        'My heart is yours, always and forever! 💞',
+        'Your love lights up my world! 🌹'
+      ],
+      condolences: [
+        'Sending heartfelt condolences in this time of loss. 🕊️',
+        'With you in spirit, offering deepest sympathy. 🌹',
+        'May love and memories bring you comfort. 🙏'
+      ]
+    },
+    es: {
+      birthday: [
+        '¡Te deseo un cumpleaños fantástico lleno de alegría! 🎉',
+        '¡Feliz cumpleaños! ¡Que tu día esté lleno de risas y amor! 🎂',
+        '¡Celebrándote hoy! ¡Que tengas un cumpleaños increíble! 🥳'
+      ],
+      anniversary: [
+        '¡Salud por su amor y otro año juntos! 💕',
+        '¡Feliz aniversario! ¡Por muchos más momentos compartidos! 💑',
+        '¡Felicidades por su hito! ¡El amor crece más fuerte! 💖'
+      ],
+      'get-well': [
+        'Te envío cálidos deseos de una pronta recuperación! 🌻',
+        '¡Mejorate pronto! ¡Pensando en ti con cuidado y calidez! 💊',
+        '¡Te deseo fuerza y salud en poco tiempo! 🌿'
+      ],
+      congrats: [
+        '¡Felicidades por tu increíble logro! 🏆',
+        '¡Bien hecho! ¡Tu éxito es realmente inspirador! 🎈',
+        '¡Felicidades! ¡Sigue brillando! 🌟'
+      ],
+      'thank-you': [
+        '¡Gracias por tu increíble apoyo y amabilidad! 🙏',
+        '¡Agradecido por ti! ¡Tu ayuda significa el mundo! 😊',
+        '¡Gracias desde el corazón por todo lo que haces! 💝'
+      ],
+      'good-luck': [
+        '¡Te deseo lo mejor de la suerte en tu próxima aventura! 🍀',
+        '¡Buena suerte! ¡Vas a hacer grandes cosas! 🌈',
+        '¡Todo lo mejor para tu viaje adelante! 🚪'
+      ],
+      motivation: [
+        '¡Sigue brillando, tú puedes! 🚀',
+        '¡Eres imparable! ¡Sigue adelante! 💥',
+        '¡Cree en ti mismo, estás en el camino correcto! 🌟'
+      ],
+      appreciation: [
+        '¡Tus esfuerzos son verdaderamente apreciados! 🌟',
+        '¡Gracias por tu increíble trabajo y dedicación! 👏',
+        '¡Haces una diferencia, y se nota! 💛'
+      ],
+      farewell: [
+        '¡Te deseo lo mejor en tu nuevo viaje! 👋',
+        '¡Despedida, pero no adiós! ¡Brilla en tu próximo capítulo! 🌍',
+        '¡Mejores deseos mientras embarcas en nuevas aventuras! 🚶'
+      ],
+      encouragement: [
+        '¡Eres más fuerte de lo que sabes, sigue adelante! 💪',
+        '¡Tú puedes! ¡Sigue con coraje! 🦁',
+        '¡Mantente fuerte, eres capaz de cosas increíbles! 🌼'
+      ],
+      love: [
+        '¡Haces cada momento especial con tu amor! ❤️',
+        '¡Mi corazón es tuyo, siempre y para siempre! 💞',
+        '¡Tu amor ilumina mi mundo! 🌹'
+      ],
+      condolences: [
+        'Envío condolencias de corazón en este tiempo de pérdida. 🕊️',
+        'Contigo en espíritu, ofreciendo la más profunda simpatía. 🌹',
+        'Que el amor y los recuerdos te traigan consuelo. 🙏'
+      ]
+    }
   };
-  const messageList = messages[occasion] || [''];
+  const messageList = messages[language][occasion] || [''];
   currentBaseMessage = messageList[Math.floor(Math.random() * messageList.length)];
   messageDiv.textContent = currentBaseMessage;
   updateMessageWithName();
@@ -107,6 +172,19 @@ function saveMessage() {
   localStorage.setItem('savedMessages', JSON.stringify(saved));
   gtag('event', 'save_message', { 'event_category': 'Action', 'event_label': 'Save Message' });
   displaySavedMessages();
+}
+
+function exportSavedMessages() {
+  const saved = JSON.parse(localStorage.getItem('savedMessages') || '[]');
+  if (saved.length === 0) return alert('No messages to export!');
+  const blob = new Blob([JSON.stringify(saved, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'saved_messages.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  gtag('event', 'export_messages', { 'event_category': 'Action', 'event_label': 'Export Saved Messages' });
 }
 
 function deleteMessage(index) {
