@@ -130,3 +130,17 @@ input, select, textarea {
   margin-bottom: 10px;
   color: var(--accent);
 }
+
+/* ✅ checkbox moved to right */
+.delete-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  cursor: pointer;
+}
+.delete-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
