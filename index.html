@@ -63,14 +63,16 @@
         </div>
       </div>
 
-      <!-- Message body with protected signature -->
+      <!-- Message body with emoji -->
       <div class="message-area">
         <textarea id="customMessage" rows="6" placeholder="Write your message here…"></textarea>
-        <div class="signature">Generated with love using GoodWisher.<br>https://mashifmj-prog.github.io/goodwisher/</div>
+        <button id="emojiButton" class="small-icon">😊</button>
       </div>
 
-      <!-- Single Share Button -->
+      <!-- Share button -->
       <button id="shareBtn" class="btn big">Share</button>
+
+      <!-- Share options (hidden by default) -->
       <div id="shareOptions" class="share-options hidden">
         <button class="btn small" id="shareWhatsApp">WhatsApp</button>
         <button class="btn small" id="shareFacebook">Facebook</button>
@@ -80,7 +82,7 @@
         <button class="btn small" id="shareDevice">Share (Device)</button>
       </div>
 
-      <!-- Feedback Button -->
+      <!-- Feedback button -->
       <button id="feedbackBtn" class="btn big">Give Feedback</button>
     </main>
   </div>
@@ -100,11 +102,3 @@
       <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
       <div class="modal-actions">
         <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
-        <button onclick="submitFeedback()" class="btn">Send</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
