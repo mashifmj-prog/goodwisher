@@ -98,6 +98,7 @@
   <div id="feedbackModal" class="modal hidden">
     <div class="modal-content">
       <h2>Your Feedback Matters!</h2>
+
       <div id="starRating" class="star-row">
         <button onclick="setRating(1)" class="star">★</button>
         <button onclick="setRating(2)" class="star">★</button>
@@ -105,7 +106,13 @@
         <button onclick="setRating(4)" class="star">★</button>
         <button onclick="setRating(5)" class="star">★</button>
       </div>
-      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+
+      <div id="percentRow" class="percent-row">
+        <span>20%</span><span>40%</span><span>60%</span><span>80%</span><span>100%</span>
+      </div>
+      <div id="ratingPercent" class="rating-value">0%</div>
+
+      <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?"></textarea>
       <div class="modal-actions">
         <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
         <button onclick="submitFeedback()" class="btn">Send</button>
