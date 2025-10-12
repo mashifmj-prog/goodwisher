@@ -1,19 +1,21 @@
-/* Lightweight script with 5 languages: English, Mandarin, Hindi, Spanish, Afrikaans */
 function $(id){return document.getElementById(id);}
-let currentBaseMessage='';let selectedRating=0;let emojiPickerInitialized=false;let confettiLoaded=false;
-function loadScript(url,cb){const s=document.createElement('script');s.src=url;s.onload=()=>cb&&cb();document.body.appendChild(s);}
+let currentBaseMessage='', selectedRating=0, emojiPickerInitialized=false, confettiLoaded=false;
 
-/* Theme */
-function setThemeIcon(){const p=$('themeIconPath');if(!p)return;const d=document.body.dataset.theme==='dark';
-p.setAttribute('d',d?'M12 4.5a1 1 0 010-2 1 1 0 010 2z':'M12 2a10 10 0 100 20 10 10 0 000-20z');}
-function toggleTheme(){const b=document.body;b.dataset.theme=b.dataset.theme==='dark'?'light':'dark';localStorage.setItem('theme',b.dataset.theme);setThemeIcon();}
+/* ---------- Theme ---------- */
+function setThemeIcon(){
+  const path=$('themeIconPath');
+  if(!path) return;
+  const isDark=document.body.dataset.theme==='dark';
+  path.setAttribute('d',isDark?'M12 4.5a1 1 0 010-2 1 1 0 010 2z':'M12 2a10 10 0 100 20 10 10 0 000-20z');
+}
+function toggleTheme(){
+  const b=document.body;
+  b.dataset.theme=b.dataset.theme==='dark'?'light':'dark';
+  localStorage.setItem('theme',b.dataset.theme);
+  setThemeIcon();
+}
 
-/* Clock */
-function updateClock(){const n=new Date(),days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-$('clockText').textContent=`${days[n.getDay()]}, ${months[n.getMonth()]} ${n.getDate()}, ${n.getFullYear()}, ${n.toTimeString().split(' ')[0]}`;
-const h=n.getHours(),ic=$('timeIcon');ic.textContent=h<12?'🧡':h<15?'☀️':h<18?'🌤️':'🌙';}
-
-/* Messages (English, Chinese, Hindi, Spanish, Afrikaans) */
+/* ---------- Messages ---------- */
 const messages={
  en:{birthday:['Wishing you a fantastic birthday filled with joy! 🎉','Happy birthday! May your day be full of laughter and love! 🎂'],
      anniversary:['Happy anniversary! Wishing you love and joy! 💕'],
@@ -82,36 +84,26 @@ const messages={
      vacation:['Geniet jou vakansie! 🌴']}
 };
 
-/* Greetings per language */
+/* Greetings (optional, just for personalization) */
 const greetings={
- en:['Good Morning','Good Day','Good Afternoon','Good Evening'],
- zh:['早上好','日安','下午好','晚上好'],
- hi:['सुप्रभात','नमस्ते','शुभ दोपहर','शुभ संध्या'],
- es:['Buenos días','Buen día','Buenas tardes','Buenas noches'],
- af:['Goeie môre','Goeie dag','Goeie middag','Goeie naand']
+ en:'Hi',
+ zh:'你好',
+ hi:'नमस्ते',
+ es:'Hola',
+ af:'Hallo'
 };
 
 function displayMessage(){
- const o=$('occasion').value,l=$('language').value||'en',m=$('message');
- const list=(messages[l]&&messages[l][o])||(messages.en[o]||['']);
- currentBaseMessage=list[Math.floor(Math.random()*list.length)];
- m.textContent=currentBaseMessage;updateMessageWithName();
+  const occasion=$('occasion').value, lang=$('language').value||'en', msg=$('message');
+  const list=(messages[lang]&&messages[lang][occasion])||(messages.en[occasion]||['']);
+  currentBaseMessage=list[Math.floor(Math.random()*list.length)];
+  msg.textContent=currentBaseMessage;
+  updateMessageWithName();
 }
-function getTimeGreeting(lang){const h=new Date().getHours(),g=greetings[lang]||greetings.en;
- return h<12?g[0]:h<15?g[1]:h<18?g[2]:g[3];}
+
 function updateMessageWithName(){
- const r=$('recipientName').value.trim(),s=$('senderName').value.trim(),l=$('language').value||'en';
- let msg=currentBaseMessage||'';if(r){msg=`${getTimeGreeting(l)}, ${r}\n\n${currentBaseMessage}`;}
- if(s){msg=`${msg}\n\nRegards,\n${s}`;}
- $('customMessage').value=msg||currentBaseMessage;
-}
-
-/* copy + confetti */
-function copyMessage(){const t=$('customMessage').value;if(!t)return alert('Please generate a message first!');
- navigator.clipboard.writeText(t).then(()=>{
-  alert('Message copied!');
-  if(!confettiLoaded){confettiLoaded=true;loadScript('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js',()=>{confetti({particleCount:80,spread:60,origin:{y:0.6}});});}
-  else{confetti({particleCount:80,spread:60,origin:{y:0.6}});}
- });}
-
-/* saving / templates etc. unchanged from previous version ... (same as before) */
+  const r=$('recipientName').value.trim(), s=$('senderName').value.trim(), l=$('language').value||'en';
+  let text=currentBaseMessage||'';
+  if(r){text=`${greetings[l]} ${r},\n\n${currentBaseMessage}`;}
+  if(s){text=`${text}\n\nRegards,\n${s}`;}
+  $('customMessage').value=text||currentBase
