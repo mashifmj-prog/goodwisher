@@ -1,137 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GoodWisher</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body data-theme="light">
-  <div class="container">
-    <header class="header">
-      <h1 class="title">GoodWisher</h1>
-      <button id="themeToggle" aria-label="Toggle theme" class="icon-btn" title="Toggle theme">
-        <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path id="themeIconPath" d="" fill="currentColor"></path>
-        </svg>
-      </button>
-    </header>
+<!-- Feedback Modal -->
+<div id="feedbackModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Your Feedback Matters!</h2>
 
-    <main class="card">
-      <p class="sub">Choose an occasion and share a warm message instantly.</p>
-
-      <select id="language" onchange="displayMessage()">
-        <option value="en" selected>English</option>
-        <option value="zh">中文 (Mandarin)</option>
-        <option value="hi">हिन्दी (Hindi)</option>
-        <option value="es">Español (Spanish)</option>
-        <option value="af">Afrikaans</option>
-      </select>
-
-      <input id="recipientName" type="text" placeholder="Recipient's name (optional)" oninput="updateMessageWithName()" />
-      <input id="senderName" type="text" placeholder="Your name (optional)" oninput="updateMessageWithName()" />
-
-      <select id="occasion" onchange="displayMessage()">
-        <option value="" disabled selected>Select an occasion</option>
-        <option value="birthday">Birthday</option>
-        <option value="anniversary">Anniversary</option>
-        <option value="get-well">Get Well Soon</option>
-        <option value="congrats">Congratulations</option>
-        <option value="thank-you">Thank You</option>
-        <option value="good-luck">Good Luck</option>
-        <option value="motivation">Motivation</option>
-        <option value="appreciation">Appreciation</option>
-        <option value="farewell">Farewell</option>
-        <option value="encouragement">Encouragement</option>
-        <option value="love">Love</option>
-        <option value="condolences">Condolences</option>
-        <option value="vacation">Vacation</option>
-      </select>
-
-      <div id="message" class="message"></div>
-
-      <div class="textarea-wrap">
-        <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
-        <button id="emojiButton" class="small-icon" aria-label="Add emoji">😊</button>
+    <div id="starPercentWrap" class="star-percent-wrap">
+      <div class="star-col">
+        <button onclick="setRating(1)" class="star">★</button>
+        <span>20%</span>
       </div>
-
-      <div class="actions">
-        <button onclick="copyMessage()" class="btn">Copy</button>
-        <button onclick="saveMessage()" class="btn alt">Save</button>
-        <button onclick="saveTemplate()" class="btn">Save as Template</button>
-        <button onclick="openShareModal()" class="btn light">Share</button>
+      <div class="star-col">
+        <button onclick="setRating(2)" class="star">★</button>
+        <span>40%</span>
       </div>
-
-      <label class="small">
-        <input type="checkbox" id="deleteAfterTemplate" /> Delete saved message after saving as template
-      </label>
-
-      <select id="templateSelect" onchange="loadTemplate()">
-        <option value="" disabled selected>Load a Template (optional)</option>
-      </select>
-
-      <div id="savedMessages" class="saved-area">
-        <button onclick="exportSavedMessages()" class="btn small">Export Saved Messages</button>
+      <div class="star-col">
+        <button onclick="setRating(3)" class="star">★</button>
+        <span>60%</span>
       </div>
-
-      <button id="feedbackButton" onclick="openFeedbackModal()" class="btn big">Give Feedback</button>
-      <p class="tiny">Multilingual version (EN, 中文, हिन्दी, Español, Afrikaans)</p>
-    </main>
-  </div>
-
-  <!-- Share Modal -->
-  <div id="shareModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Share Via</h2>
-      <div class="modal-actions">
-        <button onclick="shareWhatsApp(); closeShareModal()" class="btn small">WhatsApp</button>
-        <button onclick="shareFacebook(); closeShareModal()" class="btn small">Facebook</button>
-        <button onclick="shareTwitter(); closeShareModal()" class="btn small">X (Twitter)</button>
-        <button onclick="shareTelegram(); closeShareModal()" class="btn small">Telegram</button>
-        <button onclick="shareEmail(); closeShareModal()" class="btn small">Email</button>
+      <div class="star-col">
+        <button onclick="setRating(4)" class="star">★</button>
+        <span>80%</span>
       </div>
-      <button onclick="closeShareModal()" class="btn light">Cancel</button>
-    </div>
-  </div>
-
-  <!-- Feedback Modal -->
-  <div id="feedbackModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Your Feedback Matters!</h2>
-
-      <div id="starPercentWrap" class="star-percent-wrap">
-        <div class="star-col">
-          <button onclick="setRating(1)" class="star">★</button>
-          <span>20%</span>
-        </div>
-        <div class="star-col">
-          <button onclick="setRating(2)" class="star">★</button>
-          <span>40%</span>
-        </div>
-        <div class="star-col">
-          <button onclick="setRating(3)" class="star">★</button>
-          <span>60%</span>
-        </div>
-        <div class="star-col">
-          <button onclick="setRating(4)" class="star">★</button>
-          <span>80%</span>
-        </div>
-        <div class="star-col">
-          <button onclick="setRating(5)" class="star">★</button>
-          <span>100%</span>
-        </div>
-      </div>
-
-      <div id="ratingPercent" class="rating-value">0%</div>
-
-      <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?"></textarea>
-      <div class="modal-actions">
-        <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
-        <button onclick="submitFeedback()" class="btn">Send</button>
+      <div class="star-col">
+        <button onclick="setRating(5)" class="star">★</button>
+        <span>100%</span>
       </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
-</body>
-</html>
+    <div id="ratingScore" class="rating-score">Score: 0%</div>
+
+    <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?"></textarea>
+    <div class="modal-actions">
+      <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+      <button onclick="submitFeedback()" class="btn">Send</button>
+    </div>
+  </div>
+</div>
