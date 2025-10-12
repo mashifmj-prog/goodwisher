@@ -49,10 +49,6 @@ body {
   padding: 0.5rem;
 }
 
-#authSection button, #authSection .text-sm {
-  font-size: 0.85rem;
-}
-
 select#occasion, select#language, select#templateSelect, input#recipientName, input#senderName {
   background-color: #fff;
   border-color: var(--border-color);
@@ -72,7 +68,7 @@ textarea#customMessage {
   color: #374151;
 }
 
-button, label[for="importTemplates"] {
+button {
   font-weight: 600;
   font-size: 0.9rem;
   letter-spacing: 0.5px;
@@ -82,12 +78,12 @@ button, label[for="importTemplates"] {
   justify-content: center;
 }
 
-button:not(.delete-btn, .edit-btn, #emojiButton), label[for="importTemplates"] {
+button:not(.delete-btn, .edit-btn, #emojiButton) {
   background-color: var(--button-bg);
   color: var(--text-color);
 }
 
-button:not(.delete-btn, .edit-btn, #emojiButton):hover, label[for="importTemplates"]:hover {
+button:not(.delete-btn, .edit-btn, #emojiButton):hover {
   background-color: var(--button-hover);
   transform: translateY(-2px);
 }
@@ -200,8 +196,7 @@ button:not(.delete-btn, .edit-btn, #emojiButton):hover, label[for="importTemplat
 
 @media (max-width: 640px) {
   .max-w-md { padding: 1rem; }
-  button, label[for="importTemplates"] { padding: 0.5rem 0.75rem; font-size: 0.85rem; flex: 1 1 48%; }
+  button { padding: 0.5rem 0.75rem; font-size: 0.85rem; flex: 1 1 48%; }
   .flex-wrap { gap: 0.5rem; }
   .toggle-theme { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
-  #authSection button, #authSection .text-sm { font-size: 0.8rem; }
 }
