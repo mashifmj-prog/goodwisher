@@ -5,7 +5,10 @@ let selectedRating=0;
 function setThemeIcon(){
   const p=$('themeIconPath');
   const isDark=document.body.dataset.theme==='dark';
-  p.setAttribute('d',isDark?'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z':'M12 2a10 10 0 100 20 10 10 0 000-20z');
+  p.setAttribute('d',isDark
+    ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z'
+    : 'M12 2a10 10 0 100 20 10 10 0 000-20z'
+  );
 }
 function toggleTheme(){
   const body=document.body;
@@ -89,12 +92,15 @@ function submitFeedback(){
 /* SHARE */
 function openShareModal(){ $('shareModal').classList.remove('hidden'); }
 function closeShareModal(){ $('shareModal').classList.add('hidden'); }
+
 function getMessageWithPromo(){
   const text=$('customMessage').value.trim();
   if(!text){alert('Please generate a message first!');return '';}
+  // ensure no duplicate and no emoji in signature
   return text.replace(/Generated with love using GoodWisher[.\s\S]*/gi,'').trim() +
          `\n\nGenerated with love using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
 }
+
 function shareWhatsApp(){
   const msg=getMessageWithPromo(); if(!msg)return;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
