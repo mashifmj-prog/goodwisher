@@ -9,9 +9,6 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -30,14 +27,6 @@
       <span id="timeIcon"></span> <span id="clockText">Loading...</span>
     </div>
     <p class="text-gray-600 text-center mb-6">Choose an occasion and share a warm message instantly.</p>
-    
-    <div id="authSection" class="mb-4">
-      <button id="signInButton" onclick="signInWithGoogle()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 hidden"><i class="fas fa-sign-in-alt mr-2"></i>Sign In to Sync</button>
-      <div id="userInfo" class="text-sm text-gray-600 hidden">
-        <span id="userEmail"></span>
-        <button onclick="signOut()" class="ml-2 text-teal-700 hover:underline">Sign Out</button>
-      </div>
-    </div>
     
     <select id="language" aria-label="Select language" class="w-full p-2 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-300">
       <option value="en" selected>English</option>
@@ -88,7 +77,6 @@
       <button onclick="saveMessage()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300"><i class="fas fa-save mr-2"></i>Save Message</button>
       <button onclick="saveTemplate()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"><i class="fas fa-star mr-2"></i>Save as Template</button>
       <button onclick="openShareModal()" class="bg-green-400 text-white px-4 py-2 rounded-md hover:bg-green-500 transition duration-300"><i class="fas fa-share-alt mr-2"></i>Share</button>
-      <button id="syncButton" onclick="saveTemplatesToCloud()" class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 transition duration-300 hidden"><i class="fas fa-cloud-upload-alt mr-2"></i>Sync to Cloud</button>
     </div>
     
     <div class="mb-4">
@@ -103,13 +91,7 @@
     </select>
     
     <div id="savedMessages" class="mt-4">
-      <div class="flex gap-2">
-        <button onclick="exportSavedMessages()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"><i class="fas fa-download mr-2"></i>Export Saved Messages</button>
-        <label class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 cursor-pointer">
-          <i class="fas fa-upload mr-2"></i>Import Templates
-          <input type="file" id="importTemplates" accept=".json" class="hidden" onchange="importTemplates()">
-        </label>
-      </div>
+      <button onclick="exportSavedMessages()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mb-2"><i class="fas fa-download mr-2"></i>Export Saved Messages</button>
     </div>
     
     <button id="feedbackButton" onclick="openFeedbackModal()" class="w-full bg-teal-500 text-white py-2 rounded-md hover:bg-teal-600 transition duration-300 mt-4 border-2 border-teal-700 text-lg font-semibold"><i class="fas fa-comment mr-2"></i>Give Feedback</button>
