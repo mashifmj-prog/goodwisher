@@ -1,7 +1,7 @@
 const $ = id => document.getElementById(id);
 let selectedRating = 0;
 
-// Theme toggle
+// Theme
 function setThemeIcon() {
   const p = $('themeIconPath');
   const isDark = document.body.dataset.theme === 'dark';
@@ -11,19 +11,15 @@ function setThemeIcon() {
   );
 }
 function toggleTheme() {
-  const body = document.body;
-  body.dataset.theme = body.dataset.theme === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('theme', body.dataset.theme);
+  document.body.dataset.theme = document.body.dataset.theme==='dark'?'light':'dark';
+  localStorage.setItem('theme', document.body.dataset.theme);
   setThemeIcon();
 }
 
-// Clear name input
-function clearNameInput(e) {
-  const targetId = e.target.dataset.target;
-  $(targetId).value = '';
-}
+// Clear name inputs
+function clearNameInput(e) { $(e.target.dataset.target).value=''; }
 
-// Message generation (simple template, can extend with multilingual)
+// Generate message
 function generateMessage() {
   const occ = $('occasion').value;
   const r = $('recipientName').value.trim();
@@ -40,7 +36,7 @@ function generateMessage() {
     'farewell':'Wishing you the best in your next adventure! 👋',
     'encouragement':'You’ve got this! 💪',
     'love':'You make life beautiful! ❤️',
-    'condolences':'Sending my deepest condolences. 🕊️',
+    'condolences':'Sending heartfelt condolences. 🕊️',
     'vacation':'Enjoy your well-deserved vacation! 🌴'
   };
   if(!occ) return;
@@ -56,65 +52,96 @@ function closeFeedbackModal() {
   $('feedbackModal').classList.add('hidden');
   $('feedbackText').value = '';
   selectedRating = 0;
-  document.querySelectorAll('.star').forEach(s => s.classList.remove('selected'));
-  $('ratingScore').textContent = 'Score: 0%';
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected'));
+  $('ratingScore').textContent='Score: 0%';
 }
 function setRating(r) {
-  selectedRating = r;
-  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected', i<r));
-  $('ratingScore').textContent = `Score: ${r*20}%`;
+  selectedRating=r;
+  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected',i<r));
+  $('ratingScore').textContent=`Score: ${r*20}%`;
 }
 function submitFeedback(){
-  const fb = $('feedbackText').value.trim();
-  if(!fb && selectedRating===0) return alert('Please rate or comment!');
+  const fb=$('feedbackText').value.trim();
+  if(!fb&&selectedRating===0) return alert('Please rate or comment!');
   alert(`Thanks for rating ${selectedRating}/5 (${selectedRating*20}%)!`);
   closeFeedbackModal();
 }
 
-// Share functionality
-function toggleShareOptions() { $('shareOptions').classList.toggle('hidden'); }
-function getMessageForShare() {
-  const msg = $('customMessage').value.trim();
-  return msg + "\n\nGenerated with love using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/";
+// Share
+function toggleShareOptions(){ $('shareOptions').classList.toggle('hidden'); }
+function getMessageForShare(){
+  let msg = $('customMessage').value.trim();
+  const senderName = $('senderName').value.trim();
+  if(senderName) msg += `\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
+  return msg;
 }
-function shareGeneric(urlBase) {
-  const msg = getMessageForShare();
-  window.open(urlBase + encodeURIComponent(msg), '_blank');
-}
-function shareDevice() {
-  const text = getMessageForShare();
-  if (navigator.share) {
-    navigator.share({ text }).catch(err => console.log('Share canceled or failed', err));
-  } else {
-    alert('Device share not supported. Copy the message manually.');
-  }
+function shareGeneric(urlBase){ window.open(urlBase + encodeURIComponent(getMessageForShare()), '_blank'); }
+function shareDevice(){
+  const text=getMessageForShare();
+  if(navigator.share){ navigator.share({ text }).catch(()=>{}); }
+  else alert('Device share not supported. Copy message manually.');
 }
 
-// Initialize events
-window.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  document.body.dataset.theme = savedTheme;
+// Emoji picker
+const emojis=['😊','😂','❤️','👍','🎉','🌟','💪','🥰','🙏','🌻','🕊️','🍀'];
+function openEmojiPicker() {
+  let picker=document.createElement('div');
+  picker.id='emojiPicker';
+  picker.style.position='absolute';
+  picker.style.background='#fff';
+  picker.style.border='1px solid #ccc';
+  picker.style.padding='6px';
+  picker.style.borderRadius='8px';
+  picker.style.display='flex';
+  picker.style.flexWrap='wrap';
+  picker.style.gap='4px';
+  const rect = $('emojiButton').getBoundingClientRect();
+  picker.style.top = (rect.bottom + window.scrollY) + 'px';
+  picker.style.left = (rect.left + window.scrollX) + 'px';
+  emojis.forEach(e=>{
+    let btn=document.createElement('button');
+    btn.textContent=e;
+    btn.style.border='none';
+    btn.style.background='none';
+    btn.style.cursor='pointer';
+    btn.style.fontSize='1.2rem';
+    btn.addEventListener('click', ()=>{
+      const textarea=$('customMessage');
+      const start=textarea.selectionStart;
+      const end=textarea.selectionEnd;
+      textarea.value=textarea.value.substring(0,start)+e+textarea.value.substring(end);
+      textarea.focus();
+      picker.remove();
+    });
+    picker.appendChild(btn);
+  });
+  document.body.appendChild(picker);
+  const closePicker=(ev)=>{ if(!picker.contains(ev.target)&&ev.target.id!=='emojiButton'){ picker.remove(); document.removeEventListener('click', closePicker); } };
+  document.addEventListener('click', closePicker);
+}
+
+// Init
+window.addEventListener('DOMContentLoaded', ()=>{
+  document.body.dataset.theme = localStorage.getItem('theme')||'light';
   setThemeIcon();
   $('themeToggle').addEventListener('click', toggleTheme);
   $('occasion').addEventListener('change', generateMessage);
   $('language').addEventListener('change', generateMessage);
   $('senderName').addEventListener('input', generateMessage);
   $('recipientName').addEventListener('input', generateMessage);
-
-  document.querySelectorAll('.clear-btn').forEach(btn => btn.addEventListener('click', clearNameInput));
-
+  document.querySelectorAll('.clear-btn').forEach(btn=>btn.addEventListener('click', clearNameInput));
   $('shareBtn').addEventListener('click', toggleShareOptions);
   $('shareWhatsApp').addEventListener('click', ()=>shareGeneric('https://wa.me/?text='));
   $('shareFacebook').addEventListener('click', ()=>shareGeneric('https://www.facebook.com/sharer/sharer.php?u=https://mashifmj-prog.github.io/goodwisher/&quote='));
   $('shareX').addEventListener('click', ()=>shareGeneric('https://x.com/intent/tweet?text='));
   $('shareTelegram').addEventListener('click', ()=>shareGeneric('https://t.me/share/url?url=https://mashifmj-prog.github.io/goodwisher/&text='));
   $('shareEmail').addEventListener('click', ()=>{
-    const msg = getMessageForShare();
-    const subject = encodeURIComponent('A Special Message from GoodWisher');
-    const body = encodeURIComponent(msg.replace(/\n/g,'%0A'));
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    const msg=getMessageForShare();
+    const subject=encodeURIComponent('A Special Message from GoodWisher');
+    const body=encodeURIComponent(msg.replace(/\n/g,'%0A'));
+    window.location.href=`mailto:?subject=${subject}&body=${body}`;
   });
   $('shareDevice').addEventListener('click', shareDevice);
-
+  $('emojiButton').addEventListener('click', openEmojiPicker);
   $('feedbackBtn').addEventListener('click', openFeedbackModal);
 });
