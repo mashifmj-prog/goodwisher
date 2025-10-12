@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⭐ GoodWisher</title>
+  <title>GoodWisher</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="style.css">
@@ -18,11 +18,17 @@
   </script>
 </head>
 <body class="bg-gray-100" data-theme="light">
-  <div id="notificationBanner" class="bg-yellow-200 p-2 text-center text-gray-700">
-    New languages and vacation occasion added! <button onclick="dismissNotification()" class="ml-2 text-red-500"><i class="fas fa-times"></i></button>
+  <div id="notificationBanner" class="bg-yellow-200 p-2 text-center text-gray-700 fixed w-full top-0 z-100">
+    New features: World clock, enhanced templates, and more! <button onclick="dismissNotification()" class="ml-2 text-red-500"><i class="fas fa-times"></i></button>
   </div>
-  <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
-    <h1 class="text-2xl font-bold text-teal-700 text-center mb-2">⭐ GoodWisher <button onclick="toggleTheme()" class="ml-2 text-sm"><i class="fas fa-moon"></i></button></h1>
+  <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md mt-12">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold text-teal-700">GoodWisher</h1>
+      <button onclick="toggleTheme()" class="text-sm text-teal-700 hover:underline">Toggle Theme</button>
+    </div>
+    <div id="worldClock" class="text-gray-600 text-center mb-4">
+      <span id="timeIcon"></span> <span id="clockText">Loading...</span>
+    </div>
     <p class="text-gray-600 text-center mb-6">Choose an occasion and share a warm message instantly.</p>
     
     <select id="language" aria-label="Select language" class="w-full p-2 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-300" onchange="displayMessage()">
@@ -76,6 +82,13 @@
       <button onclick="openShareModal()" class="bg-green-400 text-white px-4 py-2 rounded-md hover:bg-green-500 transition duration-300"><i class="fas fa-share-alt mr-2"></i>Share</button>
     </div>
     
+    <div class="mb-4">
+      <label class="flex items-center">
+        <input type="checkbox" id="deleteAfterTemplate" class="mr-2">
+        <span class="text-gray-600 text-sm">Delete saved message after saving as template</span>
+      </label>
+    </div>
+    
     <select id="templateSelect" aria-label="Select template" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-300" onchange="loadTemplate()">
       <option value="" disabled selected>Load a Template (optional)</option>
     </select>
@@ -110,12 +123,15 @@
       <h2 class="text-xl font-bold text-teal-700 mb-4">Your Feedback Matters!</h2>
       <div class="mb-4">
         <label class="block text-gray-700 mb-2">Rate your experience:</label>
-        <div id="starRating" class="flex gap-1">
+        <div id="starRating" class="flex gap-1 justify-center">
           <button onclick="setRating(1)" class="text-2xl hover:text-yellow-400">★</button>
           <button onclick="setRating(2)" class="text-2xl hover:text-yellow-400">★</button>
           <button onclick="setRating(3)" class="text-2xl hover:text-yellow-400">★</button>
           <button onclick="setRating(4)" class="text-2xl hover:text-yellow-400">★</button>
           <button onclick="setRating(5)" class="text-2xl hover:text-yellow-400">★</button>
+        </div>
+        <div id="ratingPercentages" class="flex justify-between text-sm text-gray-600 mt-2">
+          <span>20%</span><span>40%</span><span>60%</span><span>80%</span><span>100%</span>
         </div>
       </div>
       <textarea id="feedbackText" rows="4" placeholder="What do you love? What can we improve?" class="w-full p-2 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-teal-300"></textarea>
