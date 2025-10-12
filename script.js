@@ -68,3 +68,40 @@ function submitFeedback(){
   alert(`Thanks for rating ${selectedRating}/5 (${selectedRating*20}%)!`);
   closeFeedbackModal();
 }
+
+/* SHARE */
+function openShareModal(){ $('shareModal').classList.remove('hidden'); }
+function closeShareModal(){ $('shareModal').classList.add('hidden'); }
+function getMessageWithPromo(){
+  const text=$('customMessage').value.trim();
+  if(!text){alert('Please generate a message first!');return '';}
+  return `${text}\n\nGenerated with ❤️ using GoodWisher.\nhttps://mashifmj-prog.github.io/goodwisher/`;
+}
+function shareWhatsApp(){
+  const msg=getMessageWithPromo(); if(!msg)return;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+  closeShareModal();
+}
+function shareFacebook(){
+  const msg=getMessageWithPromo(); if(!msg)return;
+  const url=encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/');
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(msg)}`,'_blank');
+  closeShareModal();
+}
+function shareTwitter(){
+  const msg=getMessageWithPromo(); if(!msg)return;
+  window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(msg)}`,'_blank');
+  closeShareModal();
+}
+function shareTelegram(){
+  const msg=getMessageWithPromo(); if(!msg)return;
+  window.open(`https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(msg)}`,'_blank');
+  closeShareModal();
+}
+function shareEmail(){
+  const msg=getMessageWithPromo(); if(!msg)return;
+  const subject=encodeURIComponent('A Special Message from GoodWisher');
+  const body=encodeURIComponent(msg.replace(/\n/g,'%0A'));
+  window.location.href=`mailto:?subject=${subject}&body=${body}`;
+  closeShareModal();
+}
