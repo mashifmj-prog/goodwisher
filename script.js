@@ -5,7 +5,9 @@ function initializeEmojiPicker() {
   const button = document.getElementById('emojiButton');
   const picker = new EmojiButton({
     position: 'bottom-start',
-    theme: document.body.dataset.theme === 'dark' ? 'dark' : 'light'
+    theme: document.body.dataset.theme === 'dark' ? 'dark' : 'light',
+    emojisPerRow: 8,
+    rows: 5
   });
   picker.on('emoji', emoji => {
     const textarea = document.getElementById('customMessage');
@@ -13,7 +15,8 @@ function initializeEmojiPicker() {
     const endPos = textarea.selectionEnd;
     textarea.value = textarea.value.substring(0, startPos) + emoji + textarea.value.substring(endPos);
     textarea.focus();
-    gtag('event', 'emoji_selected', { 'event_category': 'Action', 'event_label': 'Emoji' });
+    textarea.selectionStart = textarea.selectionEnd = startPos + emoji.length;
+    gtag('event', 'emoji_selected', { 'event_category': 'Action', 'event_label': emoji });
   });
   button.addEventListener('click', () => {
     picker.togglePicker(button);
@@ -24,29 +27,144 @@ function toggleTheme() {
   const body = document.body;
   const isDark = body.dataset.theme === 'dark';
   body.dataset.theme = isDark ? 'light' : 'dark';
-  document.querySelector('button[onclick="toggleTheme()"] i').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
   localStorage.setItem('theme', body.dataset.theme);
   gtag('event', 'theme_toggle', { 'event_category': 'Action', 'event_label': body.dataset.theme });
 }
 
 function dismissNotification() {
   document.getElementById('notificationBanner').classList.add('hidden');
-  localStorage.setItem('notificationDismissed', 'true');
+  localStorage.setItem('notificationDismissed', '2'); // Version for this update
+}
+
+function updateClock() {
+  const now = new Date();
+  const hours = now.getHours();
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const clockText = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}, ${now.toTimeString().split(' ')[0]}`;
+  document.getElementById('clockText').textContent = clockText;
+  
+  const timeIcon = document.getElementById('timeIcon');
+  if (hours >= 0 && hours < 12) {
+    timeIcon.innerHTML = '<span style="color: #FF4500;">🧡</span>'; // Sunrise (Morning)
+  } else if (hours >= 12 && hours < 15) {
+    timeIcon.innerHTML = '<span style="color: #FFD700;">☀️</span>'; // Sun (Day)
+  } else if (hours >= 15 && hours < 18) {
+    timeIcon.innerHTML = '<span style="color: #FFA500;">🌤️</span>'; // Sun with clouds (Afternoon)
+  } else {
+    timeIcon.innerHTML = '<span style="color: #4169E1;">🌙</span>'; // Moon with stars (Evening)
+  }
+}
+
+function getTimeGreeting(language) {
+  const now = new Date();
+  const hours = now.getHours();
+  const greetings = {
+    en: {
+      morning: 'Good Morning',
+      day: 'Good Day',
+      afternoon: 'Good Afternoon',
+      evening: 'Good Evening'
+    },
+    zh: {
+      morning: '早上好',
+      day: '日安',
+      afternoon: '下午好',
+      evening: '晚上好'
+    },
+    hi: {
+      morning: 'सुप्रभात',
+      day: 'शुभ दिन',
+      afternoon: 'शुभ दोपहर',
+      evening: 'शुभ संध्या'
+    },
+    es: {
+      morning: 'Buenos días',
+      day: 'Buen día',
+      afternoon: 'Buenas tardes',
+      evening: 'Buenas noches'
+    },
+    fr: {
+      morning: 'Bonjour',
+      day: 'Bon jour',
+      afternoon: 'Bon après-midi',
+      evening: 'Bonsoir'
+    },
+    ar: {
+      morning: 'صباح الخير',
+      day: 'يوم جيد',
+      afternoon: 'مساء الخير',
+      evening: 'مساء الخير'
+    },
+    bn: {
+      morning: 'সুপ্রভাত',
+      day: 'শুভ দিন',
+      afternoon: 'শুভ বিকেল',
+      evening: 'শুভ সন্ধ্যা'
+    },
+    pt: {
+      morning: 'Bom dia',
+      day: 'Bom dia',
+      afternoon: 'Boa tarde',
+      evening: 'Boa noite'
+    },
+    ru: {
+      morning: 'Доброе утро',
+      day: 'Добрый день',
+      afternoon: 'Добрый день',
+      evening: 'Добрый вечер'
+    },
+    ur: {
+      morning: 'صبح بخیر',
+      day: 'اچھا دن',
+      afternoon: 'دوپہر بخیر',
+      evening: 'شام بخیر'
+    },
+    af: {
+      morning: 'Goeie môre',
+      day: 'Goeie dag',
+      afternoon: 'Goeie middag',
+      evening: 'Goeie aand'
+    },
+    zu: {
+      morning: 'Sawubona ekuseni',
+      day: 'Usuku oluhle',
+      afternoon: 'Ntambama omuhle',
+      evening: 'Kusihlwa okumnandi'
+    },
+    sn: {
+      morning: 'Mhoro mangwanani',
+      day: 'Mhoro zuva',
+      afternoon: 'Mhoro masikati',
+      evening: 'Mhoro manheru'
+    },
+    nso: {
+      morning: 'Thobela mmoro',
+      day: 'Letsatsi le lekaone',
+      afternoon: 'Thobela motshegare',
+      evening: 'Thobela mabo'
+    }
+  };
+  if (hours >= 0 && hours < 12) return greetings[language].morning;
+  if (hours >= 12 && hours < 15) return greetings[language].day;
+  if (hours >= 15 && hours < 18) return greetings[language].afternoon;
+  return greetings[language].evening;
 }
 
 function updateMessageWithName() {
   const recipientName = document.getElementById('recipientName').value.trim();
   const senderName = document.getElementById('senderName').value.trim();
+  const language = document.getElementById('language').value;
   const customMessage = document.getElementById('customMessage');
-  if (currentBaseMessage && recipientName && senderName) {
-    customMessage.value = `${recipientName}\n\n${currentBaseMessage}\n\nRegards\n${senderName}`;
-  } else if (currentBaseMessage && recipientName) {
-    customMessage.value = `${recipientName}\n\n${currentBaseMessage}`;
-  } else if (currentBaseMessage && senderName) {
-    customMessage.value = `${currentBaseMessage}\n\nRegards\n${senderName}`;
-  } else if (currentBaseMessage) {
-    customMessage.value = currentBaseMessage;
+  let message = currentBaseMessage;
+  if (recipientName) {
+    const greeting = getTimeGreeting(language);
+    message = `${greeting}, ${recipientName}\n\n${currentBaseMessage}`;
   }
+  if (senderName) {
+    message = `${message}\n\nRegards\n${senderName}`;
+  }
+  customMessage.value = message || currentBaseMessage;
 }
 
 function displayMessage() {
@@ -371,7 +489,7 @@ function displayMessage() {
       ]
     },
     hi: {
-      birthday: ['10 messages...'], // Placeholder: Full translations available
+      birthday: ['10 messages...'],
       anniversary: ['10 messages...'],
       'get-well': ['10 messages...'],
       congrats: ['10 messages...'],
@@ -583,10 +701,23 @@ function saveMessage() {
 function saveTemplate() {
   const customMessage = document.getElementById('customMessage').value;
   if (!customMessage) return alert('Please generate a message first!');
+  const occasion = document.getElementById('occasion').value || 'Custom';
+  const autoName = `${customMessage.slice(0, 20)}... (${occasion})`;
+  const customName = prompt('Enter a name for this template (or leave blank for auto-name):', autoName);
+  const templateName = customName.trim() || autoName;
   let templates = JSON.parse(localStorage.getItem('templates') || '[]');
-  templates.push(customMessage);
+  templates.push({ name: templateName, content: customMessage });
   localStorage.setItem('templates', JSON.stringify(templates));
-  gtag('event', 'save_template', { 'event_category': 'Action', 'event_label': 'Save Template' });
+  if (document.getElementById('deleteAfterTemplate').checked) {
+    let saved = JSON.parse(localStorage.getItem('savedMessages') || '[]');
+    const index = saved.indexOf(customMessage);
+    if (index !== -1) {
+      saved.splice(index, 1);
+      localStorage.setItem('savedMessages', JSON.stringify(saved));
+      displaySavedMessages();
+    }
+  }
+  gtag('event', 'save_template', { 'event_category': 'Action', 'event_label': templateName });
   updateTemplateSelect();
 }
 
@@ -594,7 +725,7 @@ function updateTemplateSelect() {
   const templateSelect = document.getElementById('templateSelect');
   const templates = JSON.parse(localStorage.getItem('templates') || '[]');
   templateSelect.innerHTML = '<option value="" disabled selected>Load a Template (optional)</option>' +
-    templates.map((template, i) => `<option value="${i}">Template ${i + 1}</option>`).join('');
+    templates.map((template, i) => `<option value="${i}">${template.name}</option>`).join('');
 }
 
 function loadTemplate() {
@@ -602,8 +733,8 @@ function loadTemplate() {
   const index = templateSelect.value;
   if (index === '') return;
   const templates = JSON.parse(localStorage.getItem('templates') || '[]');
-  document.getElementById('customMessage').value = templates[index];
-  gtag('event', 'load_template', { 'event_category': 'Action', 'event_label': 'Load Template' });
+  document.getElementById('customMessage').value = templates[index].content;
+  gtag('event', 'load_template', { 'event_category': 'Action', 'event_label': templates[index].name });
 }
 
 function exportSavedMessages() {
@@ -757,12 +888,20 @@ function closeFeedbackModal() {
   document.getElementById('feedbackText').value = '';
   selectedRating = 0;
   document.querySelectorAll('#starRating button').forEach(btn => btn.classList.remove('selected'));
+  document.querySelectorAll('#ratingPercentages span').forEach((span, i) => {
+    span.style.fontWeight = i < selectedRating ? 'bold' : 'normal';
+    span.style.color = i < selectedRating ? '#FBBF24' : '#6B7280';
+  });
 }
 
 function setRating(rating) {
   selectedRating = rating;
   document.querySelectorAll('#starRating button').forEach((btn, index) => {
     btn.classList.toggle('selected', index < rating);
+  });
+  document.querySelectorAll('#ratingPercentages span').forEach((span, i) => {
+    span.style.fontWeight = i < rating ? 'bold' : 'normal';
+    span.style.color = i < rating ? '#FBBF24' : '#6B7280';
   });
   gtag('event', 'rating_selected', { 'event_category': 'Action', 'event_label': 'Rating', 'value': rating });
 }
@@ -787,14 +926,15 @@ function submitFeedback() {
 window.onload = function() {
   if (localStorage.getItem('theme') === 'dark') {
     document.body.dataset.theme = 'dark';
-    document.querySelector('button[onclick="toggleTheme()"] i').className = 'fas fa-sun';
   }
-  if (localStorage.getItem('notificationDismissed') !== 'true') {
+  if (localStorage.getItem('notificationDismissed') !== '2') {
     document.getElementById('notificationBanner').classList.remove('hidden');
   }
   initializeEmojiPicker();
   displaySavedMessages();
   updateTemplateSelect();
+  updateClock();
+  setInterval(updateClock, 1000);
   const feedbackButton = document.getElementById('feedbackButton');
   if (feedbackButton) {
     console.log('Feedback button loaded successfully');
