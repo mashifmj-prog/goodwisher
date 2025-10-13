@@ -148,7 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.className = 'emoji-btn';
         btn.textContent = emoji;
         btn.addEventListener('click', () => {
-          document.getElementById('customMessage').value += emoji;
+          const textarea = document.getElementById('customMessage');
+          const currentText = textarea.value.split('\n');
+          const messageBodyIndex = currentText[0].startsWith('Hi ') ? 2 : 0;
+          currentText[messageBodyIndex] = (currentText[messageBodyIndex] || '') + emoji;
+          textarea.value = currentText.join('\n');
           emojiPicker.remove();
           emojiPicker = null;
         });
@@ -183,14 +187,20 @@ document.addEventListener('DOMContentLoaded', () => {
     updateMessageWithName();
   };
 
-  // Display message (only the body, no signature)
+  // Display message with full preview
   function displayMessage() {
     const textarea = document.getElementById('customMessage');
+    const sender = document.getElementById('senderName').value.trim();
+    const recipient = document.getElementById('recipientName').value.trim();
+    let messageBody = '';
     if (currentOccasion && messages[currentOccasion]) {
-      textarea.value = messages[currentOccasion][currentIndex];
-    } else {
-      textarea.value = '';
+      messageBody = messages[currentOccasion][currentIndex];
+    } else if (textarea.value && !sender && !recipient) {
+      messageBody = textarea.value;
     }
+    const greeting = recipient ? `Hi ${recipient},\n\n` : '';
+    const signature = sender ? `\n\nRegards\n${sender}` : '';
+    textarea.value = `${greeting}${messageBody}${signature}`;
   }
 
   // Action buttons
@@ -213,22 +223,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.openShareModal = () => {
     document.getElementById('shareModal').classList.remove('hidden');
-    document.getElementById('phoneNumber').value = ''; // Clear phone number
+    document.getElementById('phoneNumber').value = '';
   };
 
   window.openFeedbackModal = () => {
     document.getElementById('feedbackModal').classList.remove('hidden');
+    setRating(0); // Reset rating on open
   };
 
   // Helper function to get full shareable message
   function getShareableMessage() {
     const textarea = document.getElementById('customMessage');
-    const sender = document.getElementById('senderName').value.trim();
-    const recipient = document.getElementById('recipientName').value.trim();
-    const messageBody = textarea.value.trim();
-    const greeting = recipient ? `Hi ${recipient},\n` : '';
-    const signature = sender ? `\n\nRegards\n${sender}` : '';
-    return `${greeting}${messageBody}${signature}\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
+    const messageText = textarea.value.trim();
+    if (!messageText) return '';
+    return `${messageText}\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
   }
 
   // Share modal functions
