@@ -1,76 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GoodWisher</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GoodWisher</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
 
-  <div class="container">
-    <header class="header">
-      <h1 class="title">GoodWisher</h1>
-      <button id="themeToggle" class="icon-btn" title="Toggle theme">
-        <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path id="themeIconPath" fill="currentColor"></path>
-        </svg>
-      </button>
-    </header>
+<div class="container">
+  <header class="header">
+    <h1 class="title">GoodWisher</h1>
+    <button id="themeToggle" class="icon-btn" title="Toggle theme">
+      <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path id="themeIconPath" fill="currentColor"></path>
+      </svg>
+    </button>
+  </header>
 
-    <main class="card">
-      <p class="sub">Choose an occasion and share a warm message instantly.</p>
+  <main class="card">
+    <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
-      <label>Language</label>
-      <select id="language">
-        <option value="en" selected>English</option>
-        <option value="zh">中文 (Mandarin)</option>
-        <option value="hi">हिन्दी (Hindi)</option>
-        <option value="es">Español (Spanish)</option>
-        <option value="af">Afrikaans</option>
-      </select>
+    <label>Language</label>
+    <select id="language">
+      <option value="en" selected>English</option>
+      <option value="zh">中文 (Mandarin)</option>
+      <option value="hi">हिन्दी (Hindi)</option>
+      <option value="es">Español (Spanish)</option>
+      <option value="af">Afrikaans</option>
+    </select>
 
-      <label>Occasion</label>
-      <select id="occasion">
-        <option value="" disabled selected>Select an occasion</option>
-        <option value="birthday">Birthday</option>
-        <option value="anniversary">Anniversary</option>
-        <option value="get-well">Get Well Soon</option>
-        <option value="congrats">Congratulations</option>
-        <option value="thank-you">Thank You</option>
-        <option value="good-luck">Good Luck</option>
-        <option value="motivation">Motivation</option>
-        <option value="appreciation">Appreciation</option>
-        <option value="farewell">Farewell</option>
-        <option value="encouragement">Encouragement</option>
-        <option value="love">Love</option>
-        <option value="condolences">Condolences</option>
-        <option value="vacation">Vacation</option>
-      </select>
+    <label>Occasion</label>
+    <select id="occasion">
+      <option value="" disabled selected>Select an occasion</option>
+      <option value="birthday">Birthday</option>
+      <option value="anniversary">Anniversary</option>
+      <option value="get-well">Get Well Soon</option>
+      <option value="congrats">Congratulations</option>
+      <option value="thank-you">Thank You</option>
+      <option value="good-luck">Good Luck</option>
+      <option value="motivation">Motivation</option>
+      <option value="appreciation">Appreciation</option>
+      <option value="farewell">Farewell</option>
+      <option value="encouragement">Encouragement</option>
+      <option value="love">Love</option>
+      <option value="condolences">Condolences</option>
+      <option value="vacation">Vacation</option>
+    </select>
 
-      <div class="names-wrap">
-        <div class="name-input">
-          <input id="recipientName" placeholder="To: Recipient's name (optional)">
-        </div>
-        <div class="name-input">
-          <input id="senderName" placeholder="From: Your name (optional)">
-        </div>
+    <div class="textarea-wrap">
+      <button id="emojiButton" class="emoji-btn" title="Insert emoji">😊</button>
+      <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
+      <button id="nextMessage" class="btn light">Next Message</button>
+      <button id="clearMessage" class="btn light">Clear Content</button>
+    </div>
+
+    <div class="names-wrap">
+      <div class="name-input">
+        <input id="recipientName" placeholder="To: Recipient's name (optional)">
       </div>
-
-      <div class="textarea-wrap">
-        <button id="emojiButton" class="emoji-btn" title="Insert emoji">😊</button>
-        <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
-        <button id="refreshMessage" class="btn light">Next Message</button>
+      <div class="name-input">
+        <input id="senderName" placeholder="From: Your name (optional)">
       </div>
+    </div>
 
-      <div class="actions">
-        <button onclick="copyMessage()" class="btn light">Copy</button>
-      </div>
+    <div class="actions">
+      <button onclick="copyMessage()" class="btn light">Copy</button>
+    </div>
 
-      <div class="tiny">Multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</div>
-    </main>
-  </div>
+    <div class="tiny">Multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</div>
+  </main>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
