@@ -82,11 +82,27 @@ textarea {
   padding: 6px 12px;
   cursor: pointer;
   font-size: 0.95rem;
+  position: relative;
 }
 
 .btn.light:hover {
   background: var(--accent);
   color: #fff;
+}
+
+#feedbackButton:hover::after {
+  content: attr(data-watermark);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card-bg);
+  opacity: 0.7;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  z-index: 1000;
 }
 
 .actions, .action-line {
@@ -107,31 +123,18 @@ textarea {
   margin-bottom: 12px;
 }
 
-.name-input { position: relative; flex: 1; }
-.name-input input { width: 100%; padding-right: 28px; font-size: 0.95rem; }
-.clear-btn {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  background: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: var(--muted);
+.name-input, .phone-input {
+  position: relative;
+  flex: 1;
 }
 
-.phone-input {
-  position: relative;
-  width: 100%;
-  margin-bottom: 10px;
-}
-.phone-input input {
+.name-input input, .phone-input input {
   width: 100%;
   padding-right: 28px;
   font-size: 0.95rem;
 }
-.phone-input .clear-btn {
+
+.clear-btn {
   position: absolute;
   right: 6px;
   top: 50%;
@@ -164,20 +167,20 @@ textarea {
   box-sizing: border-box;
 }
 
-.star-percent-wrap {
+.rating-wrap {
   display: flex;
   justify-content: space-between;
   margin-bottom: 6px;
 }
 
-.star-col {
+.rating-col {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 18%;
 }
 
-.star {
+.rating-btn {
   background: none;
   border: none;
   font-size: 1.8rem;
@@ -185,12 +188,12 @@ textarea {
   color: var(--muted);
 }
 
-.star.selected {
+.rating-btn.selected {
   color: #fbbf24;
   text-shadow: 0 0 6px rgba(251,191,36,0.6);
 }
 
-.star-col span {
+.rating-col span {
   font-size: 0.8rem;
   color: var(--muted);
 }
