@@ -1,346 +1,286 @@
-// GoodWisher: English Only
-function $(id){return document.getElementById(id);}
-let selectedRating=0;
-let currentOccasion='';
-let currentIndex=0;
+// Helper
+function $(id){ return document.getElementById(id); }
 
-// Theme Toggle
-function setThemeIcon(){
-  const p=$('themeIconPath');
-  const isDark=document.body.dataset.theme==='dark';
-  p.setAttribute('d',isDark
+// ----------------- THEME -----------------
+function setThemeIcon() {
+  const p = $('themeIconPath');
+  const isDark = document.body.dataset.theme === 'dark';
+  p.setAttribute('d', isDark
     ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z'
     : 'M12 2a10 10 0 100 20 10 10 0 000-20z'
   );
 }
-function toggleTheme(){
-  const body=document.body;
-  const newTheme=body.dataset.theme==='dark'?'light':'dark';
-  body.dataset.theme=newTheme;
-  localStorage.setItem('theme',newTheme);
+
+function toggleTheme() {
+  const body = document.body;
+  const newTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+  body.dataset.theme = newTheme;
+  localStorage.setItem('theme', newTheme);
   setThemeIcon();
 }
-window.addEventListener('DOMContentLoaded',()=>{
-  const saved=localStorage.getItem('theme')||'light';
-  document.body.dataset.theme=saved;
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('theme') || 'light';
+  document.body.dataset.theme = saved;
   setThemeIcon();
-  $('themeToggle').addEventListener('click',toggleTheme);
+  $('themeToggle').addEventListener('click', toggleTheme);
 });
 
-// Messages
-const messagesData = {
-  'birthday':[ 
-    "Wishing you a day filled with love and cheer! 🥳",
-    "Another year older, wiser! 🎂",
-    "Hope your birthday is as wonderful as you are! 🎉",
-    "Celebrate big and smile always! 🎈",
-    "May all your wishes come true today! 🍰",
-    "Cheers to you and your special day! 🥂",
-    "Have a fantastic birthday full of joy! 🎁",
-    "Happy Birthday! Keep shining bright! ✨",
-    "Enjoy every moment of your birthday! 🎊",
-    "Sending birthday happiness your way! 🌟",
-    "Hope your birthday sparkles with fun! 🎇",
-    "To another amazing year ahead! 🏆",
-    "Happy Birthday! Celebrate every little thing! 🎉",
-    "Wishing you laughter and joy today! 😄",
-    "May your day be filled with sunshine and smiles! 🌞"
+// ----------------- MESSAGES -----------------
+const occasions = {
+  'birthday': [
+    "Another year older, wiser! 🥳",
+    "Wishing you a day full of happiness and a year full of joy! 🎉",
+    "Celebrate your day with laughter and love! 🎂",
+    "Cheers to you on your special day! 🥂",
+    "Hope your birthday is as amazing as you are! 🎁",
+    "Have a fantastic birthday full of smiles! 😄",
+    "Birthdays are the universe’s way of celebrating you! 🌟",
+    "May your birthday bring you sweet moments! 🍰",
+    "Enjoy every moment of your special day! 🎈",
+    "Happy Birthday! Keep shining always! ✨",
+    "A day to celebrate the wonderful you! 🥳",
+    "May your day be bright and full of joy! 🌞",
+    "Birthday blessings to you! 🎂",
+    "Another fabulous year ahead! 🎉",
+    "Cheers to your happiness and health! 🥂"
   ],
-  'anniversary':[ 
-    "Happy Anniversary! 💕 May love always surround you.",
-    "Cheers to another year of togetherness! 🥂",
-    "Wishing you a lifetime of love and joy! 🌹",
-    "Celebrate the love that grows every year! ❤️",
-    "May your bond grow stronger with each passing day! 💖",
-    "Happy Anniversary! Keep creating memories! 🌟",
-    "Love and laughter for many years to come! 💑",
-    "Another beautiful year together! 🌷",
-    "Wishing you endless happiness! 🌺",
-    "To a love that keeps shining brighter! ✨",
-    "Happy Anniversary! Enjoy every moment! 🥰",
-    "May your hearts always beat as one! 💞",
-    "A toast to love, laughter, and memories! 🍷",
-    "Happy Anniversary! Keep cherishing each other! 🌸",
-    "Sending love and best wishes your way! 💌"
+  'anniversary': [
+    "Happy Anniversary! 💕",
+    "Celebrating another year of love and togetherness! ❤️",
+    "Wishing you both endless joy and love! 🌹",
+    "May your love grow stronger each year! 💖",
+    "Happy moments today, forever and always! 🥂",
+    "Cheers to a beautiful journey together! 💞",
+    "Another year, another wonderful reason to celebrate love! 🎉",
+    "Wishing your bond keeps getting stronger! 💑",
+    "Happy Anniversary to a lovely couple! 🌸",
+    "May your love story never end! ❤️",
+    "Celebrating love that inspires! 💕",
+    "Together is a beautiful place to be! 🌹",
+    "To many more happy years ahead! 🥂",
+    "Love and laughter forever! 💖",
+    "A toast to your amazing love! 🎉"
   ],
-  'condolence':[ 
+  'condolence': [
     "Sending heartfelt condolences in this time of loss. 🕊️",
-    "Thinking of you and wishing you comfort. 🌹",
-    "May you find peace and strength during this difficult time. 🙏",
-    "Holding you in my thoughts and prayers. 🕯️",
-    "Wishing you moments of peace and reflection. 🌿",
-    "Deepest sympathies for your loss. 💐",
-    "May cherished memories bring you comfort. 🕊️",
-    "Keeping you close in heart and mind. 🖤",
-    "May love and support surround you now. 💌",
-    "Sending gentle hugs and prayers your way. 🤍",
-    "Wishing you solace in every memory. 🌾",
-    "Thinking of you with care and compassion. 🌼",
-    "May hope and love bring you peace. 🌟",
-    "Holding you close in thought and spirit. 🕊️",
-    "Deepest condolences and warm thoughts to you. 🌹"
+    "May you find comfort and peace during this difficult time. 🌿",
+    "Our thoughts are with you in your sorrow. 🕊️",
+    "Wishing you strength and peace. 🌸",
+    "With deepest sympathy and caring thoughts. 🌷",
+    "May fond memories bring you comfort. 🕊️",
+    "Thinking of you and sending love. 💛",
+    "Holding you close in thoughts and prayers. 🌿",
+    "Our hearts go out to you in sympathy. 🕊️",
+    "Wishing you moments of peace and comfort. 🌼",
+    "May memories of joy lighten your heart. 💐",
+    "Sending warm thoughts and prayers. 🌸",
+    "May time ease the pain of loss. 🕊️",
+    "With caring thoughts at this sad time. 🌿",
+    "Hoping you find solace in loving memories. 💛"
   ],
-  'congratulations':[ 
-    "Congratulations on your wonderful achievement! 🏆",
-    "You did it! So proud of you! 🎉",
-    "Wishing you continued success in all you do! 🌟",
-    "Bravo! Your hard work paid off! 🎖️",
-    "Cheers to your fantastic accomplishment! 🥂",
-    "May this success bring more joy ahead! 🌈",
-    "Amazing job! Keep reaching higher! 🚀",
-    "Celebrating your remarkable achievement! 🎊",
-    "You’re an inspiration to everyone around! ✨",
-    "Congrats! Keep shining and growing! 💫",
-    "Way to go! Your dedication is admirable! 👏",
-    "Congratulations! Enjoy your well-earned success! 🌟",
-    "Hats off to your excellent work! 🎩",
-    "So happy for your achievement! 🌷",
-    "Cheers to your bright future! 🍀"
+  'congratulations': [
+    "Congratulations on your achievement! 🏆",
+    "Well done! Keep up the great work! 🎉",
+    "Your hard work paid off! Congratulations! 🌟",
+    "Cheers to your success! 🥂",
+    "So proud of you! Well deserved! 💐",
+    "Your dedication is inspiring! 👏",
+    "Hats off to your accomplishments! 🎓",
+    "Celebrating your outstanding achievement! 🌟",
+    "May success continue to follow you! 🚀",
+    "Kudos! You did it! 🎉",
+    "Excited for your amazing success! 🏆",
+    "Your efforts are truly commendable! 👏",
+    "Wishing you even greater achievements ahead! 🌟",
+    "A big cheer for your success! 🎊",
+    "You’ve earned every bit of this! 🥂"
   ],
-  'get-well':[ 
-    "Wishing you a speedy recovery! 🌻",
-    "Hope you feel better very soon! 💐",
-    "Sending healing thoughts your way. 🕊️",
-    "Take care and get well quickly! 🌼",
-    "Wishing you strength and comfort. 🌟",
-    "May each day bring renewed health. 🌞",
-    "Sending warm wishes for your recovery! 💌",
-    "Hoping you’re back on your feet soon! 🍀",
-    "Feel better and stay strong! 💪",
-    "Get well soon! Thinking of you. 🌸",
-    "Sending love and health your way! 🌷",
-    "Take time to rest and heal fully! 🛌",
-    "Wishing you brighter days ahead! 🌈",
-    "Hope you regain your energy and smile soon! 😄",
-    "Thinking of you and wishing wellness! 🌹"
+  'get-well': [
+    "Get well soon! 🌻",
+    "Wishing you a speedy recovery! 💛",
+    "Hope you feel better each day! 🌸",
+    "Sending healing thoughts your way! 🌿",
+    "Take care and get better soon! 💐",
+    "May you regain your strength quickly! 🌞",
+    "Thinking of you and wishing wellness! 🍀",
+    "Hoping for your fast recovery! 🌷",
+    "Feel better soon! 🕊️",
+    "Sending warm wishes for healing! 💖",
+    "Take time to rest and heal! 🌼",
+    "Hope you’re back on your feet soon! 💛",
+    "Wishing you comfort and care! 🌸",
+    "Sending positive vibes for recovery! 🌿",
+    "Get well wishes and warm thoughts! 💐"
   ],
-  'thank-you':[ 
+  'thank-you': [
     "Thank you for your kindness and support! 🙏",
-    "Grateful for everything you do! 🌟",
-    "Appreciate your help and generosity! 💐",
-    "Thanks a ton! You’re amazing! 🎉",
-    "Many thanks for your thoughtfulness! 🌼",
-    "Heartfelt thanks for all you do! 💌",
-    "Your support means the world! 🌷",
-    "Thanks! You make a difference! ✨",
-    "Deeply appreciate your guidance and care! 🌹",
-    "Thank you for always being there! 🤝",
-    "Much gratitude for your help! 🌟",
-    "Thanks for brightening my day! 😄",
-    "Appreciate your effort and dedication! 💖",
-    "Thanks for going the extra mile! 🌈",
-    "Thank you for your generosity! 🌸"
+    "Grateful for everything you do! 💛",
+    "Thanks for always being there! 🌸",
+    "Appreciate your generosity and help! 🌿",
+    "Many thanks for your thoughtfulness! 💐",
+    "Grateful for your time and effort! 🌞",
+    "Thanks for being amazing! 🌟",
+    "Appreciate your kindness! 💛",
+    "Your help means a lot! 🙏",
+    "Thank you for making a difference! 🌷",
+    "Thanks a million for your support! 💐",
+    "Truly grateful for your guidance! 🌸",
+    "Appreciate all you do! 🌿",
+    "Thanks for being a wonderful friend! 💛",
+    "Grateful for your generosity and heart! 💖"
   ],
-  'good-luck':[ 
+  'good-luck': [
     "Good luck on your journey! 🍀",
-    "Wishing you all the best in your endeavors! 🌟",
-    "May success follow you everywhere! ✨",
-    "Fingers crossed for your big day! 🤞",
-    "Wishing you smooth sailing ahead! ⛵",
-    "Good luck! Shine bright and confident! 🌈",
-    "May fortune smile upon you! 💫",
-    "Sending positive vibes your way! 🌞",
-    "All the best! You’ve got this! 💪",
-    "Good luck! Keep believing in yourself! 🌟",
-    "Wishing you success at every turn! 🏆",
-    "Go forth and conquer! 🎖️",
-    "May luck be your faithful companion! 🍀",
-    "Good luck! Enjoy every moment! 🎉",
-    "Wishing you triumph and happiness! 🌸"
+    "Wishing you all the best! 🌟",
+    "May success follow you everywhere! 🚀",
+    "Best wishes for your new adventure! 🌞",
+    "Hope everything goes perfectly! 💛",
+    "Fingers crossed for you! 🤞",
+    "Wishing you triumph and joy! 🎉",
+    "All the best in your endeavors! 🌿",
+    "Good fortune is on your side! 🌟",
+    "Sending luck and positive vibes! 💐",
+    "Wishing you great success ahead! 🏆",
+    "Hope your efforts shine brightly! 🌞",
+    "Good luck and happiness always! 🌸",
+    "Wishing you victory in all you do! 🏅",
+    "Best wishes for an amazing outcome! 🌟"
   ],
-  'appreciation':[ 
+  'appreciation': [
     "You’re appreciated more than you know! 🌟",
-    "Thanks for being so wonderful! 💐",
-    "Your kindness doesn’t go unnoticed! 🌹",
-    "Truly grateful for you! 🙏",
-    "Appreciate all that you do! 🌼",
-    "You make a positive difference! ✨",
-    "Thanks for your effort and heart! 💖",
-    "Your support is invaluable! 🌷",
-    "You’re amazing! Keep shining! 🎉",
-    "Deep appreciation for your help! 💌",
-    "Grateful for your dedication! 🌟",
-    "Thanks for always caring! 🤍",
-    "Appreciate your thoughtfulness! 🌸",
-    "You’re a wonderful person! 💫",
-    "Thanks for being you! 🌈"
+    "Thanks for all that you do! 💛",
+    "Your effort does not go unnoticed! 🌸",
+    "Grateful for your dedication! 🌿",
+    "Appreciate your support and care! 💐",
+    "You make a difference! 🌞",
+    "Thanks for being amazing! 🌟",
+    "Your work is valued greatly! 💛",
+    "Much appreciation for your kindness! 🌷",
+    "We are grateful for you! 💖",
+    "Your contributions are appreciated! 🌸",
+    "Thank you for your constant effort! 🌿",
+    "You are truly valued! 💛",
+    "Thanks for being a star! 🌟",
+    "Appreciation for all your hard work! 💐"
   ],
-  'farewell':[ 
+  'farewell': [
     "Wishing you the best in your next adventure! 👋",
-    "Goodbye and good luck ahead! 🌟",
-    "Farewell! Stay happy and successful! 🎉",
-    "Best wishes for your journey! 🌈",
-    "It’s been great knowing you! 💖",
-    "Wishing you joy in new beginnings! 🌷",
-    "Take care and keep smiling! 😄",
-    "Goodbye! May happiness follow you! 🌸",
-    "Farewell! Your presence will be missed! 💐",
-    "Wishing you memorable days ahead! 🌹",
-    "All the best in everything you do! 🍀",
-    "Good luck on new horizons! 🚀",
-    "Farewell! Keep inspiring others! 🌟",
-    "Best wishes always! 🎁",
-    "Take the next step confidently! 💪"
+    "Goodbye and good luck! 🌟",
+    "All the best for your new journey! 🍀",
+    "Farewell! Stay amazing! 🌸",
+    "Wishing you success in what lies ahead! 💛",
+    "Hope your new path is full of joy! 🌿",
+    "Good luck in all your endeavors! 🌞",
+    "You’ll be missed! Take care! 💐",
+    "May your future be bright and happy! 🌟",
+    "Best wishes for the road ahead! 🌷",
+    "Farewell and happy adventures! 🌸",
+    "Wishing you joy and success! 💛",
+    "All the best for tomorrow! 🌞",
+    "Goodbye and stay blessed! 🌿",
+    "Farewell with love and warmth! 💐"
   ],
-  'encouragement':[ 
+  'encouragement': [
     "You’ve got this! 💪",
-    "Keep pushing forward! 🚀",
-    "Believe in yourself! ✨",
-    "Stay strong and positive! 🌟",
-    "Never give up on your dreams! 🌈",
-    "Keep aiming high! 🏹",
-    "Courage will guide you! 🦁",
-    "You can achieve anything! 🌞",
-    "Stay motivated and focused! 🎯",
-    "Keep striving for excellence! 🌹",
-    "Trust your instincts! 💡",
-    "Persevere and succeed! 🏆",
-    "You are capable and strong! 💖",
-    "Keep shining bright! 🌸",
-    "Stay determined and fearless! 🌟"
+    "Keep going — you can do it! 🚀",
+    "Believe in yourself! 🌟",
+    "Stay strong and positive! 🌿",
+    "You’re capable of amazing things! 💛",
+    "Keep pushing forward! 🌸",
+    "Your effort is worthwhile! 💐",
+    "Never give up! 💪",
+    "Stay determined and confident! 🌞",
+    "You can achieve your dreams! 🌟",
+    "Courage and strength will guide you! 🌿",
+    "Keep believing in your potential! 💛",
+    "You are stronger than you know! 💪",
+    "Keep fighting and shining! 🌸",
+    "Your persistence pays off! 💐"
   ],
-  'love':[ 
+  'love': [
     "You make life beautiful! ❤️",
-    "Love and joy always surround you! 💕",
-    "Thinking of you with love! 🌹",
-    "You’re cherished and adored! 💖",
-    "Sending hugs and kisses! 😘",
-    "Your love inspires me! 💫",
-    "Always in my heart! 💌",
-    "Forever grateful for you! 🌸",
-    "Love you more each day! ❤️",
-    "Wishing endless happiness together! 🌟",
-    "You are my sunshine! 🌞",
-    "Love knows no bounds! 💕",
-    "Together is our favorite place! 🏡",
-    "You’re my everything! 💖",
-    "With all my heart, always! 💘"
+    "Sending love and warm thoughts! 💕",
+    "You’re cherished and loved! 🌹",
+    "Love and happiness always! 💖",
+    "You brighten my world! 🌟",
+    "With all my heart! ❤️",
+    "Love and joy to you always! 💛",
+    "You are truly special! 💕",
+    "Forever in my heart! 🌹",
+    "Sending hugs and love! 💖",
+    "May love surround you! 🌸",
+    "You are adored and cherished! ❤️",
+    "Love and light always! 🌟",
+    "Thinking of you with love! 💛",
+    "Love that lasts forever! 💕"
   ],
-  'vacation':[ 
+  'vacation': [
     "Enjoy your well-deserved vacation! 🌴",
-    "Relax and recharge fully! 🏖️",
-    "May your trip be amazing! ✨",
-    "Wishing you fun and adventure! 🌟",
-    "Have a fantastic holiday! 🌞",
-    "Take time to unwind and smile! 😄",
-    "Make memories that last forever! 📸",
-    "Enjoy every moment of your break! 🎉",
-    "Rest, relax, and rejuvenate! 🌷",
-    "Vacation vibes only! 🌴",
-    "Travel safely and happily! 🚗",
-    "Have a refreshing getaway! 🌊",
-    "Enjoy sunshine and good times! ☀️",
-    "Take pleasure in every experience! 🌟",
-    "Make your vacation unforgettable! 🎊"
+    "Relax and recharge! ☀️",
+    "Have a fun and memorable trip! 🌊",
+    "Wishing you sunny days and happy times! 🏖️",
+    "Take a break and enjoy every moment! 🍹",
+    "Hope your vacation is amazing! 🌸",
+    "Time to unwind and enjoy life! 🌞",
+    "Make beautiful memories! 🌿",
+    "Have a refreshing and joyful holiday! 🌺",
+    "Enjoy adventures and relaxation! 🌴",
+    "Relax and let your worries go! ☀️",
+    "Vacation vibes only! 🌊",
+    "Have a fantastic getaway! 🏖️",
+    "Savor the fun and sunshine! 🍹",
+    "Rest, recharge, and enjoy! 🌞"
   ]
 };
 
-// Display Message
-function displayMessage(){
-  const occ=$('occasion').value;
-  if(!occ){$('customMessage').value='';currentOccasion='';return;}
-  currentOccasion=occ;
-  currentIndex=Math.floor(Math.random()*messagesData[occ].length);
-  const msg = messagesData[occ][currentIndex];
-  $('customMessage').value=msg;
-}
+let currentOccasion = '';
+let currentIndex = 0;
 
-// Next Random Message
-function nextMessage(){
-  if(!currentOccasion)return alert("Select an occasion first!");
-  let nextIndex=Math.floor(Math.random()*messagesData[currentOccasion].length);
-  while(nextIndex===currentIndex) nextIndex=Math.floor(Math.random()*messagesData[currentOccasion].length);
-  currentIndex=nextIndex;
-  $('customMessage').value=messagesData[currentOccasion][currentIndex];
-}
-
-// Clear Content
-function clearContent(){
-  $('customMessage').value='';
-}
-
-// Emoji Button
-const emojiSets = {
-  generic:["😊","😂","😍","👍","🎉"],
-  birthday:["🎂","🎈","🥳","🎁","🎊"],
-  anniversary:["💖","🥂","🌹","💑","🌟"],
-  condolence:["🕊️","🌹","💐","🖤","🕯️"],
-  congratulations:["🏆","🎉","🎖️","✨","🌟"],
-  get-well:["🌻","🌼","💌","🍀","🌞"],
-  "thank-you":["🙏","🌟","💐","💌","🌹"],
-  "good-luck":["🍀","🌈","💪","🎯","🌟"],
-  appreciation:["🌟","💐","🌹","✨","💖"],
-  farewell:["👋","🌷","🌸","💐","🍀"],
-  encouragement:["💪","🚀","✨","🌟","🌈"],
-  love:["❤️","💕","💫","💌","🌸"],
-  vacation:["🌴","🏖️","🌊","☀️","🎊"]
-};
-
-function showEmojis(){
-  const occ = currentOccasion || 'generic';
-  const set = emojiSets[occ];
-  const emojiList=set.join(' ');
-  alert("Emoji Picker:\n"+emojiList+"\nClick to copy manually!");
-}
-
-// Copy
-function copyMessage(){
-  const text=$('customMessage').value;
-  if(!text)return alert('No message!');
-  navigator.clipboard.writeText(text+'\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/');
-  alert('Copied!');
-}
-
-// Feedback
-function openFeedbackModal(){$('feedbackModal').classList.remove('hidden');}
-function closeFeedbackModal(){
-  $('feedbackModal').classList.add('hidden');
-  $('feedbackText').value=''; selectedRating=0;
-  document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected'));
-  $('ratingScore').textContent='Score: 0%';
-}
-function setRating(r){
-  selectedRating=r;
-  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected',i<r));
-  $('ratingScore').textContent=`Score: ${r*20}%`;
-}
-function submitFeedback(){
-  const fb=$('feedbackText').value.trim();
-  if(!fb && selectedRating===0)return alert('Please rate or comment!');
-  let stored=JSON.parse(localStorage.getItem('feedbacks')||'[]');
-  stored.push({rating:selectedRating,feedback:fb,date:new Date().toLocaleString()});
-  localStorage.setItem('feedbacks',JSON.stringify(stored));
-  alert(`Thanks for your feedback!`);
-  closeFeedbackModal();
-}
-function viewFeedbacks(){
-  const stored=JSON.parse(localStorage.getItem('feedbacks')||'[]');
-  if(!stored.length)return alert('No feedback yet.');
-  let msgs=stored.map(f=>`[${f.date}] ⭐${f.rating} - ${f.feedback}`).join('\n\n');
-  alert(msgs);
-}
-
-// Share (Generic)
-function shareMessage(){
-  const text=$('customMessage').value;
-  if(!text)return alert('Generate a message first!');
-  const fullMsg=text+'\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/';
-  if(navigator.share){
-    navigator.share({text:fullMsg}).catch(err=>console.log(err));
-  } else {
-    alert("Sharing not supported. Copy instead.");
+// ----------------- DISPLAY MESSAGE -----------------
+function displayMessage() {
+  const occSelect = $('occasion');
+  currentOccasion = occSelect.value;
+  if (!currentOccasion) {
+    $('customMessage').value = '';
+    return;
   }
+  currentIndex = Math.floor(Math.random() * occasions[currentOccasion].length);
+  updateMessage();
 }
 
-// Init Event Listeners
-window.addEventListener('DOMContentLoaded',()=>{
-  $('occasion').addEventListener('change',displayMessage);
-  $('nextMessage').addEventListener('click',nextMessage);
-  $('clearContent').addEventListener('click',clearContent);
-  $('emojiButton').addEventListener('click',showEmojis);
-  $('copyBtn').addEventListener('click',copyMessage);
-  $('shareBtn').addEventListener('click',shareMessage);
-  $('feedbackBtn').addEventListener('click',openFeedbackModal);
-  $('submitFeedbackBtn').addEventListener('click',submitFeedback);
-  $('viewFeedbackBtn').addEventListener('click',viewFeedbacks);
-});
+function updateMessage() {
+  let msg = occasions[currentOccasion][currentIndex];
+  const recipient = $('recipientName').value.trim();
+  const sender = $('senderName').value.trim();
+
+  if (recipient) msg = `Hi ${recipient},\n\n${msg}`;
+  if (sender) msg += `\n\nRegards\n${sender}`;
+
+  $('customMessage').value = msg;
+}
+
+function nextMessage() {
+  if (!currentOccasion) return alert("Please select an occasion first!");
+  currentIndex = (currentIndex + 1) % occasions[currentOccasion].length;
+  updateMessage();
+}
+
+function clearContent() {
+  $('customMessage').value = '';
+  $('recipientName').value = '';
+  $('senderName').value = '';
+}
+
+// ----------------- EMOJI -----------------
+const genericEmojis = ["😊","🎉","🌟","❤️","👍"];
+const occasionEmojis = {
+  'birthday': ["🎂","🥳","🎁","🎈"],
+  'anniversary': ["💕","💖","🌹"],
+  'condolence': ["🕊️","🌿","💛"],
+  'congratulations': ["🏆","🎉","🌟"],
+  'get-well': ["🌻","🌼","🌸"],
+  'thank-you': ["🙏","💐","🌸"],
+  'good-luck': ["🍀","🌟","🚀"],
+  'appreciation': ["🌟","💛","🌸"],
+  'farewell':
