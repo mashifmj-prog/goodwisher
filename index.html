@@ -22,28 +22,29 @@
     <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
     <label for="occasion">Occasion</label>
-    <select id="occasion">
-      <option value="" disabled selected>Select an occasion</option>
-      <option value="birthday">Birthday</option>
-      <option value="anniversary">Anniversary</option>
-      <option value="get-well">Get Well Soon</option>
-      <option value="congrats">Congratulations</option>
-      <option value="thank-you">Thank You</option>
-      <option value="good-luck">Good Luck</option>
-      <option value="motivation">Motivation</option>
-      <option value="appreciation">Appreciation</option>
-      <option value="farewell">Farewell</option>
-      <option value="encouragement">Encouragement</option>
-      <option value="love">Love</option>
-      <option value="condolences">Condolences</option>
-      <option value="vacation">Vacation</option>
-      <option value="custom">Custom</option>
-      <option value="exit">Exit</option>
-    </select>
-
-    <div id="customOccasionWrap" class="custom-occasion-wrap hidden">
-      <input id="customOccasionDesc" placeholder="Describe the occasion (e.g., new job)" maxlength="50">
-      <button id="generateSuggestions" class="btn light">Generate Suggestions</button>
+    <div class="occasion-wrap">
+      <select id="occasion">
+        <option value="" disabled selected>Select an occasion</option>
+        <option value="birthday">Birthday</option>
+        <option value="anniversary">Anniversary</option>
+        <option value="get-well">Get Well Soon</option>
+        <option value="congrats">Congratulations</option>
+        <option value="thank-you">Thank You</option>
+        <option value="good-luck">Good Luck</option>
+        <option value="motivation">Motivation</option>
+        <option value="appreciation">Appreciation</option>
+        <option value="farewell">Farewell</option>
+        <option value="encouragement">Encouragement</option>
+        <option value="love">Love</option>
+        <option value="condolences">Condolences</option>
+        <option value="vacation">Vacation</option>
+        <option value="custom">Custom</option>
+        <option value="exit">Exit</option>
+      </select>
+      <div id="customInputWrap" class="custom-input-wrap hidden">
+        <input id="customOccasionDesc" placeholder="e.g., new job, recovery, prayer" maxlength="30">
+        <button id="generateSuggestions" class="btn light">Generate</button>
+      </div>
     </div>
 
     <div class="action-line">
