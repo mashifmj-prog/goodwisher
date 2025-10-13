@@ -16,6 +16,11 @@
   --accent: #34d399;
   --accent-hover: #10b981;
   --border: #374151;
+  --twitter-bg: #ffffff;
+}
+
+[data-theme="light"] {
+  --twitter-bg: #000000;
 }
 
 body {
@@ -123,12 +128,12 @@ textarea {
   margin-bottom: 12px;
 }
 
-.name-input, .phone-input {
+.name-input {
   position: relative;
   flex: 1;
 }
 
-.name-input input, .phone-input input {
+.name-input input {
   width: 100%;
   padding-right: 28px;
   font-size: 0.95rem;
@@ -231,7 +236,76 @@ textarea {
   margin-bottom: 10px;
 }
 
-.share-options.hidden { display: none; }
+.share-device {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+.share-device:hover {
+  background: var(--accent-hover);
+}
+
+.share-whatsapp {
+  background: #25D366;
+  color: #fff;
+  border: none;
+}
+
+.share-whatsapp:hover {
+  background: #20b358;
+}
+
+.share-facebook {
+  background: #1877F2;
+  color: #fff;
+  border: none;
+}
+
+.share-facebook:hover {
+  background: #1566c9;
+}
+
+.share-twitter {
+  background: var(--twitter-bg);
+  color: var(--text-color);
+  border: none;
+}
+
+.share-twitter:hover {
+  background: #333333;
+}
+
+.share-tiktok {
+  background: #000000;
+  color: #fff;
+  border: 1px solid #00F2EA;
+}
+
+.share-tiktok:hover {
+  background: #333333;
+  border-color: #FF0050;
+}
+
+.share-copy {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+.share-copy:hover {
+  background: var(--accent-hover);
+}
+
+.share-close {
+  background: var(--muted);
+  color: var(--card-bg);
+  border: none;
+}
+
+.share-close:hover {
+  background: #5a626e;
+}
 
 .modal-content h2 {
   text-align: center;
