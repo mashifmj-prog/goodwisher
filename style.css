@@ -28,24 +28,10 @@ body {
 }
 
 .container { max-width: 720px; margin: auto; }
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .title { color: var(--accent); font-size: 1.4rem; }
+.icon-btn { background: none; border: none; cursor: pointer; color: var(--muted); }
 
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-/* Card */
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -57,74 +43,45 @@ body {
 
 input, select, textarea {
   width: 100%;
-  margin-bottom: 8px;
-  padding: 8px;
-  border-radius: 6px;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--card-bg);
   color: var(--text-color);
-  font-size: 0.95rem;
-  box-sizing: border-box;
 }
 
-.textarea-wrap { position: relative; margin-bottom: 12px; }
-
-textarea {
-  resize: vertical;
-  min-height: 100px;
-  padding: 8px;
-}
-
-/* Buttons */
-.btn {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-.btn.light:hover {
-  background: var(--accent);
-  color: #fff;
-}
-
-.actions, .action-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-  margin-top: 6px;
-}
-
-/* Emoji button positioning */
-#emojiButton {
-  margin-left: auto;
-}
-
-/* Names input */
-.names-wrap {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.name-input { position: relative; flex: 1; }
-.name-input input { width: 100%; padding-right: 28px; font-size: 0.95rem; }
-.clear-btn {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
+.textarea-wrap { position: relative; margin-bottom: 10px; }
+.top-buttons { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.small-icon {
   border: none;
   background: none;
-  font-size: 1rem;
+  font-size: 1.5rem;
   cursor: pointer;
-  color: var(--muted);
 }
 
-/* Modal */
+.names-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
+.name-input { flex: 1; }
+.name-input label { display: block; font-size: 0.9rem; color: var(--muted); }
+.name-input input { width: 100%; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.btn.light { background: transparent; color: var(--accent); border: 1px solid var(--border); }
+.btn.small { padding: 4px 6px; font-size: 0.9rem; }
+
+.share-options { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 6px; }
+
+.tiny { font-size: 0.8rem; text-align: center; color: var(--muted); margin-top: 10px; }
+
 .modal {
   position: fixed;
   inset: 0;
@@ -132,7 +89,6 @@ textarea {
   justify-content: center;
   align-items: center;
   background: rgba(0,0,0,0.5);
-  z-index: 1000;
 }
 .modal.hidden { display: none; }
 .modal-content {
@@ -141,72 +97,4 @@ textarea {
   padding: 16px;
   width: 90%;
   max-width: 400px;
-  box-sizing: border-box;
 }
-
-.star-percent-wrap {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-.star-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 18%;
-}
-.star {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: var(--muted);
-}
-.star.selected {
-  color: #fbbf24;
-  text-shadow: 0 0 6px rgba(251,191,36,0.6);
-}
-.star-col span {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-.rating-score {
-  text-align: center;
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-.modal-content h2 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: var(--accent);
-}
-
-/* Small note */
-.tiny {
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 8px;
-}
-
-/* Emoji Picker */
-.emoji-picker {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  padding: 6px;
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  border-radius: 6px;
-  z-index: 1100;
-}
-.emoji-picker .emoji-b
