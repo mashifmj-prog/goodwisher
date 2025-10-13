@@ -10,7 +10,7 @@
   <div class="container">
     <header class="header">
       <h1 class="title">GoodWisher</h1>
-      <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
+      <button id="themeToggle" class="icon-btn" title="Toggle theme">
         <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path id="themeIconPath" fill="currentColor"></path>
         </svg>
@@ -18,86 +18,78 @@
     </header>
 
     <main class="card">
-      <p class="sub">Choose an occasion, language, and share a warm message instantly.</p>
+      <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
-      <div class="form-row">
-        <label for="language">Language</label>
-        <select id="language" aria-label="Language">
-          <option value="en" selected>English</option>
-          <option value="es">Español</option>
-          <option value="af">Afrikaans</option>
-          <option value="hi">हिन्दी (Hindi)</option>
-          <option value="zh">中文 (Mandarin)</option>
-        </select>
-      </div>
+      <select id="language" onchange="displayMessage()">
+        <option value="en" selected>English</option>
+        <option value="zh">中文 (Mandarin)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="af">Afrikaans</option>
+      </select>
 
-      <div class="form-row">
-        <label for="occasion">Occasion</label>
-        <div class="occasion-row">
-          <select id="occasion" aria-label="Occasion">
-            <option value="" disabled selected>Select an occasion</option>
-            <option value="birthday">Birthday</option>
-            <option value="anniversary">Anniversary</option>
-            <option value="get-well">Get Well Soon</option>
-            <option value="congrats">Congratulations</option>
-            <option value="thank-you">Thank You</option>
-            <option value="good-luck">Good Luck</option>
-            <option value="motivation">Motivation</option>
-            <option value="appreciation">Appreciation</option>
-            <option value="farewell">Farewell</option>
-            <option value="encouragement">Encouragement</option>
-            <option value="love">Love</option>
-            <option value="condolences">Condolences</option>
-            <option value="vacation">Vacation</option>
-          </select>
-          <button id="refreshMsg" class="btn small" title="Try another message">🔁 Try another</button>
-        </div>
+      <select id="occasion" onchange="displayMessage()">
+        <option value="" disabled selected>Select an occasion</option>
+        <option value="birthday">Birthday</option>
+        <option value="anniversary">Anniversary</option>
+        <option value="get-well">Get Well Soon</option>
+        <option value="congrats">Congratulations</option>
+        <option value="thank-you">Thank You</option>
+        <option value="good-luck">Good Luck</option>
+        <option value="motivation">Motivation</option>
+        <option value="appreciation">Appreciation</option>
+        <option value="farewell">Farewell</option>
+        <option value="encouragement">Encouragement</option>
+        <option value="love">Love</option>
+        <option value="condolences">Condolences</option>
+        <option value="vacation">Vacation</option>
+      </select>
+
+      <div class="textarea-wrap">
+        <button id="emojiButton" class="small-icon" title="Insert emoji">😊</button>
+        <button id="clearButton" class="clear-btn">🧹 Clear Content</button>
+        <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
       </div>
 
       <div class="names-wrap">
         <div class="name-input">
-          <input id="senderName" placeholder="Your name (optional)" aria-label="Your name">
-          <button class="clear-btn" data-target="senderName" aria-label="Clear your name">×</button>
+          <label>From:</label>
+          <input id="senderName" placeholder="Your name (optional)" oninput="updateMessageWithName()">
+          <button class="clear-name" onclick="clearName('senderName')">✖</button>
         </div>
         <div class="name-input">
-          <input id="recipientName" placeholder="Recipient's name (optional)" aria-label="Recipient name">
-          <button class="clear-btn" data-target="recipientName" aria-label="Clear recipient name">×</button>
+          <label>To:</label>
+          <input id="recipientName" placeholder="Recipient's name (optional)" oninput="updateMessageWithName()">
+          <button class="clear-name" onclick="clearName('recipientName')">✖</button>
         </div>
       </div>
 
-      <div class="message-area">
-        <div class="message-top">
-          <div></div>
-          <button id="emojiButton" class="small-icon" aria-label="Open emoji picker">😊</button>
-        </div>
-        <textarea id="customMessage" rows="7" placeholder="Write or customize the message here…" aria-label="Message body"></textarea>
+      <button id="nextMessage" class="btn small" onclick="nextRandomMessage()">Next Message</button>
+
+      <div class="actions">
+        <button onclick="copyMessage()" class="btn">Copy</button>
+        <button onclick="saveMessage()" class="btn alt">Save</button>
+        <button onclick="saveTemplate()" class="btn">Save as Template</button>
+        <button id="shareBtn" class="btn light" onclick="openShareModal()">Share</button>
       </div>
 
-      <div class="actions-row">
-        <button id="copyBtn" class="btn small">Copy</button>
-        <button id="saveBtn" class="btn small">Save</button>
-        <button id="shareBtn" class="btn big">Share</button>
+      <select id="templateSelect" onchange="loadTemplate()">
+        <option value="" disabled selected>Load a Template (optional)</option>
+      </select>
+
+      <div id="savedMessages" class="saved-area">
+        <button onclick="exportSavedMessages()" class="btn small">Export Saved Messages</button>
       </div>
 
-      <div id="shareOptions" class="share-options hidden" aria-hidden="true">
-        <button class="btn small" id="shareWhatsApp">WhatsApp</button>
-        <button class="btn small" id="shareFacebook">Facebook</button>
-        <button class="btn small" id="shareX">X (Twitter)</button>
-        <button class="btn small" id="shareTelegram">Telegram</button>
-        <button class="btn small" id="shareEmail">Email</button>
-        <button class="btn small" id="shareDevice">Share (Device)</button>
-      </div>
-
-      <div style="margin-top:12px">
-        <button id="feedbackBtn" class="btn light">Give Feedback</button>
-      </div>
+      <button id="feedbackButton" onclick="openFeedbackModal()" class="btn big">Give Feedback</button>
+      <p class="tiny">Multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</p>
     </main>
   </div>
 
   <!-- Feedback Modal -->
-  <div id="feedbackModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div id="feedbackModal" class="modal hidden">
     <div class="modal-content">
-      <h2>We Value Your Feedback!</h2>
+      <h2>Your Feedback Matters!</h2>
       <div class="star-percent-wrap">
         <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
         <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
@@ -108,9 +100,25 @@
       <div id="ratingScore" class="rating-score">Score: 0%</div>
       <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
       <div class="modal-actions">
-        <button id="cancelFeedback" class="btn light">Cancel</button>
-        <button id="submitFeedback" class="btn">Send</button>
+        <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+        <button onclick="submitFeedback()" class="btn">Send</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="shareModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Share Via</h2>
+      <div class="modal-actions" id="shareOptions">
+        <button onclick="shareWhatsApp()" class="btn small">WhatsApp</button>
+        <button onclick="shareFacebook()" class="btn small">Facebook</button>
+        <button onclick="shareTwitter()" class="btn small">X (Twitter)</button>
+        <button onclick="shareTelegram()" class="btn small">Telegram</button>
+        <button onclick="shareEmail()" class="btn small">Email</button>
+        <button onclick="shareDevice()" class="btn small">Device Share</button>
+      </div>
+      <button onclick="closeShareModal()" class="btn light" style="margin-top:10px">Cancel</button>
     </div>
   </div>
 
