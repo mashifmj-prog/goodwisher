@@ -51,7 +51,7 @@ const messages = {
     "Have an amazing vacation filled with fun!",
     "Enjoy your getaway and making new memories!"
   ],
-  custom: [] // Populated dynamically by generateCustomSuggestions
+  custom: [] // Populated dynamically
 };
 
 const emojis = {
@@ -69,7 +69,7 @@ const emojis = {
   condolences: ['🙏', '🕊️', '🌹', '💔'],
   vacation: ['🌴', '✈️', '🏖️', '☀️'],
   default: ['😊', '👍', '❤️', '🌟'],
-  custom: ['🎉', '🌟', '🥳', '🙌'] // Generic positive emojis for custom occasion
+  custom: ['🎉', '🌟', '🥳', '🙌']
 };
 
 let currentOccasion = '';
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Occasion selection
   const occasionSelect = document.getElementById('occasion');
   occasionSelect.addEventListener('change', () => {
-    const customWrap = document.getElementById('customOccasionWrap');
+    const customWrap = document.getElementById('customInputWrap');
     if (occasionSelect.value === 'exit') {
       occasionSelect.value = '';
       currentOccasion = '';
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (desc) {
       generateCustomSuggestions(desc);
     } else {
-      alert('Please enter a description for the custom occasion (e.g., new job).');
+      alert('Please enter a description for the custom occasion (e.g., new job, recovery, prayer).');
     }
   });
 
@@ -142,53 +142,90 @@ document.addEventListener('DOMContentLoaded', () => {
     const textarea = document.getElementById('customMessage');
     textarea.value = 'Generating suggestions...';
     try {
-      // Try multiple queries to improve results
+      // Sentiment check based on keywords
+      const negativeKeywords = ['hurt', 'loss', 'sorry', 'pain', 'grief', 'sad'];
+      const neutralSpiritualKeywords = ['fasting', 'prayer', 'meditation', 'retreat', 'reflection', 'worship', 'spiritual'];
+      const isNegative = negativeKeywords.some(keyword => desc.toLowerCase().includes(keyword));
+      const isNeutralSpiritual = neutralSpiritualKeywords.some(keyword => desc.toLowerCase().includes(keyword));
+      
+      // Try multiple queries
       const queries = [
-        `congratulations for ${desc}`,
-        `best wishes for ${desc}`,
-        `good wishes for ${desc}`
+        `supportive messages for ${desc}`,
+        `kind wishes for ${desc}`,
+        `positive messages for ${desc}`,
+        `encouraging words for ${desc}`
       ];
       let suggestions = [];
       for (const query of queries) {
         const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&pretty=1`);
         const data = await response.json();
-        // Check AbstractText first
+        // Check AbstractText
         if (data.AbstractText) {
           suggestions.push(data.AbstractText);
         }
-        // Then check RelatedTopics
+        // Check RelatedTopics
         const related = data.RelatedTopics
           .map(topic => topic.Text)
-          .filter(text => text && (text.toLowerCase().includes('wish') || text.toLowerCase().includes('congrat') || text.toLowerCase().includes('message')))
+          .filter(text => text && text.length <= 100 && /wish|message|support|blessing/i.test(text))
           .slice(0, 3 - suggestions.length);
         suggestions = [...suggestions, ...related];
         if (suggestions.length >= 3) break;
       }
-      // Fallback messages if no results
+      // Fallback messages based on sentiment
       if (suggestions.length === 0) {
-        suggestions = [
-          `Wishing you joy and success in your ${desc}!`,
-          `Congratulations on your ${desc}! Keep shining!`,
-          `Best wishes for your ${desc}! May it bring you happiness.`
-        ];
+        if (isNegative) {
+          suggestions = [
+            `Wishing you strength during your ${desc}.`,
+            `Sending you love and support for your ${desc}.`,
+            `May you find peace and healing through your ${desc}.`
+          ];
+        } else if (isNeutralSpiritual) {
+          suggestions = [
+            `May your ${desc} bring you peace and clarity.`,
+            `Wishing you strength and focus in your ${desc}.`,
+            `Blessings for your ${desc}.`
+          ];
+        } else {
+          suggestions = [
+            `Congratulations on your ${desc}! Keep shining!`,
+            `Wishing you joy and success in your ${desc}!`,
+            `Best wishes for your ${desc}! May it bring happiness.`
+          ];
+        }
       }
       // Clean and limit to 3 suggestions
       suggestions = suggestions
-        .filter(text => text.length <= 100) // Short messages only
+        .filter(text => text.length <= 100)
         .slice(0, 3);
       messages.custom = suggestions;
       currentIndex = 0;
       displayMessage();
     } catch (error) {
       console.error('Error fetching suggestions:', error);
-      messages.custom = [
-        `Wishing you joy and success in your ${desc}!`,
-        `Congratulations on your ${desc}! Keep shining!`,
-        `Best wishes for your ${desc}! May it bring you happiness.`
-      ];
+      const isNegative = negativeKeywords.some(keyword => desc.toLowerCase().includes(keyword));
+      const isNeutralSpiritual = neutralSpiritualKeywords.some(keyword => desc.toLowerCase().includes(keyword));
+      if (isNegative) {
+        messages.custom = [
+          `Wishing you strength during your ${desc}.`,
+          `Sending you love and support for your ${desc}.`,
+          `May you find peace and healing through your ${desc}.`
+        ];
+      } else if (isNeutralSpiritual) {
+        messages.custom = [
+          `May your ${desc} bring you peace and clarity.`,
+          `Wishing you strength and focus in your ${desc}.`,
+          `Blessings for your ${desc}.`
+        ];
+      } else {
+        messages.custom = [
+          `Congratulations on your ${desc}! Keep shining!`,
+          `Wishing you joy and success in your ${desc}!`,
+          `Best wishes for your ${desc}! May it bring happiness.`
+        ];
+      }
       currentIndex = 0;
       displayMessage();
-      alert('Error fetching suggestions. Using default messages. Try a shorter description like "wedding" or "new job".');
+      alert('No suggestions found. Try a concise term like "new job," "recovery," or "prayer".');
     }
   }
 
@@ -206,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('senderName').value = '';
     document.getElementById('recipientName').value = '';
     document.getElementById('customOccasionDesc').value = '';
-    document.getElementById('customOccasionWrap').classList.add('hidden');
+    document.getElementById('customInputWrap').classList.add('hidden');
     currentIndex = 0;
     occasionSelect.value = '';
     currentOccasion = '';
