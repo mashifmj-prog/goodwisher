@@ -26,6 +26,7 @@ body {
 }
 
 .container { max-width: 720px; margin: auto; }
+
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .title { color: var(--accent); font-size: 1.4rem; }
 .icon-btn { background: none; border: none; cursor: pointer; color: var(--muted); }
@@ -38,11 +39,16 @@ input, select, textarea { width: 100%; margin-bottom: 10px; padding: 8px; border
 .names-wrap { display: flex; gap: 8px; margin-top: 8px; }
 .names-wrap input { flex: 1; }
 
-.textarea-wrap { position: relative; margin-bottom: 12px; }
-.textarea-header { display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 4px; }
-.emoji-btn { font-size: 1rem; }
+.textarea-actions-top { display: flex; justify-content: space-between; margin-bottom: 4px; }
 
 .btn.light { background: transparent; color: var(--accent); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
 
-.actions { display: flex; justify-content: flex-start; margin-top: 6px; gap: 6px; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
 .tiny { text-align: center; font-size: 0.8rem; margin-top: 8px; }
+
+/* Modals */
+.modal { position: fixed; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.5);}
+.modal.hidden{display:none;}
+.modal-content{background:var(--card-bg); border-radius:10px; padding:16px; width:90%; max-width:400px;}
+.modal-actions{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:6px;}
