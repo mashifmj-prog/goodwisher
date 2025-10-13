@@ -14,7 +14,7 @@ function toggleTheme(){
   setThemeIcon();
 }
 
-// Messages
+// Messages (English only)
 const messages = {
   birthday:["Happy Birthday! 🎉","Wishing you a joyful day! 🎂"],
   anniversary:["Happy Anniversary! 💕","Celebrating your love! ❤️"],
@@ -33,10 +33,9 @@ const messages = {
 
 let currentIndex = 0;
 
-// Initialization
+// Init
 window.addEventListener('DOMContentLoaded',()=>{
-  const saved=localStorage.getItem('theme')||'light';
-  document.body.dataset.theme=saved;
+  document.body.dataset.theme=localStorage.getItem('theme')||'light';
   setThemeIcon();
   $('themeToggle').addEventListener('click',toggleTheme);
 
@@ -78,3 +77,32 @@ function nextMessage(){
   updateTextarea(messages[occ][currentIndex]);
 }
 
+function clearMessage(){ $('customMessage').value=''; }
+
+function showEmojiPopup(){ alert('Emoji popup here!'); /* placeholder */ }
+
+function copyMessage(){
+  const txt=$('customMessage').value;
+  if(!txt) return alert('No message!');
+  navigator.clipboard.writeText(txt);
+  alert('Copied!');
+}
+
+// Share modal
+function openShareModal(){$('shareModal').classList.remove('hidden');}
+function closeShareModal(){$('shareModal').classList.add('hidden');}
+
+function shareWhatsApp(){let msg=$('customMessage').value; if(!msg)return; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
+function shareTwitter(){let msg=$('customMessage').value; if(!msg)return; window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
+function shareTelegram(){let msg=$('customMessage').value; if(!msg)return; window.open(`https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
+function shareEmail(){let msg=$('customMessage').value; if(!msg)return; window.location.href=`mailto:?subject=GoodWisher&body=${encodeURIComponent(msg)}`; closeShareModal();}
+function shareDevice(){alert('Device share popup (native)'); closeShareModal();}
+
+// Feedback modal
+function openFeedbackModal(){$('feedbackModal').classList.remove('hidden');}
+function closeFeedbackModal(){$('feedbackModal').classList.add('hidden');}
+function submitFeedback(){const fb=$('feedbackText').value.trim(); alert('Feedback submitted!'); closeFeedbackModal();}
+
+// Placeholder functions
+function saveMessage(){alert('Message saved!');}
+function saveTemplate(){alert('Template saved!');}
