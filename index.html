@@ -45,4 +45,52 @@
       <button id="emojiButton" class="btn light">😊</button>
     </div>
 
-    <textarea id="customMessage" placeho
+    <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
+
+    <div class="names-wrap">
+      <input id="recipientName" placeholder="To: Recipient's name (optional)">
+      <input id="senderName" placeholder="From: Your name (optional)">
+    </div>
+
+    <div class="actions">
+      <button id="copyBtn" class="btn light">Copy</button>
+      <button id="saveBtn" class="btn light">Save</button>
+      <button id="saveTemplateBtn" class="btn light">Save as Template</button>
+      <button id="shareBtn" class="btn light">Share</button>
+      <button id="feedbackBtn" class="btn light">Feedback</button>
+    </div>
+
+    <p class="tiny">English only</p>
+  </main>
+</div>
+
+<!-- Share Modal -->
+<div id="shareModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Share Via</h2>
+    <div class="modal-actions">
+      <button onclick="shareWhatsApp()" class="btn light">WhatsApp</button>
+      <button onclick="shareTwitter()" class="btn light">Twitter</button>
+      <button onclick="shareTelegram()" class="btn light">Telegram</button>
+      <button onclick="shareEmail()" class="btn light">Email</button>
+      <button onclick="shareDevice()" class="btn light">Device Share</button>
+    </div>
+    <button onclick="closeShareModal()" class="btn light" style="margin-top:10px">Cancel</button>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+<div id="feedbackModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Your Feedback Matters!</h2>
+    <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+    <div class="modal-actions">
+      <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+      <button onclick="submitFeedback()" class="btn light">Send</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
