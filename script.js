@@ -13,6 +13,7 @@ function toggleTheme(){
   localStorage.setItem('theme',newTheme);
   setThemeIcon();
 }
+
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('theme')||'light';
   document.body.dataset.theme=saved;
@@ -22,26 +23,27 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('occasion').addEventListener('change', displayMessage);
   $('nextMessage').addEventListener('click', nextMessage);
   $('clearMessage').addEventListener('click', clearMessage);
-  $('emojiButton').addEventListener('click', insertEmoji);
+  $('emojiButton').addEventListener('click', showEmojiPicker);
+  $('copyBtn').addEventListener('click', copyMessage);
   $('recipientName').addEventListener('input', displayMessage);
   $('senderName').addEventListener('input', displayMessage);
 });
 
 // Messages
 const messages = {
-  birthday:["Happy Birthday! 🎉","Wishing you a joyful day!"],
-  anniversary:["Happy Anniversary! 💕","Celebrating your love!"],
-  "get-well":["Get well soon! 🌻","Wishing you a speedy recovery!"],
-  congrats:["Congratulations! 🏆","Well done!"],
-  "thank-you":["Thank you for your kindness! 🙏","Much appreciated!"],
-  "good-luck":["Good luck on your journey! 🍀","Wishing you success!"],
-  motivation:["Keep going — you can do this! 🚀","Believe in yourself!"],
-  appreciation:["You’re appreciated more than you know! 🌟","Thanks for everything!"],
-  farewell:["Wishing you the best in your next adventure! 👋","Goodbye and take care!"],
-  encouragement:["You’ve got this! 💪","Stay strong!"],
-  love:["You make life beautiful! ❤️","Sending love!"],
-  condolences:["Sending my deepest condolences. 🕊️","Thinking of you in this time."],
-  vacation:["Enjoy your well-deserved vacation! 🌴","Relax and have fun!"]
+  birthday:["Happy Birthday! 🎉","Wishing you a joyful day! 🎂"],
+  anniversary:["Happy Anniversary! 💕","Celebrating your love! ❤️"],
+  "get-well":["Get well soon! 🌻","Wishing you a speedy recovery! 🌟"],
+  congrats:["Congratulations! 🏆","Well done! 🎖️"],
+  "thank-you":["Thank you for your kindness! 🙏","Much appreciated! 😊"],
+  "good-luck":["Good luck on your journey! 🍀","Wishing you success! 🌈"],
+  motivation:["Keep going — you can do this! 🚀","Believe in yourself! 💪"],
+  appreciation:["You’re appreciated more than you know! 🌟","Thanks for everything! 🙌"],
+  farewell:["Wishing you the best in your next adventure! 👋","Goodbye and take care! 🌸"],
+  encouragement:["You’ve got this! 💪","Stay strong! 🌼"],
+  love:["You make life beautiful! ❤️","Sending love! 💌"],
+  condolences:["Sending my deepest condolences. 🕊️","Thinking of you in this time. 🌹"],
+  vacation:["Enjoy your well-deserved vacation! 🌴","Relax and have fun! 🏖️"]
 };
 
 let currentIndex = 0;
@@ -82,7 +84,8 @@ function copyMessage(){
   alert('Copied!');
 }
 
-function insertEmoji(){
-  const emoji = prompt("Enter emoji to insert (or leave blank for 😊)","😊");
+function showEmojiPicker(){
+  const emojiSet = ["😊","❤️","🎉","🌟","🍀","🌹","💌","🎂","🎖️","🌴"];
+  const emoji = prompt("Select emoji to insert:\n"+emojiSet.join(" "), "😊");
   if(emoji) $('customMessage').value += emoji;
 }
