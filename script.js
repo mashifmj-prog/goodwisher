@@ -223,8 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.openShareModal = () => {
     document.getElementById('shareModal').classList.remove('hidden');
-    document.getElementById('phoneNumber').value = '';
-    document.getElementById('shareOptions').classList.add('hidden');
   };
 
   window.openFeedbackModal = () => {
@@ -241,87 +239,113 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Share modal functions
-  window.shareMessage = () => {
+  window.shareDevice = async () => {
     const text = getShareableMessage();
     if (!text.trim()) {
       alert('Please enter or select a message to share.');
       return;
     }
-    const phoneNumber = document.getElementById('phoneNumber').value.trim();
-    if (phoneNumber) {
-      // Directly share via SMS if phone number is provided
-      fallbackToSMS(text, phoneNumber);
-    } else if (navigator.share) {
-      // Use Web Share API if no phone number
-      navigator.share({
-        title: 'GoodWisher Message',
-        text: text
-      }).then(() => {
-        console.log('Shared successfully');
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'GoodWisher Message',
+          text: text
+        });
         closeShareModal();
-      }).catch((error) => {
+      } catch (error) {
         console.error('Error sharing:', error);
-        // Show other sharing options if Web Share fails
-        document.getElementById('shareOptions').classList.remove('hidden');
-      });
+        fallbackToSMS(text);
+      }
     } else {
-      // Show other sharing options if Web Share is unsupported
-      document.getElementById('shareOptions').classList.remove('hidden');
+      fallbackToSMS(text);
     }
   };
 
+  async function fallbackToSMS(text) {
+    if ('contacts' in navigator && 'select' in navigator.contacts) {
+      try {
+        const contacts = await navigator.contacts.select(['tel'], { multiple: false });
+        if (contacts.length > 0) {
+          const phoneNumber = contacts[0].tel[0];
+          const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(text)}`;
+          window.open(smsUrl, '_blank');
+          closeShareModal();
+        } else {
+          promptForPhoneNumber(text);
+        }
+      } catch (error) {
+        console.error('Error accessing contacts:', error);
+        promptForPhoneNumber(text);
+      }
+    } else {
+      promptForPhoneNumber(text);
+    }
+  }
+
+  function promptForPhoneNumber(text) {
+    const phoneNumber = prompt('Enter a phone number for SMS (e.g., +27123456789):');
+    if (phoneNumber) {
+      const cleanedNumber = phoneNumber.replace(/[^0-9+]/g, '');
+      if (/^\+?[1-9]\d{1,14}$/.test(cleanedNumber)) {
+        const smsUrl = `sms:${cleanedNumber}?body=${encodeURIComponent(text)}`;
+        window.open(smsUrl, '_blank');
+        closeShareModal();
+      } else {
+        alert('Please enter a valid phone number (e.g., +27 for South Africa).');
+      }
+    } else {
+      const smsUrl = `sms:?body=${encodeURIComponent(text)}`;
+      window.open(smsUrl, '_blank');
+      closeShareModal();
+    }
+  }
+
   window.shareWhatsApp = () => {
     const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     closeShareModal();
   };
 
   window.shareFacebook = () => {
     const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(text)}`, '_blank');
     closeShareModal();
   };
 
   window.shareTwitter = () => {
     const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     closeShareModal();
   };
 
-  window.shareTelegram = () => {
+  window.shareTikTok = () => {
     const text = getShareableMessage();
-    window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
-    closeShareModal();
-  };
-
-  window.shareEmail = () => {
-    const text = getShareableMessage();
-    window.open(`mailto:?body=${encodeURIComponent(text)}`, '_blank');
-    closeShareModal();
-  };
-
-  // Fallback to SMS URL scheme
-  function fallbackToSMS(text, phoneNumber) {
-    const cleanedNumber = phoneNumber.replace(/[^0-9+]/g, '');
-    if (phoneNumber && !/^\+?[1-9]\d{1,14}$/.test(cleanedNumber)) {
-      alert('Please enter a valid phone number (e.g., +27 for South Africa).');
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
       return;
     }
-    const smsUrl = cleanedNumber ? `sms:${cleanedNumber}?body=${encodeURIComponent(text)}` : `sms:?body=${encodeURIComponent(text)}`;
-    try {
-      window.open(smsUrl, '_blank');
+    // TikTok doesn't have a direct share API; use a URL-based approach
+    alert('To share on TikTok, copy the message and paste it into a TikTok post.');
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Message copied! Paste it into TikTok.');
       closeShareModal();
-    } catch (error) {
-      console.error('Error opening SMS:', error);
-      alert('Unable to open SMS app. Try copying the message or using another sharing method.');
-      document.getElementById('shareOptions').classList.remove('hidden');
-    }
-  }
+    });
+  };
 
   window.closeShareModal = () => {
     document.getElementById('shareModal').classList.add('hidden');
-    document.getElementById('phoneNumber').value = '';
-    document.getElementById('shareOptions').classList.add('hidden');
   };
 
   // Feedback modal
