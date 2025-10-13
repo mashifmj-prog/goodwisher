@@ -36,8 +36,8 @@ const messages = {
     "You'll be missed, but your future is bright!"
   ],
   encouragement: [
-    "You’re stronger than you know—keep going!",
-    "Believe in yourself; you’re capable of great things."
+    "You're stronger than you know—keep going!",
+    "Believe in yourself; you're capable of great things."
   ],
   love: [
     "You mean the world to me.",
@@ -183,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       textarea.value = '';
     }
-    updateMessageWithName();
   }
 
   // Action buttons
@@ -206,40 +205,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.openShareModal = () => {
     document.getElementById('shareModal').classList.remove('hidden');
+    document.getElementById('phoneNumber').value = ''; // Clear phone number on modal open
   };
 
   window.openFeedbackModal = () => {
     document.getElementById('feedbackModal').classList.remove('hidden');
   };
 
-  // Share modal
+  // Helper function to get full shareable message
+  function getShareableMessage() {
+    const textarea = document.getElementById('customMessage');
+    const sender = document.getElementById('senderName').value;
+    const recipient = document.getElementById('recipientName').value;
+    const signature = sender ? `\n\nFrom: ${sender}` : '';
+    return recipient ? `To: ${recipient}\n${textarea.value}${signature}` : `${textarea.value}${signature}`;
+  }
+
+  // Share modal functions
   window.shareWhatsApp = () => {
-    const text = document.getElementById('customMessage').value;
+    const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   window.shareFacebook = () => {
-    const text = document.getElementById('customMessage').value;
+    const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(text)}`, '_blank');
   };
 
   window.shareTwitter = () => {
-    const text = document.getElementById('customMessage').value;
+    const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   window.shareTelegram = () => {
-    const text = document.getElementById('customMessage').value;
+    const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
   };
 
   window.shareEmail = () => {
-    const text = document.getElementById('customMessage').value;
+    const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
     window.open(`mailto:?body=${encodeURIComponent(text)}`, '_blank');
   };
 
+  // Share via Device (Web Share API for native SMS, etc.)
+  window.shareDevice = () => {
+    const text = getShareableMessage();
+    if (!text.trim()) {
+      alert('Please enter or select a message to share.');
+      return;
+    }
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    if (navigator.share && !phoneNumber) { // Use Web Share API if no phone number
+      navigator.share({
+        title: 'GoodWisher Message',
+        text: text
+      }).then(() => {
+        console.log('Shared successfully');
+      }).catch((error) => {
+        console.error('Error sharing:', error);
+        fallbackToSMS(text, phoneNumber);
+      });
+    } else {
+      // Use SMS URL if phone number provided or Web Share API unsupported
+      fallbackToSMS(text, phoneNumber);
+    }
+  };
+
+  // Fallback to SMS URL scheme
+  function fallbackToSMS(text, phoneNumber) {
+    const cleanedNumber = phoneNumber.replace(/[^0-9+]/g, ''); // Clean phone number
+    const smsUrl = cleanedNumber ? `sms:${cleanedNumber}?body=${encodeURIComponent(text)}` : `sms:?body=${encodeURIComponent(text)}`;
+    try {
+      window.open(smsUrl, '_blank');
+    } catch (error) {
+      console.error('Error opening SMS:', error);
+      alert('Unable to open SMS app. Try copying the message instead.');
+    }
+  }
+
   window.closeShareModal = () => {
     document.getElementById('shareModal').classList.add('hidden');
+    document.getElementById('phoneNumber').value = ''; // Clear phone number on close
   };
 
   // Feedback modal
@@ -272,10 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // View previous feedback
-  document.getElementById('feedbackModal').addEventListener('click', (e) => {
-    if (e.target.textContent === 'View Previous') {
-      const feedbackDisplay = feedbackList.map(f => `Rating: ${f.rating} stars (${f.rating * 20}%), Text: ${f.text}, Time: ${f.timestamp}`).join('\n');
-      alert(feedbackDisplay || 'No previous feedback.');
-    }
-  });
+  window.viewPreviousFeedback = () => {
+    const feedbackDisplay = feedbackList.map(f => `Rating: ${f.rating} stars (${f.rating * 20}%), Text: ${f.text}, Time: ${f.timestamp}`).join('\n');
+    alert(feedbackDisplay || 'No previous feedback.');
+  };
 });
