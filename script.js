@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (desc) {
       generateCustomSuggestions(desc);
     } else {
-      alert('Please enter a description for the custom occasion (e.g., new job, recovery, prayer).');
+      alert('Please enter a description for the custom occasion (e.g., new job, recovery, prayer, encouragement).');
     }
   });
 
@@ -142,11 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const textarea = document.getElementById('customMessage');
     textarea.value = 'Generating suggestions...';
     try {
-      // Sentiment check based on keywords
-      const negativeKeywords = ['hurt', 'loss', 'sorry', 'pain', 'grief', 'sad'];
+      // Sentiment check based on keywords (case-insensitive)
+      const negativeKeywords = ['hurt', 'loss', 'sorry', 'pain', 'grief', 'sad', 'discouraged', 'disappointed', 'struggle', 'challenge'];
       const neutralSpiritualKeywords = ['fasting', 'prayer', 'meditation', 'retreat', 'reflection', 'worship', 'spiritual'];
-      const isNegative = negativeKeywords.some(keyword => desc.toLowerCase().includes(keyword));
-      const isNeutralSpiritual = neutralSpiritualKeywords.some(keyword => desc.toLowerCase().includes(keyword));
+      const lowerDesc = desc.toLowerCase();
+      const isNegative = negativeKeywords.some(keyword => lowerDesc.includes(keyword));
+      const isNeutralSpiritual = neutralSpiritualKeywords.some(keyword => lowerDesc.includes(keyword));
       
       // Try multiple queries
       const queries = [
@@ -160,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&pretty=1`);
         const data = await response.json();
         // Check AbstractText
-        if (data.AbstractText) {
+        if (data.AbstractText && data.AbstractText.length <= 100) {
           suggestions.push(data.AbstractText);
         }
         // Check RelatedTopics
@@ -195,15 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       // Clean and limit to 3 suggestions
       suggestions = suggestions
-        .filter(text => text.length <= 100)
+        .filter(text => text && text.length <= 100)
         .slice(0, 3);
       messages.custom = suggestions;
       currentIndex = 0;
       displayMessage();
     } catch (error) {
       console.error('Error fetching suggestions:', error);
-      const isNegative = negativeKeywords.some(keyword => desc.toLowerCase().includes(keyword));
-      const isNeutralSpiritual = neutralSpiritualKeywords.some(keyword => desc.toLowerCase().includes(keyword));
+      const lowerDesc = desc.toLowerCase();
+      const isNegative = negativeKeywords.some(keyword => lowerDesc.includes(keyword));
+      const isNeutralSpiritual = neutralSpiritualKeywords.some(keyword => lowerDesc.includes(keyword));
       if (isNegative) {
         messages.custom = [
           `Wishing you strength during your ${desc}.`,
@@ -225,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       currentIndex = 0;
       displayMessage();
-      alert('No suggestions found. Try a concise term like "new job," "recovery," or "prayer".');
+      alert('No suggestions found. Try a concise term like "new job," "recovery," "prayer," or "encouragement".');
     }
   }
 
