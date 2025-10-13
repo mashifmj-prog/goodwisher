@@ -344,13 +344,21 @@ textarea {
 .occasion-wrap {
   position: relative;
   margin-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.occasion-wrap select {
+  flex: 1;
 }
 
 .custom-input-wrap {
   display: flex;
   gap: 8px;
-  margin-top: 4px;
   align-items: center;
+  width: 100%;
 }
 
 .custom-input-wrap.hidden { display: none; }
@@ -359,8 +367,10 @@ textarea {
   flex: 1;
 }
 
-.custom-input-wrap button {
+.custom-input-wrap button, #closeOccasion {
   flex-shrink: 0;
   padding: 6px 8px;
   font-size: 0.9rem;
 }
+
+#closeOccasion.hidden { display: none; }
