@@ -66,12 +66,12 @@ input, select, textarea {
   box-sizing: border-box;
 }
 
-.textarea-wrap { position: relative; margin-bottom: 12px; }
-
 textarea {
   resize: vertical;
   min-height: 100px;
   padding: 8px;
+  line-height: 1.5;
+  font-family: Inter, sans-serif;
 }
 
 .btn {
@@ -170,7 +170,7 @@ textarea {
 .rating-wrap {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
 .rating-col {
@@ -185,7 +185,8 @@ textarea {
   border: none;
   font-size: 1.8rem;
   cursor: pointer;
-  color: var(--muted);
+  color: var(--text-color);
+  font-weight: bold;
 }
 
 .rating-btn.selected {
