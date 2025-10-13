@@ -1,8 +1,11 @@
-/* GoodWisher - full rebuild (EN/ES/AF manual messages; HI/ZH fallback to EN) */
+/* GoodWisher - updated with occasion-specific emoji sets
+   Manual messages included for EN, ES, AF.
+   HI & ZH fallback to EN (I can add manual HI/ZH translations next if you'd like)
+*/
 
 const $ = id => document.getElementById(id);
 
-// --- Messages data (EN, ES, AF). HI and ZH fall back to EN.
+// --- data: messages (EN / ES / AF). HI/ZH fallback to EN.
 const MESSAGES = {
   en: {
     birthday: [
@@ -163,6 +166,7 @@ const MESSAGES = {
     ]
   },
 
+  /* Spanish (ES) - manual */
   es: {
     birthday: [
       "¡Feliz cumpleaños! 🎉 Que tengas un día lleno de alegría.",
@@ -176,7 +180,7 @@ const MESSAGES = {
       "Que tengas un cumpleaños mágico y brillante. 🪄",
       "Disfruta tu día especial al máximo. 🎊"
     ],
-    anniversary: [
+    anniversary:[
       "¡Feliz aniversario! 💕 Que su amor crezca siempre.",
       "Brindemos por otro año juntos. 🥂",
       "Celebrando su amor y compromiso hoy. ❤️",
@@ -188,7 +192,7 @@ const MESSAGES = {
       "Juntos es un lugar maravilloso para estar. 👫",
       "Feliz aniversario a una hermosa pareja. 💑"
     ],
-    "get-well": [
+    "get-well":[
       "Te envío fuerza y una pronta recuperación. 🌻",
       "Que cada día te acerque más a sentirte mejor.",
       "Pensando en ti y deseando que pronto estés bien.",
@@ -200,7 +204,7 @@ const MESSAGES = {
       "Que cada día traiga mejoría — ánimo y fuerzas.",
       "Mis mejores deseos para tu pronta recuperación."
     ],
-    congrats: [
+    congrats:[ /* ...10 messages */ 
       "¡Enhorabuena por tu logro! Te lo mereces.",
       "¡Felicitaciones! Tu esfuerzo dio frutos.",
       "Celebrando tu éxito — ¡sigue brillando!",
@@ -212,7 +216,7 @@ const MESSAGES = {
       "Éxito merecido — celebra este momento.",
       "Celebramos contigo — ¡enhorabuena!"
     ],
-    "thank-you": [
+    "thank-you":[ /* ...10 messages */ 
       "Gracias por tu amabilidad y apoyo — significa mucho.",
       "Tu ayuda marcó la diferencia — muchas gracias.",
       "Agradecido/a por todo lo que haces — gracias.",
@@ -224,7 +228,7 @@ const MESSAGES = {
       "Sinceras gracias por tu ayuda y consideración.",
       "Te agradezco más de lo que las palabras pueden decir."
     ],
-    "good-luck": [
+    "good-luck":[ /* ...10 messages */
       "¡Mucho éxito! Confío en que lo harás genial. 🍀",
       "Buena suerte en esta nueva etapa — tienes mi apoyo.",
       "Te envío toda la buena vibra y suerte.",
@@ -236,7 +240,7 @@ const MESSAGES = {
       "Vas a lograrlo — te envío suerte y ánimo.",
       "Mucha suerte y los mejores deseos para ti."
     ],
-    motivation: [
+    motivation:[ /* ...10 messages */ 
       "Sigue adelante — los pequeños pasos llevan a grandes cambios. 🚀",
       "Cree en ti — tu potencial es enorme.",
       "Mantente fuerte y enfocado — lo lograrás.",
@@ -248,7 +252,7 @@ const MESSAGES = {
       "Paso a paso, llegarás lejos.",
       "Sigue motivado/a — tu futuro te lo agradecerá."
     ],
-    appreciation: [
+    appreciation:[ /* ...10 messages */ 
       "Solo quería decir cuánto te aprecio — gracias.",
       "Tu amabilidad no pasa desapercibida — eres valioso/a.",
       "Gracias por todo lo que haces — haces la diferencia.",
@@ -260,7 +264,7 @@ const MESSAGES = {
       "Te valoro y aprecio tu amistad y ayuda.",
       "Mil gracias por todo — te lo agradezco."
     ],
-    farewell: [
+    farewell:[ /* ...10 messages */ 
       "Te deseo lo mejor en tu próximo capítulo — ¡adiós y éxito!",
       "Fue un placer — que te vaya muy bien.",
       "Buen viaje en tu nueva aventura — éxitos.",
@@ -272,7 +276,7 @@ const MESSAGES = {
       "Que tu próximo capítulo sea brillante y feliz.",
       "Mucha suerte en lo próximo — ¡a triunfar!"
     ],
-    encouragement: [
+    encouragement:[ /* ...10 messages */
       "Tú puedes — confío en ti. ¡Adelante! 💪",
       "Recuerda lo lejos que has llegado — sigue avanzando.",
       "Ánimo — días mejores están por venir.",
@@ -284,7 +288,7 @@ const MESSAGES = {
       "Sé resiliente — crecerás con este desafío.",
       "Mantén la esperanza — eres capaz de grandes cosas."
     ],
-    love: [
+    love:[ /* ...10 messages */ 
       "Iluminas mi vida — te amo con todo mi corazón. ❤️",
       "Cada día a tu lado es un regalo — te amo.",
       "Mi amor por ti crece cada día.",
@@ -296,7 +300,7 @@ const MESSAGES = {
       "Eres mi roca y mi alegría — te amo.",
       "Te guardo en mi corazón — amor eterno."
     ],
-    condolences: [
+    condolences:[ /* ...10 messages */ 
       "Te envío mi más sentido pésame y un abrazo. 🕊️",
       "Siento mucho tu pérdida — te acompaño en el dolor.",
       "Que los recuerdos te traigan consuelo y paz.",
@@ -308,7 +312,7 @@ const MESSAGES = {
       "Que encuentres consuelo rodeado/a de quienes te quieren.",
       "Recibe mi más sentido pésame y un cálido abrazo."
     ],
-    vacation: [
+    vacation:[ /* ...10 messages */
       "Que tengas unas vacaciones relajantes y maravillosas. 🌴",
       "Disfruta cada momento de tu descanso — te lo mereces.",
       "Que tu viaje esté lleno de buenos recuerdos y risas.",
@@ -322,6 +326,7 @@ const MESSAGES = {
     ]
   },
 
+  /* Afrikaans (AF) - manual */
   af: {
     birthday: [
       "Gelukkige verjaarsdag! 🎉 Mag jou dag vol liefde en lag wees.",
@@ -335,7 +340,7 @@ const MESSAGES = {
       "Geniet ’n wonderlike en spesiale verjaarsdag! 🪄",
       "Vier groot — dit is jou dag! 🎊"
     ],
-    anniversary: [
+    anniversary: [ /* 10 messages similar to earlier AF set */ 
       "Gelukkige herdenking! 💕 Mag julle liefde altyd groei.",
       "Brink op nog ’n jaar saam — baie geluk! 🥂",
       "Vier julle liefde en verbintenis vandag. ❤️",
@@ -347,7 +352,8 @@ const MESSAGES = {
       "Saam is ’n pragtige plek om te wees. 👫",
       "Gelukkige herdenking aan ’n mooi paartjie. 💑"
     ],
-    "get-well": [
+    /* ... other AF occasions follow same pattern (10 messages each) */
+    "get-well":[
       "Baie sterkte — ek hoop jy voel gou beter. 🌻",
       "Stuur genesingsgroete en positiewe gedagtes aan jou.",
       "Mag jy vinnig herstel en gou weer sterk wees.",
@@ -359,7 +365,7 @@ const MESSAGES = {
       "Mag elke dag verbetering bring — sterkte!",
       "Beste wense vir jou gesondheid en spoedige herstel."
     ],
-    congrats: [
+    congrats:[ /* ...10 */ 
       "Baie geluk met jou prestasie — so trots op jou!",
       "Goed gedaan! Jou harde werk het gevier.",
       "Vier jou sukses — geniet hierdie oomblik!",
@@ -371,7 +377,7 @@ const MESSAGES = {
       "Geniet die oorwinning — jy het dit verdien!",
       "Vier groot — jou prestasie inspireer."
     ],
-    "thank-you": [
+    "thank-you":[ /* ...10 */ 
       "Dankie vir jou vriendelikheid en hulp — dit beteken baie.",
       "Jou ondersteuning het ’n verskil gemaak — baie dankie.",
       "Ek waardeer alles wat jy doen — dankie.",
@@ -383,7 +389,7 @@ const MESSAGES = {
       "Sincere dank vir jou ondersteuning en sorg.",
       "Ek is opreg dankbaar — baie dankie."
     ],
-    "good-luck": [
+    "good-luck":[ /* ...10 */ 
       "Sterkte en voorspoed — jy gaan dit doen! 🍀",
       "Baie sukses op jou nuwe avontuur — ek glo in jou.",
       "Stuur al die goeie wense en geluk na jou toe.",
@@ -395,7 +401,7 @@ const MESSAGES = {
       "Jy is gereed — sterkte en sukses!",
       "Beste wense en geluk op jou pad."
     ],
-    motivation: [
+    motivation:[ /* ...10 */ 
       "Hou aan — klein stappe bou groot veranderinge. 🚀",
       "Glo in jou self — jou potensiaal is groot.",
       "Hou moed en fokus — jy sal slaag.",
@@ -407,7 +413,7 @@ const MESSAGES = {
       "Een tree op ’n slag — jy sal ver gaan.",
       "Blijven volharden — jou toekoms is blink."
     ],
-    appreciation: [
+    appreciation:[ /* ...10 */ 
       "Net ’n dankie — ek waardeer jou opreg.",
       "Jy is so gewaardeer — dankie vir alles.",
       "Dankie dat jy altyd daar is — ek waardeer dit.",
@@ -419,7 +425,7 @@ const MESSAGES = {
       "Ek is opreg dankbaar vir jou hulp.",
       "Dankie — ek waardeer jou meer as woorde."
     ],
-    farewell: [
+    farewell:[ /* ...10 */ 
       "Baie voorspoed in jou volgende hoofstuk — totsiens!",
       "Dit was ’n plesier — sterkte in jou nuwe avontuur.",
       "Totsiens en baie sukses op jou pad.",
@@ -431,7 +437,7 @@ const MESSAGES = {
       "Mag jou volgende hoofstuk vol vreugde wees.",
       "Veel sukses — totsiens en seëninge!"
     ],
-    encouragement: [
+    encouragement:[ /* ...10 */ 
       "Jy kan dit doen — ek glo in jou. Hou aan! 💪",
       "Onthou hoe ver jy al gekom het — hou aan.",
       "Hou moed — beter dae is op pad.",
@@ -443,7 +449,7 @@ const MESSAGES = {
       "Hou vas aan hoop — goeie dinge kom nader.",
       "Glo in jouself — jy is in staat tot grootsheid."
     ],
-    love: [
+    love:[ /* ...10 */ 
       "Jy lig my lewe op — ek is mal oor jou. ❤️",
       "Elke dag saam met jou is ’n seën — ek is lief vir jou.",
       "My liefde vir jou groei elke dag.",
@@ -455,7 +461,7 @@ const MESSAGES = {
       "Jy is my anker — ek is lief vir jou.",
       "Ek koester jou — liefde vir altyd."
     ],
-    condolences: [
+    condolences:[ /* ...10 */ 
       "Ek stuur my innige simpatie en ’n warm drukkie. 🕊️",
       "Ek is diep bedroef oor julle verlies — my simpatie.",
       "Mag die herinneringe vir jou troos bring.",
@@ -467,7 +473,7 @@ const MESSAGES = {
       "Mag jy troos vind by familie en vriende.",
       "Aanvaar my opregte innige simpatie en steun."
     ],
-    vacation: [
+    vacation:[ /* ...10 */ 
       "Geniet ’n wonderlike en rustige vakansie — jy verdien dit! 🌴",
       "Neem tyd om te ontspan en energie te herwin.",
       "Mag jou reis vol gelukkige herinneringe wees.",
@@ -482,8 +488,25 @@ const MESSAGES = {
   }
 };
 
-// languages hi & zh fall back to 'en'
+// HI & ZH fallback to EN
 const LANG_FALLBACK = { hi: 'en', zh: 'en' };
+
+// --- Occasion-specific emoji sets
+const OCCASION_EMOJIS = {
+  birthday: ['🎉','🎂','🎈','🎁','🎊','🥳','🍰','🎆','🎇','🎶'],
+  anniversary: ['💕','💍','💖','🌹','💑','❤️','💞','🌸','🌷','🎶'],
+  "get-well": ['🌻','🌈','💪','🤗','💐','☀️','🌼','🙏','✨','🌟'],
+  congrats: ['🏆','🎉','👏','🎊','🥳','🌟','💫','🎈','🎆','🌠'],
+  "thank-you": ['🙏','💐','🌸','💖','😊','🌹','💞','🌷','✨','🎁'],
+  "good-luck": ['🍀','🌈','✨','💫','🌟','🐞','🤞','🔥','☘️','🌠'],
+  motivation: ['💪','🔥','🏃','🌈','💫','🚀','🌟','👏','🙌','☀️'],
+  appreciation: ['💐','🌸','🌹','💖','👏','😊','💞','✨','🎉','🌻'],
+  farewell: ['👋','💐','🌈','✈️','💞','🌹','🌻','🙏','🎶','☀️'],
+  encouragement: ['🌻','💪','✨','🌈','🔥','🌟','🤗','🙌','☀️','👏'],
+  love: ['❤️','💋','💌','💖','💕','🌹','😘','💞','🌷','🌸'],
+  condolences: ['🕊️','💐','🙏','🖤','🌹','🌧️','🕯️','💭','💞','😔'],
+  vacation: ['✈️','🌴','☀️','🌊','🍹','🏖️','🌈','🏝️','📸','😎']
+};
 
 // --- App state
 let currentLang = 'en';
@@ -492,13 +515,38 @@ let currentList = [];
 let currentIndex = -1;
 let lastIndex = null;
 
-// --- Theme
+// --- init UI data (populate selects)
+function populateUI(){
+  const langs = [
+    {val:'en', label:'English'},
+    {val:'es', label:'Español'},
+    {val:'af', label:'Afrikaans'},
+    {val:'hi', label:'हिन्दी (Hindi)'},
+    {val:'zh', label:'中文 (Mandarin)'}
+  ];
+  const languages = $('language');
+  langs.forEach(l => {
+    const o = document.createElement('option'); o.value = l.val; o.textContent = l.label;
+    languages.appendChild(o);
+  });
+
+  const occs = ['birthday','anniversary','get-well','congrats','thank-you','good-luck','motivation','appreciation','farewell','encouragement','love','condolences','vacation'];
+  const occSelect = $('occasion');
+  const labels = {
+    birthday: 'Birthday', anniversary: 'Anniversary', 'get-well':'Get Well Soon', congrats:'Congratulations',
+    'thank-you':'Thank You', 'good-luck':'Good Luck', motivation:'Motivation', appreciation:'Appreciation',
+    farewell:'Farewell', encouragement:'Encouragement', love:'Love', condolences:'Condolences', vacation:'Vacation'
+  };
+  occs.forEach(o=> {
+    const el = document.createElement('option'); el.value = o; el.textContent = labels[o] || o; occSelect.appendChild(el);
+  });
+}
+
+// --- theme helpers
 function setThemeIcon(){
   const p = $('themeIconPath');
   const isDark = document.body.dataset.theme === 'dark';
-  p.setAttribute('d', isDark
-    ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z'
-    : 'M12 2a10 10 0 100 20 10 10 0 000-20z');
+  p.setAttribute('d', isDark ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z' : 'M12 2a10 10 0 100 20 10 10 0 000-20z');
 }
 function toggleTheme(){
   document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -506,13 +554,10 @@ function toggleTheme(){
   setThemeIcon();
 }
 
-// --- Utilities
-function getEffectiveLang(lang){
-  if (MESSAGES[lang]) return lang;
-  return LANG_FALLBACK[lang] || 'en';
-}
+// --- helpers
+function getEffectiveLang(lang){ return MESSAGES[lang] ? lang : (LANG_FALLBACK[lang] || 'en'); }
 function pickRandom(list){
-  if(!list || list.length===0) return -1;
+  if(!list||list.length===0) return -1;
   if(list.length===1) return 0;
   let idx;
   do { idx = Math.floor(Math.random()*list.length); } while(idx===lastIndex);
@@ -520,29 +565,23 @@ function pickRandom(list){
   return idx;
 }
 
-// --- Message handling
+// --- message handling
 function loadCurrentMessages(){
   currentLang = $('language').value;
   currentOccasion = $('occasion').value;
-  if(!currentOccasion) {
-    $('customMessage').value = '';
-    currentList = [];
-    return;
-  }
+  if(!currentOccasion){ $('customMessage').value = ''; currentList=[]; return; }
   const effective = getEffectiveLang(currentLang);
   currentList = (MESSAGES[effective] && MESSAGES[effective][currentOccasion]) || (MESSAGES['en'] && MESSAGES['en'][currentOccasion]) || [];
-  if(currentList.length===0){
-    $('customMessage').value = '';
-    return;
-  }
+  if(!currentList.length){ $('customMessage').value = ''; return; }
   currentIndex = pickRandom(currentList);
   renderMessageByIndex(currentIndex);
+  // prepare emoji set for the occasion (used by emoji picker)
+  prepareEmojiForOccasion(currentOccasion);
 }
 
 function renderMessageByIndex(idx){
   if(idx<0 || !currentList.length) return;
   const base = currentList[idx];
-  // apply names if present (but don't store signature)
   const r = $('recipientName').value.trim();
   const s = $('senderName').value.trim();
   let text = base;
@@ -552,44 +591,35 @@ function renderMessageByIndex(idx){
 }
 
 function nextRandomMessage(){
-  if(!currentList.length) { loadCurrentMessages(); return; }
-  const idx = pickRandom(currentList);
-  currentIndex = idx;
-  renderMessageByIndex(idx);
+  if(!currentList.length){ loadCurrentMessages(); return; }
+  currentIndex = pickRandom(currentList);
+  renderMessageByIndex(currentIndex);
 }
 
 function updateMessageWithName(){
-  // keep current base message if possible
   if(!currentList.length) return;
-  // If currentIndex set, use that base; otherwise pick random
   if(currentIndex<0) currentIndex = 0;
   renderMessageByIndex(currentIndex);
 }
 
-// --- Emoji picker
-const EMOJIS = ['😊','😂','😍','👍','🎉','💖','🌟','🍀','💪','🌻','🕊️','🙏'];
+// --- emoji UI
+let currentEmojiList = [];
+function prepareEmojiForOccasion(occasion){
+  currentEmojiList = OCCASION_EMOJIS[occasion] || ['😊','✨','🌟','❤️','👍','🎉'];
+}
+
 function openEmojiPicker(){
-  closeEmojiPicker(); // ensure single
+  closeEmojiPicker();
+  // create picker
   const picker = document.createElement('div');
   picker.id = 'emojiPicker';
-  picker.style.position = 'absolute';
-  picker.style.background = 'var(--card)';
-  picker.style.border = '1px solid var(--border)';
-  picker.style.padding = '8px';
-  picker.style.borderRadius = '8px';
-  picker.style.display = 'grid';
-  picker.style.gridTemplateColumns = 'repeat(6, 1fr)';
-  picker.style.gap = '6px';
-  picker.style.zIndex = '1200';
-  EMOJIS.forEach(e => {
+  currentEmojiList = currentEmojiList.length ? currentEmojiList : ['😊','✨','🌟','❤️','👍','🎉'];
+
+  currentEmojiList.forEach(e => {
     const b = document.createElement('button');
-    b.type = 'button';
+    b.type='button';
     b.textContent = e;
-    b.style.fontSize = '18px';
-    b.style.border = 'none';
-    b.style.background = 'none';
-    b.style.cursor = 'pointer';
-    b.addEventListener('click', () => {
+    b.addEventListener('click', ()=> {
       const ta = $('customMessage');
       const start = ta.selectionStart || ta.value.length;
       const end = ta.selectionEnd || ta.value.length;
@@ -599,82 +629,62 @@ function openEmojiPicker(){
     });
     picker.appendChild(b);
   });
+
   document.body.appendChild(picker);
   const rect = $('emojiButton').getBoundingClientRect();
-  picker.style.top = (rect.top + window.scrollY + 28) + 'px';
-  picker.style.left = Math.max(8, rect.left + window.scrollX - 200) + 'px';
-  setTimeout(()=>document.addEventListener('click', clickOutsideEmoji), 0);
+  picker.style.top = (rect.top + window.scrollY + 30) + 'px';
+  // position to the right edge of textarea but make sure it doesn't overflow
+  const leftPos = Math.min(window.innerWidth - 260, Math.max(8, rect.left + window.scrollX - 200));
+  picker.style.left = leftPos + 'px';
+  setTimeout(()=>document.addEventListener('click', emojiOutsideClick), 0);
 }
-function clickOutsideEmoji(e){
+function emojiOutsideClick(e){
   const p = document.getElementById('emojiPicker');
   if(!p) return;
   if(!p.contains(e.target) && e.target !== $('emojiButton')) closeEmojiPicker();
 }
-function closeEmojiPicker(){ const p=document.getElementById('emojiPicker'); if(p) p.remove(); document.removeEventListener('click', clickOutsideEmoji); }
+function closeEmojiPicker(){ const p = document.getElementById('emojiPicker'); if(p) p.remove(); document.removeEventListener('click', emojiOutsideClick); }
 
-// --- Clear content
+// --- clear content
 function clearContent(){ $('customMessage').value = ''; }
 
-// --- Copy / signature behavior
+// --- copy/share signature behavior
 function getMessageForShare(){
   let text = $('customMessage').value.trim();
   const s = $('senderName').value.trim();
   if(!text) return '';
-  if(s){
-    text += `\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
-  }
+  if(s) text += `\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
   return text;
 }
-
 function copyMessage(){
   const txt = getMessageForShare();
-  if(!txt) { alert('Please generate or write a message first.'); return; }
+  if(!txt){ alert('Please write or generate a message first.'); return; }
   navigator.clipboard.writeText(txt).then(()=> alert('Copied to clipboard'), ()=> alert('Copy failed'));
 }
 
-// --- Share handlers
+// --- share handlers
 function openShareModal(){ $('shareModal').classList.remove('hidden'); $('shareModal').setAttribute('aria-hidden','false'); }
 function closeShareModal(){ $('shareModal').classList.add('hidden'); $('shareModal').setAttribute('aria-hidden','true'); }
-
-function openWindowShare(urlBase){
-  const msg = getMessageForShare();
-  if(!msg){ alert('Please generate or write a message first.'); return; }
-  window.open(urlBase + encodeURIComponent(msg), '_blank');
-}
+function openWindowShare(urlBase){ const msg = getMessageForShare(); if(!msg){ alert('Please write or generate a message first.'); return; } window.open(urlBase + encodeURIComponent(msg), '_blank'); }
 function shareWhatsApp(){ openWindowShare('https://wa.me/?text='); }
 function shareFacebook(){ openWindowShare('https://www.facebook.com/sharer/sharer.php?u=https://mashifmj-prog.github.io/goodwisher/&quote='); }
 function shareTwitter(){ openWindowShare('https://x.com/intent/tweet?text='); }
 function shareTelegram(){ openWindowShare('https://t.me/share/url?url=https://mashifmj-prog.github.io/goodwisher/&text='); }
-function shareEmail(){
-  const msg = getMessageForShare();
-  if(!msg){ alert('Please generate or write a message first.'); return; }
-  const subject = encodeURIComponent('A Special Message from GoodWisher');
-  const body = encodeURIComponent(msg.replace(/\n/g, '%0A'));
-  window.location.href = `mailto:?subject=${subject}&body=${body}`;
-}
-function shareDevice(){
-  const text = getMessageForShare();
-  if(!text){ alert('Please generate or write a message first.'); return; }
-  if(navigator.share){ navigator.share({ text }).catch(()=>{}); }
-  else alert('Device share not supported on this device.');
-}
+function shareEmail(){ const msg = getMessageForShare(); if(!msg){ alert('Please write or generate a message first.'); return; } const subject = encodeURIComponent('A Special Message from GoodWisher'); const body = encodeURIComponent(msg.replace(/\n/g,'%0A')); window.location.href = `mailto:?subject=${subject}&body=${body}`; }
+function shareDevice(){ const text = getMessageForShare(); if(!text){ alert('Please write or generate a message first.'); return; } if(navigator.share) navigator.share({ text }).catch(()=>{}); else alert('Device share not supported on this device.'); }
 
-// --- Templates & saved messages (localStorage)
+// --- templates & saves
 function loadSavedTemplates(){
   const raw = localStorage.getItem('gw_templates') || '[]';
   const arr = JSON.parse(raw);
   const sel = $('templateSelect');
-  // clear
+  // clear existing options except placeholder
   while(sel.options.length>1) sel.remove(1);
   arr.forEach((t,i)=>{
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = t.title || (`Template ${i+1} (${new Date(t.date).toLocaleString()})`);
+    const opt = document.createElement('option'); opt.value = i; opt.textContent = t.title || (`Template ${i+1}`);
     sel.appendChild(opt);
   });
-  // also load saved messages list in memory when needed
 }
-
 function saveAsTemplate(){
   const txt = $('customMessage').value.trim();
   if(!txt) return alert('Nothing to save as template.');
@@ -686,72 +696,49 @@ function saveAsTemplate(){
   loadSavedTemplates();
   alert('Saved as template locally.');
 }
-
 function loadTemplate(){
-  const sel = $('templateSelect');
-  const idx = sel.value;
-  if(!idx) return;
+  const sel = $('templateSelect'); const idx = sel.value;
+  if(!idx && idx !== 0) return;
   const arr = JSON.parse(localStorage.getItem('gw_templates') || '[]');
   const t = arr[idx];
   if(t) $('customMessage').value = t.text;
 }
-
-// save normal (saved messages)
 function saveMessageLocally(){
-  const txt = $('customMessage').value.trim();
-  if(!txt) return alert('Nothing to save.');
-  const arr = JSON.parse(localStorage.getItem('gw_saved') || '[]');
-  arr.unshift({text: txt, date: new Date().toISOString()});
-  localStorage.setItem('gw_saved', JSON.stringify(arr.slice(0,200)));
-  alert('Message saved locally.');
+  const txt = $('customMessage').value.trim(); if(!txt) return alert('Nothing to save.');
+  const arr = JSON.parse(localStorage.getItem('gw_saved') || '[]'); arr.unshift({text: txt, date: new Date().toISOString()});
+  localStorage.setItem('gw_saved', JSON.stringify(arr.slice(0,200))); alert('Message saved locally.');
 }
-
 function exportSaved(){
-  const arr = JSON.parse(localStorage.getItem('gw_saved') || '[]');
-  if(!arr.length) return alert('No saved messages to export.');
-  const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'goodwisher-saved-messages.json';
-  a.click();
-  URL.revokeObjectURL(url);
+  const arr = JSON.parse(localStorage.getItem('gw_saved') || '[]'); if(!arr.length) return alert('No saved messages to export.');
+  const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'goodwisher-saved-messages.json'; a.click(); URL.revokeObjectURL(url);
 }
 
-// --- Feedback
+// --- feedback
 let rating = 0;
 function openFeedback(){ $('feedbackModal').classList.remove('hidden'); $('feedbackModal').setAttribute('aria-hidden','false'); }
-function closeFeedback(){ $('feedbackModal').classList.add('hidden'); $('feedbackModal').setAttribute('aria-hidden','true'); document.getElementById('feedbackText').value = ''; rating = 0; document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected')); document.getElementById('ratingScore').textContent='Score: 0%'; }
-function setRating(r){
-  rating = r;
-  document.querySelectorAll('.star').forEach(s=> s.classList.toggle('selected', Number(s.dataset.star) <= r));
-  document.getElementById('ratingScore').textContent = `Score: ${r*20}%`;
-}
-function submitFeedback(){
-  const txt = document.getElementById('feedbackText').value.trim();
-  if(!txt && rating===0) return alert('Please rate or comment!');
-  alert('Thanks for your feedback!');
-  closeFeedback();
-}
+function closeFeedback(){ $('feedbackModal').classList.add('hidden'); $('feedbackModal').setAttribute('aria-hidden','true'); document.getElementById('feedbackText').value=''; rating=0; document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected')); document.getElementById('ratingScore').textContent='Score: 0%'; }
+function setRating(r){ rating = r; document.querySelectorAll('.star').forEach(s=> s.classList.toggle('selected', Number(s.dataset.star) <= r)); document.getElementById('ratingScore').textContent = `Score: ${r*20}%`; }
+function submitFeedback(){ const txt = document.getElementById('feedbackText').value.trim(); if(!txt && rating===0) return alert('Please rate or comment!'); alert('Thanks for your feedback!'); closeFeedback(); }
 
-// --- Init wiring
-window.addEventListener('DOMContentLoaded', ()=>{
+// --- init
+function init(){
+  populateUI();
   // theme
   document.body.dataset.theme = localStorage.getItem('gw_theme') || 'light';
   setThemeIcon();
   $('themeToggle').addEventListener('click', toggleTheme);
 
-  // message controls
+  // wiring
   $('occasion').addEventListener('change', loadCurrentMessages);
   $('language').addEventListener('change', loadCurrentMessages);
   $('nextMessage').addEventListener('click', nextRandomMessage);
   $('recipientName').addEventListener('input', updateMessageWithName);
   $('senderName').addEventListener('input', updateMessageWithName);
 
-  // emoji & clear
   $('emojiButton').addEventListener('click', openEmojiPicker);
   $('clearButton').addEventListener('click', clearContent);
 
-  // copy/share/save
   $('copyBtn').addEventListener('click', copyMessage);
   $('shareBtn').addEventListener('click', openShareModal);
   $('closeShare').addEventListener('click', closeShareModal);
@@ -762,33 +749,21 @@ window.addEventListener('DOMContentLoaded', ()=>{
   $('shareEmail').addEventListener('click', shareEmail);
   $('shareDevice').addEventListener('click', shareDevice);
 
-  // templates & saves
   $('saveTemplateBtn').addEventListener('click', saveAsTemplate);
   $('saveBtn').addEventListener('click', saveMessageLocally);
   $('exportBtn').addEventListener('click', exportSaved);
   $('templateSelect').addEventListener('change', loadTemplate);
 
-  // feedback wiring
   $('feedbackBtn').addEventListener('click', openFeedback);
   $('cancelFeedback').addEventListener('click', closeFeedback);
   $('submitFeedback').addEventListener('click', submitFeedback);
   document.querySelectorAll('.star').forEach(s => s.addEventListener('click', ()=> setRating(Number(s.dataset.star))));
 
-  // clear-name buttons
-  document.querySelectorAll('.clear-name').forEach(b => b.addEventListener('click', (e) => {
-    const t = e.currentTarget.dataset.target;
-    if(t) $(t).value = '';
-    else {
-      // data-target not set in markup for older buttons — handle manually
-      const target = e.currentTarget.getAttribute('data-target');
-      if(target) $(target).value = '';
-    }
-    updateMessageWithName();
+  document.querySelectorAll('.clear-name').forEach(b => b.addEventListener('click', (e)=>{
+    const t = e.currentTarget.dataset.target; if(t) $(t).value=''; updateMessageWithName();
   }));
 
-  // load templates list
   loadSavedTemplates();
+}
 
-  // initial state (if occasion preselected)
-  if($('occasion').value) loadCurrentMessages();
-});
+window.addEventListener('DOMContentLoaded', init);
