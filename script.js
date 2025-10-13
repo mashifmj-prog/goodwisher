@@ -1,6 +1,6 @@
 const messages = {
   birthday: [
-    "Wishing you a day filled with love and happiness.",
+    "Another year older, wiser! 🥳",
     "Happy Birthday! Enjoy your special day."
   ],
   anniversary: [
@@ -98,10 +98,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Occasion selection
   const occasionSelect = document.getElementById('occasion');
   occasionSelect.addEventListener('change', () => {
-    currentOccasion = occasionSelect.value;
-    currentIndex = 0;
-    displayMessage();
-    updateEmojiPicker();
+    if (occasionSelect.value === 'exit') {
+      occasionSelect.value = '';
+      currentOccasion = '';
+      currentIndex = 0;
+      displayMessage();
+      updateEmojiPicker();
+    } else {
+      currentOccasion = occasionSelect.value;
+      currentIndex = 0;
+      displayMessage();
+      updateEmojiPicker();
+    }
   });
 
   // Next Message
@@ -175,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateMessageWithName();
   };
 
-  // Display message
+  // Display message (only the body, no signature)
   function displayMessage() {
     const textarea = document.getElementById('customMessage');
     if (currentOccasion && messages[currentOccasion]) {
@@ -187,16 +195,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Action buttons
   window.copyMessage = () => {
-    const textarea = document.getElementById('customMessage');
-    const sender = document.getElementById('senderName').value;
-    const recipient = document.getElementById('recipientName').value;
-    const signature = sender ? `\n\nFrom: ${sender}` : '';
-    const fullMessage = recipient ? `To: ${recipient}\n${textarea.value}${signature}` : `${textarea.value}${signature}`;
-    if (!fullMessage.trim()) {
+    const text = getShareableMessage();
+    if (!text.trim()) {
       alert('Please enter or select a message to copy.');
       return;
     }
-    navigator.clipboard.writeText(fullMessage).then(() => alert('Message copied!'));
+    navigator.clipboard.writeText(text).then(() => alert('Message copied!'));
   };
 
   window.saveMessage = () => {
@@ -209,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.openShareModal = () => {
     document.getElementById('shareModal').classList.remove('hidden');
-    document.getElementById('phoneNumber').value = ''; // Clear phone number on modal open
+    document.getElementById('phoneNumber').value = ''; // Clear phone number
   };
 
   window.openFeedbackModal = () => {
@@ -219,97 +223,102 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helper function to get full shareable message
   function getShareableMessage() {
     const textarea = document.getElementById('customMessage');
-    const sender = document.getElementById('senderName').value;
-    const recipient = document.getElementById('recipientName').value;
-    const signature = sender ? `\n\nFrom: ${sender}` : '';
-    return recipient ? `To: ${recipient}\n${textarea.value}${signature}` : `${textarea.value}${signature}`;
+    const sender = document.getElementById('senderName').value.trim();
+    const recipient = document.getElementById('recipientName').value.trim();
+    const messageBody = textarea.value.trim();
+    const greeting = recipient ? `Hi ${recipient},\n` : '';
+    const signature = sender ? `\n\nRegards\n${sender}` : '';
+    return `${greeting}${messageBody}${signature}\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
   }
 
   // Share modal functions
-  window.shareWhatsApp = () => {
+  window.shareMessage = () => {
     const text = getShareableMessage();
     if (!text.trim()) {
       alert('Please enter or select a message to share.');
       return;
     }
+    document.getElementById('shareModal').classList.add('hidden');
+    document.getElementById('shareOptionsModal').classList.remove('hidden');
+  };
+
+  window.shareWhatsApp = () => {
+    const text = getShareableMessage();
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    closeShareOptionsModal();
   };
 
   window.shareFacebook = () => {
     const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
     window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(text)}`, '_blank');
+    closeShareOptionsModal();
   };
 
   window.shareTwitter = () => {
     const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    closeShareOptionsModal();
   };
 
   window.shareTelegram = () => {
     const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
     window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
+    closeShareOptionsModal();
   };
 
   window.shareEmail = () => {
     const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
     window.open(`mailto:?body=${encodeURIComponent(text)}`, '_blank');
+    closeShareOptionsModal();
   };
 
   // Share via Device (Web Share API for native SMS, etc.)
   window.shareDevice = () => {
     const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
     const phoneNumber = document.getElementById('phoneNumber').value.trim();
-    if (navigator.share && !phoneNumber) { // Use Web Share API if no phone number
+    if (navigator.share && !phoneNumber) {
       navigator.share({
         title: 'GoodWisher Message',
         text: text
       }).then(() => {
         console.log('Shared successfully');
+        closeShareOptionsModal();
       }).catch((error) => {
         console.error('Error sharing:', error);
         fallbackToSMS(text, phoneNumber);
       });
     } else {
-      // Use SMS URL if phone number provided or Web Share API unsupported
       fallbackToSMS(text, phoneNumber);
     }
   };
 
   // Fallback to SMS URL scheme
   function fallbackToSMS(text, phoneNumber) {
-    const cleanedNumber = phoneNumber.replace(/[^0-9+]/g, ''); // Clean phone number
+    const cleanedNumber = phoneNumber.replace(/[^0-9+]/g, '');
+    if (phoneNumber && !/^\+?[1-9]\d{1,14}$/.test(cleanedNumber)) {
+      alert('Please enter a valid phone number (e.g., +27 for South Africa).');
+      closeShareOptionsModal();
+      return;
+    }
     const smsUrl = cleanedNumber ? `sms:${cleanedNumber}?body=${encodeURIComponent(text)}` : `sms:?body=${encodeURIComponent(text)}`;
     try {
       window.open(smsUrl, '_blank');
+      closeShareOptionsModal();
     } catch (error) {
       console.error('Error opening SMS:', error);
       alert('Unable to open SMS app. Try copying the message instead.');
+      closeShareOptionsModal();
     }
   }
 
   window.closeShareModal = () => {
     document.getElementById('shareModal').classList.add('hidden');
-    document.getElementById('phoneNumber').value = ''; // Clear phone number on close
+    document.getElementById('phoneNumber').value = '';
+  };
+
+  window.closeShareOptionsModal = () => {
+    document.getElementById('shareOptionsModal').classList.add('hidden');
+    document.getElementById('phoneNumber').value = '';
   };
 
   // Feedback modal
@@ -317,8 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.setRating = (rating) => {
     currentRating = rating;
-    document.querySelectorAll('.star').forEach((star, index) => {
-      star.classList.toggle('selected', index < rating);
+    document.querySelectorAll('.rating-btn').forEach((btn, index) => {
+      btn.classList.toggle('selected', index < rating);
     });
     document.getElementById('ratingScore').textContent = `Score: ${rating * 20}%`;
   };
@@ -328,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentRating > 0) {
       feedbackList.push({ rating: currentRating, text: feedbackText, timestamp: new Date().toISOString() });
       localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
-      alert('Feedback submitted!');
+      alert('Thank you for your feedback!');
       closeFeedbackModal();
     } else {
       alert('Please select a rating.');
@@ -343,7 +352,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // View previous feedback
   window.viewPreviousFeedback = () => {
-    const feedbackDisplay = feedbackList.map(f => `Rating: ${f.rating} stars (${f.rating * 20}%), Text: ${f.text}, Time: ${f.timestamp}`).join('\n');
-    alert(feedbackDisplay || 'No previous feedback.');
+    const feedbackDisplay = feedbackList.length
+      ? feedbackList.map(f => `<p>Rating: ${f.rating} stars (${f.rating * 20}%), Text: ${f.text}, Time: ${f.timestamp}</p>`).join('')
+      : '<p>No previous feedback.</p>';
+    const modal = document.getElementById('feedbackModal');
+    const content = document.querySelector('#feedbackModal .modal-content');
+    content.innerHTML = `<h2>Previous Feedback</h2>${feedbackDisplay}<div class="modal-actions"><button onclick="closeFeedbackModal()" class="btn light">Close</button></div>`;
+    modal.classList.remove('hidden');
   };
 });
