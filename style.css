@@ -341,19 +341,26 @@ textarea {
   cursor: pointer;
 }
 
-.custom-occasion-wrap {
+.occasion-wrap {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.custom-input-wrap {
   display: flex;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-top: 4px;
   align-items: center;
 }
 
-.custom-occasion-wrap.hidden { display: none; }
+.custom-input-wrap.hidden { display: none; }
 
-.custom-occasion-wrap input {
+.custom-input-wrap input {
   flex: 1;
 }
 
-.custom-occasion-wrap button {
+.custom-input-wrap button {
   flex-shrink: 0;
+  padding: 6px 8px;
+  font-size: 0.9rem;
 }
