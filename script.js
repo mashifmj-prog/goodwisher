@@ -232,16 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setRating(0); // Reset rating on open
   };
 
-  // Feedback button hover
-  const feedbackButton = document.getElementById('feedbackButton');
-  const ratingPreview = document.getElementById('ratingPreview');
-  feedbackButton.addEventListener('mouseenter', () => {
-    ratingPreview.classList.remove('hidden');
-  });
-  feedbackButton.addEventListener('mouseleave', () => {
-    ratingPreview.classList.add('hidden');
-  });
-
   // Helper function to get full shareable message
   function getShareableMessage() {
     const textarea = document.getElementById('customMessage');
@@ -339,8 +329,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.setRating = (rating) => {
     currentRating = rating;
-    document.querySelectorAll('.rating-btn').forEach((btn, index) => {
+    const buttons = document.querySelectorAll('.rating-btn');
+    buttons.forEach((btn, index) => {
       btn.classList.toggle('selected', index < rating);
+      btn.style.display = 'block'; // Ensure buttons are visible
     });
     document.getElementById('ratingScore').textContent = `Score: ${rating * 20}%`;
   };
