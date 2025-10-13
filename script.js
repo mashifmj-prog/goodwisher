@@ -75,6 +75,7 @@ const emojis = {
 let currentOccasion = '';
 let currentIndex = 0;
 let feedbackList = JSON.parse(localStorage.getItem('feedbackList')) || [];
+let inactivityTimer = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   // Theme toggle
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.dataset.theme = newTheme;
     localStorage.setItem('theme', newTheme);
     updateThemeIcon(newTheme);
+    resetInactivityTimer();
   });
 
   function updateThemeIcon(theme) {
@@ -97,35 +99,89 @@ document.addEventListener('DOMContentLoaded', () => {
       'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z');
   }
 
+  // Reset occasion function
+  function resetOccasion() {
+    const occasionSelect = document.getElementById('occasion');
+    const customWrap = document.getElementById('customInputWrap');
+    const closeButton = document.getElementById('closeOccasion');
+    occasionSelect.value = '';
+    currentOccasion = '';
+    currentIndex = 0;
+    customWrap.classList.add('hidden');
+    closeButton.classList.add('hidden');
+    document.getElementById('customOccasionDesc').value = '';
+    document.getElementById('customMessage').value = '';
+    document.getElementById('senderName').value = '';
+    document.getElementById('recipientName').value = '';
+    messages.custom = [];
+    updateEmojiPicker();
+    clearInactivityTimer();
+  }
+
+  // Inactivity timer
+  function startInactivityTimer() {
+    clearInactivityTimer();
+    if (currentOccasion) {
+      inactivityTimer = setTimeout(() => {
+        resetOccasion();
+      }, 60000); // 60 seconds
+    }
+  }
+
+  function clearInactivityTimer() {
+    if (inactivityTimer) {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = null;
+    }
+  }
+
+  function resetInactivityTimer() {
+    if (currentOccasion) {
+      startInactivityTimer();
+    }
+  }
+
+  // Track user interactions to reset timer
+  document.addEventListener('click', resetInactivityTimer);
+  document.addEventListener('keypress', resetInactivityTimer);
+  document.addEventListener('change', (e) => {
+    if (e.target.id === 'occasion' || e.target.id === 'customOccasionDesc') {
+      resetInactivityTimer();
+    }
+  });
+
   // Occasion selection
   const occasionSelect = document.getElementById('occasion');
   occasionSelect.addEventListener('change', () => {
     const customWrap = document.getElementById('customInputWrap');
+    const closeButton = document.getElementById('closeOccasion');
     if (occasionSelect.value === 'exit') {
-      occasionSelect.value = '';
-      currentOccasion = '';
-      currentIndex = 0;
-      customWrap.classList.add('hidden');
-      document.getElementById('customOccasionDesc').value = '';
-      messages.custom = [];
-      displayMessage();
-      updateEmojiPicker();
+      resetOccasion();
     } else if (occasionSelect.value === 'custom') {
       customWrap.classList.remove('hidden');
+      closeButton.classList.remove('hidden');
       currentOccasion = 'custom';
       currentIndex = 0;
       messages.custom = [];
       displayMessage();
       updateEmojiPicker();
+      startInactivityTimer();
     } else {
       customWrap.classList.add('hidden');
       document.getElementById('customOccasionDesc').value = '';
+      closeButton.classList.remove('hidden');
       currentOccasion = occasionSelect.value;
       currentIndex = 0;
       messages.custom = [];
       displayMessage();
       updateEmojiPicker();
+      startInactivityTimer();
     }
+  });
+
+  // Close Occasion button
+  document.getElementById('closeOccasion').addEventListener('click', () => {
+    resetOccasion();
   });
 
   // Generate Suggestions for Custom Occasion
@@ -133,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const desc = document.getElementById('customOccasionDesc').value.trim();
     if (desc) {
       generateCustomSuggestions(desc);
+      resetInactivityTimer();
     } else {
       alert('Please enter a description for the custom occasion (e.g., new job, recovery, prayer, encouragement).');
     }
@@ -236,21 +293,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0) {
       currentIndex = (currentIndex + 1) % messages[currentOccasion].length;
       displayMessage();
+      resetInactivityTimer();
     }
   });
 
   // Clear Content
   document.getElementById('clearContent').addEventListener('click', () => {
-    document.getElementById('customMessage').value = '';
-    document.getElementById('senderName').value = '';
-    document.getElementById('recipientName').value = '';
-    document.getElementById('customOccasionDesc').value = '';
-    document.getElementById('customInputWrap').classList.add('hidden');
-    currentIndex = 0;
-    occasionSelect.value = '';
-    currentOccasion = '';
-    messages.custom = [];
-    updateEmojiPicker();
+    resetOccasion();
+    resetInactivityTimer();
   });
 
   // Emoji Button and Picker
@@ -277,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
           textarea.value = currentText.join('\n');
           emojiPicker.remove();
           emojiPicker = null;
+          resetInactivityTimer();
         });
         emojiPicker.appendChild(btn);
       });
@@ -292,8 +343,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Name inputs
-  document.getElementById('senderName').addEventListener('input', updateMessageWithName);
-  document.getElementById('recipientName').addEventListener('input', updateMessageWithName);
+  document.getElementById('senderName').addEventListener('input', () => {
+    updateMessageWithName();
+    resetInactivityTimer();
+  });
+  document.getElementById('recipientName').addEventListener('input', () => {
+    updateMessageWithName();
+    resetInactivityTimer();
+  });
 
   function updateMessageWithName() {
     displayMessage();
@@ -303,10 +360,12 @@ document.addEventListener('DOMContentLoaded', () => {
   window.clearSender = () => {
     document.getElementById('senderName').value = '';
     updateMessageWithName();
+    resetInactivityTimer();
   };
   window.clearRecipient = () => {
     document.getElementById('recipientName').value = '';
     updateMessageWithName();
+    resetInactivityTimer();
   };
 
   // Display message with full preview
@@ -333,18 +392,22 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     navigator.clipboard.writeText(text).then(() => alert('Message copied!'));
+    resetInactivityTimer();
   };
 
   window.saveMessage = () => {
     alert('Message saved (placeholder for local storage).');
+    resetInactivityTimer();
   };
 
   window.saveTemplate = () => {
     alert('Template saved (placeholder for local storage).');
+    resetInactivityTimer();
   };
 
   window.openShareModal = () => {
     document.getElementById('shareModal').classList.remove('hidden');
+    resetInactivityTimer();
   };
 
   window.openFeedbackModal = () => {
@@ -370,6 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     modal.classList.remove('hidden');
     setRating(0);
+    resetInactivityTimer();
   };
 
   // Helper function to get full shareable message
@@ -394,6 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
           text: text
         });
         closeShareModal();
+        resetInactivityTimer();
       } catch (error) {
         console.error('Error sharing:', error);
         fallbackToSMS(text);
@@ -412,6 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(text)}`;
           window.open(smsUrl, '_blank');
           closeShareModal();
+          resetInactivityTimer();
         } else {
           promptForPhoneNumber(text);
         }
@@ -432,6 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const smsUrl = `sms:${cleanedNumber}?body=${encodeURIComponent(text)}`;
         window.open(smsUrl, '_blank');
         closeShareModal();
+        resetInactivityTimer();
       } else {
         alert('Please enter a valid phone number (e.g., +27 for South Africa).');
       }
@@ -439,6 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const smsUrl = `sms:?body=${encodeURIComponent(text)}`;
       window.open(smsUrl, '_blank');
       closeShareModal();
+      resetInactivityTimer();
     }
   }
 
@@ -450,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     closeShareModal();
+    resetInactivityTimer();
   };
 
   window.shareFacebook = () => {
@@ -460,6 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(text)}`, '_blank');
     closeShareModal();
+    resetInactivityTimer();
   };
 
   window.shareTwitter = () => {
@@ -470,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     closeShareModal();
+    resetInactivityTimer();
   };
 
   window.shareTikTok = () => {
@@ -482,11 +553,13 @@ document.addEventListener('DOMContentLoaded', () => {
     navigator.clipboard.writeText(text).then(() => {
       alert('Message copied! Paste it into TikTok.');
       closeShareModal();
+      resetInactivityTimer();
     });
   };
 
   window.closeShareModal = () => {
     document.getElementById('shareModal').classList.add('hidden');
+    resetInactivityTimer();
   };
 
   // Feedback modal
@@ -500,6 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.style.display = 'block';
     });
     document.getElementById('ratingScore').textContent = `Score: ${rating * 20}%`;
+    resetInactivityTimer();
   };
 
   window.submitFeedback = () => {
@@ -516,6 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
           closeFeedbackModal();
         }, 1000);
       }, 1500);
+      resetInactivityTimer();
     } else {
       alert('Please select a rating.');
     }
@@ -526,6 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('feedbackText').value = '';
     document.getElementById('feedbackMessage').classList.add('hidden');
     setRating(0);
+    resetInactivityTimer();
   };
 
   window.viewPreviousFeedback = () => {
@@ -536,5 +612,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const content = document.querySelector('#feedbackModal .modal-content');
     content.innerHTML = `<h2>Previous Feedback</h2>${feedbackDisplay}<div class="modal-actions"><button onclick="closeFeedbackModal()" class="btn light">Close</button></div>`;
     modal.classList.remove('hidden');
+    resetInactivityTimer();
   };
 });
