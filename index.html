@@ -40,28 +40,24 @@
     </select>
 
     <div class="textarea-wrap">
-      <button id="emojiButton" class="emoji-btn" title="Insert emoji">😊</button>
-      <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
-      <div class="textarea-actions">
+      <div class="textarea-header">
         <button id="nextMessage" class="btn light">Next Message</button>
         <button id="clearMessage" class="btn light">Clear Content</button>
+        <button id="emojiButton" class="btn light emoji-btn">😊</button>
       </div>
+      <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
     </div>
 
     <div class="names-wrap">
-      <div class="name-input">
-        <input id="recipientName" placeholder="To: Recipient's name (optional)">
-      </div>
-      <div class="name-input">
-        <input id="senderName" placeholder="From: Your name (optional)">
-      </div>
+      <input id="recipientName" placeholder="To: Recipient's name (optional)">
+      <input id="senderName" placeholder="From: Your name (optional)">
     </div>
 
     <div class="actions">
-      <button onclick="copyMessage()" class="btn light">Copy</button>
+      <button id="copyBtn" class="btn light">Copy</button>
     </div>
 
-    <div class="tiny">English only</div>
+    <p class="tiny">English only</p>
   </main>
 </div>
 
