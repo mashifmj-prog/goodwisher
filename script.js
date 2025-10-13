@@ -104,13 +104,48 @@ document.addEventListener('DOMContentLoaded', () => {
       currentIndex = 0;
       displayMessage();
       updateEmojiPicker();
+    } else if (occasionSelect.value === 'custom') {
+      document.getElementById('customOccasionWrap').classList.remove('hidden');
+      currentOccasion = 'custom';
+      currentIndex = 0;
+      displayMessage();
+      updateEmojiPicker();
     } else {
+      document.getElementById('customOccasionWrap').classList.add('hidden');
       currentOccasion = occasionSelect.value;
       currentIndex = 0;
       displayMessage();
       updateEmojiPicker();
     }
   });
+
+  // Generate Suggestions for Custom Occasion
+  document.getElementById('generateSuggestions').addEventListener('click', () => {
+    const desc = document.getElementById('customOccasionDesc').value.trim();
+    if (desc) {
+      generateCustomSuggestions(desc);
+    } else {
+      alert('Please enter a description for the custom occasion.');
+    }
+  });
+
+  async function generateCustomSuggestions(desc) {
+    const textarea = document.getElementById('customMessage');
+    textarea.value = 'Generating suggestions...';
+    try {
+      const response = await fetch(`https://api.duckduckgo.com/?q=good+wishes+for+${encodeURIComponent(desc)}&format=json&pretty=1`);
+      const data = await response.json();
+      const suggestions = data.RelatedTopics.map(topic => topic.Text).filter(text => text.includes('wish') || text.includes('message')).slice(0, 3);
+      if (suggestions.length > 0) {
+        textarea.value = suggestions.join('\n\n');
+      } else {
+        textarea.value = 'No suggestions found. Try a different description.';
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      textarea.value = 'Error generating suggestions. Please try again.';
+    }
+  }
 
   // Next Message
   document.getElementById('nextMessage').addEventListener('click', () => {
@@ -226,27 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.openFeedbackModal = () => {
-    const modal = document.getElementById('feedbackModal');
-    const content = document.querySelector('#feedbackModal .modal-content');
-    content.innerHTML = `
-      <h2>Feedback</h2>
-      <div class="rating-wrap">
-        <div class="rating-col"><button onclick="setRating(1)" class="rating-btn">X</button><span>20%</span></div>
-        <div class="rating-col"><button onclick="setRating(2)" class="rating-btn">X</button><span>40%</span></div>
-        <div class="rating-col"><button onclick="setRating(3)" class="rating-btn">X</button><span>60%</span></div>
-        <div class="rating-col"><button onclick="setRating(4)" class="rating-btn">X</button><span>80%</span></div>
-        <div class="rating-col"><button onclick="setRating(5)" class="rating-btn">X</button><span>100%</span></div>
-      </div>
-      <div id="ratingScore" class="rating-score">Score: 0%</div>
-      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
-      <div id="feedbackMessage" class="feedback-message hidden"></div>
-      <div class="modal-actions">
-        <button onclick="submitFeedback()" class="btn light">Send</button>
-        <button onclick="viewPreviousFeedback()" class="btn light">View Previous</button>
-        <button onclick="closeFeedbackModal()" class="btn light">Close</button>
-      </div>
-    `;
-    modal.classList.remove('hidden');
+    document.getElementById('feedbackModal').classList.remove('hidden');
     setRating(0); // Reset rating on open
   };
 
