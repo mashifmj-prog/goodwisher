@@ -224,12 +224,23 @@ document.addEventListener('DOMContentLoaded', () => {
   window.openShareModal = () => {
     document.getElementById('shareModal').classList.remove('hidden');
     document.getElementById('phoneNumber').value = '';
+    document.getElementById('shareOptions').classList.add('hidden');
   };
 
   window.openFeedbackModal = () => {
     document.getElementById('feedbackModal').classList.remove('hidden');
     setRating(0); // Reset rating on open
   };
+
+  // Feedback button hover
+  const feedbackButton = document.getElementById('feedbackButton');
+  const ratingPreview = document.getElementById('ratingPreview');
+  feedbackButton.addEventListener('mouseenter', () => {
+    ratingPreview.classList.remove('hidden');
+  });
+  feedbackButton.addEventListener('mouseleave', () => {
+    ratingPreview.classList.add('hidden');
+  });
 
   // Helper function to get full shareable message
   function getShareableMessage() {
@@ -246,58 +257,57 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please enter or select a message to share.');
       return;
     }
-    document.getElementById('shareModal').classList.add('hidden');
-    document.getElementById('shareOptionsModal').classList.remove('hidden');
-  };
-
-  window.shareWhatsApp = () => {
-    const text = getShareableMessage();
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-    closeShareOptionsModal();
-  };
-
-  window.shareFacebook = () => {
-    const text = getShareableMessage();
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(text)}`, '_blank');
-    closeShareOptionsModal();
-  };
-
-  window.shareTwitter = () => {
-    const text = getShareableMessage();
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-    closeShareOptionsModal();
-  };
-
-  window.shareTelegram = () => {
-    const text = getShareableMessage();
-    window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
-    closeShareOptionsModal();
-  };
-
-  window.shareEmail = () => {
-    const text = getShareableMessage();
-    window.open(`mailto:?body=${encodeURIComponent(text)}`, '_blank');
-    closeShareOptionsModal();
-  };
-
-  // Share via Device (Web Share API for native SMS, etc.)
-  window.shareDevice = () => {
-    const text = getShareableMessage();
     const phoneNumber = document.getElementById('phoneNumber').value.trim();
-    if (navigator.share && !phoneNumber) {
+    if (phoneNumber) {
+      // Directly share via SMS if phone number is provided
+      fallbackToSMS(text, phoneNumber);
+    } else if (navigator.share) {
+      // Use Web Share API if no phone number
       navigator.share({
         title: 'GoodWisher Message',
         text: text
       }).then(() => {
         console.log('Shared successfully');
-        closeShareOptionsModal();
+        closeShareModal();
       }).catch((error) => {
         console.error('Error sharing:', error);
-        fallbackToSMS(text, phoneNumber);
+        // Show other sharing options if Web Share fails
+        document.getElementById('shareOptions').classList.remove('hidden');
       });
     } else {
-      fallbackToSMS(text, phoneNumber);
+      // Show other sharing options if Web Share is unsupported
+      document.getElementById('shareOptions').classList.remove('hidden');
     }
+  };
+
+  window.shareWhatsApp = () => {
+    const text = getShareableMessage();
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    closeShareModal();
+  };
+
+  window.shareFacebook = () => {
+    const text = getShareableMessage();
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(text)}`, '_blank');
+    closeShareModal();
+  };
+
+  window.shareTwitter = () => {
+    const text = getShareableMessage();
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    closeShareModal();
+  };
+
+  window.shareTelegram = () => {
+    const text = getShareableMessage();
+    window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
+    closeShareModal();
+  };
+
+  window.shareEmail = () => {
+    const text = getShareableMessage();
+    window.open(`mailto:?body=${encodeURIComponent(text)}`, '_blank');
+    closeShareModal();
   };
 
   // Fallback to SMS URL scheme
@@ -305,28 +315,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const cleanedNumber = phoneNumber.replace(/[^0-9+]/g, '');
     if (phoneNumber && !/^\+?[1-9]\d{1,14}$/.test(cleanedNumber)) {
       alert('Please enter a valid phone number (e.g., +27 for South Africa).');
-      closeShareOptionsModal();
       return;
     }
     const smsUrl = cleanedNumber ? `sms:${cleanedNumber}?body=${encodeURIComponent(text)}` : `sms:?body=${encodeURIComponent(text)}`;
     try {
       window.open(smsUrl, '_blank');
-      closeShareOptionsModal();
+      closeShareModal();
     } catch (error) {
       console.error('Error opening SMS:', error);
-      alert('Unable to open SMS app. Try copying the message instead.');
-      closeShareOptionsModal();
+      alert('Unable to open SMS app. Try copying the message or using another sharing method.');
+      document.getElementById('shareOptions').classList.remove('hidden');
     }
   }
 
   window.closeShareModal = () => {
     document.getElementById('shareModal').classList.add('hidden');
     document.getElementById('phoneNumber').value = '';
-  };
-
-  window.closeShareOptionsModal = () => {
-    document.getElementById('shareOptionsModal').classList.add('hidden');
-    document.getElementById('phoneNumber').value = '';
+    document.getElementById('shareOptions').classList.add('hidden');
   };
 
   // Feedback modal
@@ -342,11 +347,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.submitFeedback = () => {
     const feedbackText = document.getElementById('feedbackText').value;
+    const feedbackMessage = document.getElementById('feedbackMessage');
     if (currentRating > 0) {
       feedbackList.push({ rating: currentRating, text: feedbackText, timestamp: new Date().toISOString() });
       localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
-      alert('Thank you for your feedback!');
-      closeFeedbackModal();
+      feedbackMessage.textContent = 'Submitted';
+      feedbackMessage.classList.remove('hidden');
+      setTimeout(() => {
+        feedbackMessage.textContent = 'Thank you';
+        setTimeout(() => {
+          closeFeedbackModal();
+        }, 1000);
+      }, 1500);
     } else {
       alert('Please select a rating.');
     }
@@ -355,6 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.closeFeedbackModal = () => {
     document.getElementById('feedbackModal').classList.add('hidden');
     document.getElementById('feedbackText').value = '';
+    document.getElementById('feedbackMessage').classList.add('hidden');
     setRating(0);
   };
 
