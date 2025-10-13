@@ -1,31 +1,86 @@
-function $(id){return document.getElementById(id);}
-let selectedRating=0;
-
-// THEME
-function setThemeIcon(){
-  const p=$('themeIconPath');
-  const isDark=document.body.dataset.theme==='dark';
-  p.setAttribute('d',isDark
-    ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z'
-    : 'M12 2a10 10 0 100 20 10 10 0 000-20z'
-  );
+:root {
+  --bg: #f7fafc;
+  --card-bg: #fff;
+  --text-color: #1f2937;
+  --muted: #6b7280;
+  --accent: #0f766e;
+  --accent-hover: #0d5e58;
+  --border: #e5e7eb;
 }
-function toggleTheme(){
-  const body=document.body;
-  const newTheme=body.dataset.theme==='dark'?'light':'dark';
-  body.dataset.theme=newTheme;
-  localStorage.setItem('theme',newTheme);
-  setThemeIcon();
-}
-window.addEventListener('DOMContentLoaded',()=>{
-  const saved=localStorage.getItem('theme')||'light';
-  document.body.dataset.theme=saved;
-  setThemeIcon();
-  $('themeToggle').addEventListener('click',toggleTheme);
-});
 
-// ----------------- MESSAGES -----------------
-const occasions = {
-  birthday:["Another year older, wiser! 🥳","Wishing you a day full of happiness and a year full of joy! 🎉"],
-  anniversary:["Happy Anniversary! 💕","Celebrating another year of love and togetherness! ❤️"],
-  condolence:["Sending heartfelt condolences in this time of loss. 🕊️","May you find comfort and peace during this
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card-bg: #111827;
+  --text-color: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #34d399;
+  --accent-hover: #10b981;
+  --border: #374151;
+}
+
+body {
+  font-family: Inter, sans-serif;
+  background: var(--bg);
+  color: var(--text-color);
+  margin: 0;
+  padding: 16px;
+  transition: 0.3s;
+}
+
+.container { max-width: 720px; margin: auto; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.title { color: var(--accent); font-size: 1.4rem; }
+.icon-btn { background: none; border: none; cursor: pointer; color: var(--muted); }
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+.sub { text-align: center; color: var(--muted); }
+
+input, select, textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-color);
+}
+
+.names-wrap { display: flex; gap: 8px; }
+.name-input { flex: 1; display: flex; flex-direction: column; }
+.name-input input { margin-top: 2px; }
+
+.actions-top { display: flex; gap: 8px; margin-bottom: 8px; }
+.btn { padding: 8px 12px; border-radius: 8px; cursor: pointer; border: none; background: var(--accent); color: #fff; }
+.btn.light { background: transparent; color: var(--accent); border: 1px solid var(--border); }
+
+textarea { resize: vertical; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.5);
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 16px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.star-percent-wrap { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.star-col { display: flex; flex-direction: column; align-items: center; width: 18%; }
+.star { font-size: 1.8rem; cursor: pointer; color: var(--muted); background: none; border: none; }
+.star.selected { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.6); }
+.rating-score { text-align: center; font-weight: 600; color: var(--accent); margin-bottom: 10px; }
+
+.tiny { font-size: 0.8rem; text-align: center; color: var(--muted); }
