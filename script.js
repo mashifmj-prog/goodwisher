@@ -1,220 +1,88 @@
-const messages = {
-  en: {
-    condolences: [
-      "I'm so sorry for your loss.",
-      "My deepest condolences to you and your family.",
-      "You are in my thoughts and prayers.",
-      "May the soul of your loved one rest in peace.",
-      "Wishing you strength and comfort during this difficult time.",
-      "Please accept my heartfelt sympathies.",
-      "I am here for you during this time of sorrow.",
-      "May you find peace and solace in the memories you shared.",
-      "Sending you love and support.",
-      "May the love of those around you help you through the days ahead."
-    ],
-    birthday: [
-      "Wishing you a day filled with love and happiness.",
-      "May this year bring you joy and success.",
-      "Happy Birthday! Enjoy your special day.",
-      "Wishing you all the best on your birthday.",
-      "May your birthday be the start of a year filled with good luck, good health, and much happiness.",
-      "Have a wonderful birthday celebration.",
-      "Cheers to you and your accomplishments.",
-      "Here's to another year of great adventures.",
-      "May your birthday be as amazing as you are.",
-      "Wishing you a day as special as you are."
-    ],
-    wedding: [
-      "Congratulations on your wedding day.",
-      "Wishing you a lifetime of love and happiness.",
-      "May your marriage be filled with joy and laughter.",
-      "Here's to love, laughter, and happily ever after.",
-      "May your union be blessed with love and prosperity.",
-      "Wishing you both a wonderful journey as you build your new lives together.",
-      "May the years ahead be filled with lasting joy.",
-      "Congratulations on finding each other.",
-      "Wishing you a lifetime of love and happiness.",
-      "Here's to a beautiful future together."
-    ],
-    anniversary: [
-      "Happy Anniversary! Wishing you many more years of happiness.",
-      "May your love continue to grow each and every year.",
-      "Here's to celebrating your love and commitment.",
-      "Wishing you a lifetime of love and happiness.",
-      "May your anniversary be filled with love and joy.",
-      "Cheers to another year of wonderful memories.",
-      "Wishing you both a lifetime of happiness together.",
-      "May your love story continue to inspire others.",
-      "Here's to many more years of love and laughter.",
-      "Happy Anniversary to a wonderful couple."
-    ],
-    graduation: [
-      "Congratulations on your graduation!",
-      "Wishing you success in all your future endeavors.",
-      "May your hard work and dedication lead you to great achievements.",
-      "Here's to new beginnings and exciting opportunities.",
-      "Wishing you all the best as you embark on this new chapter.",
-      "May your dreams take you to the highest of heights.",
-      "Congratulations on reaching this significant milestone.",
-      "Wishing you a future filled with success and happiness.",
-      "May you continue to achieve great things.",
-      "Here's to your bright future ahead."
-    ],
-    baby: [
-      "Congratulations on the arrival of your little one!",
-      "Wishing your family lots of love and happiness.",
-      "May your baby bring you endless joy and laughter.",
-      "Here's to new beginnings and beautiful moments.",
-      "Wishing you all the best as you welcome your new bundle of joy.",
-      "May your baby be blessed with health and happiness.",
-      "Congratulations on your growing family.",
-      "Wishing you a lifetime of love and happiness with your new baby.",
-      "May your home be filled with love and joy.",
-      "Here's to a future filled with beautiful moments."
-    ],
-    housewarming: [
-      "Congratulations on your new home!",
-      "Wishing you many years of happiness and comfort in your new space.",
-      "May your new home be filled with love and laughter.",
-      "Here's to new beginnings and wonderful memories.",
-      "Wishing you all the best as you settle into your new home.",
-      "May your new home be a place of peace and happiness.",
-      "Congratulations on this exciting new chapter.",
-      "Wishing you a lifetime of happiness in your new home.",
-      "May your new home be filled with warmth and joy.",
-      "Here's to creating beautiful memories in your new space."
-    ],
-    newJob: [
-      "Congratulations on your new job!",
-      "Wishing you success and fulfillment in your new role.",
-      "May this new opportunity bring you growth and happiness.",
-      "Here's to new challenges and exciting adventures.",
-      "Wishing you all the best as you start this new chapter.",
-      "May your new job be everything you've hoped for and more.",
-      "Congratulations on this exciting new opportunity.",
-      "Wishing you success and happiness in your new position.",
-      "May this new job bring you joy and satisfaction.",
-      "Here's to a bright future ahead."
-    ],
-    retirement: [
-      "Congratulations on your retirement!",
-      "Wishing you a relaxing and fulfilling retirement.",
-      "May this new chapter be filled with joy and adventure.",
-      "Here's to enjoying the fruits of your labor.",
-      "Wishing you all the best as you embark on this new journey.",
-      "May your retirement be everything you've dreamed of.",
-      "Congratulations on reaching this significant milestone.",
-      "Wishing you a retirement filled with happiness and relaxation.",
-      "May you find joy in every new day.",
-      "Here's to a well-deserved and enjoyable retirement."
-    ],
-    engagement: [
-      "Congratulations on your engagement!",
-      "Wishing you both a lifetime of love and happiness.",
-      "May your engagement be the beginning of a beautiful journey.",
-      "Here's to love, laughter, and a lifetime of happiness.",
-      "Wishing you all the best as you plan your future together.",
-      "May your engagement be filled with joy and excitement.",
-      "Congratulations on finding each other.",
-      "Wishing you both a wonderful journey ahead.",
-      "May your love continue to grow and flourish.",
-      "Here's to a beautiful future together."
-    ],
-    sympathy: [
-      "I'm so sorry for your loss.",
-      "My deepest condolences to you and your family.",
-      "You are in my thoughts and prayers.",
-      "May the soul of your loved one rest in peace.",
-      "Wishing you strength and comfort during this difficult time.",
-      "Please accept my heartfelt sympathies.",
-      "I am here for you during this time of sorrow.",
-      "May you find peace and solace in the memories you shared.",
-      "Sending you love and support.",
-      "May the love of those around you help you through the days ahead."
-    ],
-    thankYou: [
-      "Thank you for your kindness and support.",
-      "I appreciate everything you've done for me.",
-      "Your generosity means the world to me.",
-      "Thank you for being there when I needed you.",
-      "I am so grateful for your help and support.",
-      "Thank you for your thoughtful gesture.",
-      "Your kindness has made a difference in my life.",
-      "I appreciate your time and effort.",
-      "Thank you for your understanding and patience.",
-      "I am truly thankful for your support."
-    ]
-  },
-  es: {
-    condolences: [
-      "Lo siento mucho por tu pérdida.",
-      "Mis más profundas condolencias para ti y tu familia.",
-      "Estás en mis pensamientos y oraciones.",
-      "Que el alma de tu ser querido descanse en paz.",
-      "Te deseo fuerza y consuelo en este momento difícil.",
-      "Por favor acepta mis más sinceras condolencias.",
-      "Estoy aquí para ti en este momento de dolor.",
-      "Que encuentres paz y consuelo en los recuerdos compartidos.",
-      "Te envío amor y apoyo.",
-      "Que el amor de los que te rodean te ayude en los días venideros."
-    ],
-    birthday: [
-      "Te deseo un día lleno de amor y felicidad.",
-      "Que este año te traiga alegría y éxito.",
-      "¡Feliz cumpleaños! Disfruta de tu día especial.",
-      "Te deseo lo mejor en tu cumpleaños.",
-      "Que tu cumpleaños sea el comienzo de un año lleno de suerte, buena salud y mucha felicidad.",
-      "Que tengas una maravillosa celebración de cumpleaños.",
-      "Salud por ti y tus logros.",
-      "Aquí está otro año de grandes aventuras.",
-      "Que tu cumpleaños sea tan increíble como tú.",
-      "Te deseo un día tan especial como tú."
-    ],
-    wedding: [
-      "Felicidades en tu día de boda.",
-      "Te deseo una vida llena de amor y felicidad.",
-      "Que tu matrimonio esté lleno de alegría y risas.",
-      "Aquí está el amor, la risa y el felices para siempre.",
-      "Que tu unión esté bendecida con amor y prosperidad.",
-      "Te deseo a ambos un maravilloso viaje mientras construyen sus nuevas vidas juntos.",
-      "Que los años venideros estén llenos de alegría duradera.",
-      "Felicidades por haberse encontrado el uno al otro.",
-      "Te deseo una vida llena de amor y felicidad.",
-      "Aquí está un hermoso futuro juntos."
-    ],
-    anniversary: [
-      "¡Feliz aniversario! Te deseo muchos más años de felicidad.",
-      "Que tu amor continúe creciendo cada año.",
-      "Aquí está celebrando tu amor y compromiso.",
-      "Te deseo una vida llena de amor y felicidad.",
-      "Que tu aniversario esté lleno de amor y alegría.",
-      "Salud por otro año de recuerdos maravillosos.",
-      "Te deseo a ambos una vida llena de felicidad juntos.",
-      "Que tu historia de amor continúe inspirando a otros.",
-      "Aquí está muchos más años de amor y risas.",
-      "Feliz aniversario a una pareja maravillosa."
-    ],
-    graduation: [
-      "¡Felicidades en tu graduación!",
-      "Te deseo éxito en todos tus futuros esfuerzos.",
-      "Que tu arduo trabajo y dedicación te lleven a grandes logros.",
-      "Aquí está nuevos comienzos y emocionantes oportunidades.",
-      "Te deseo lo mejor mientras comienzas este nuevo capítulo.",
-      "Que tus sueños te lleven a las alturas más altas.",
-      "Felicidades por alcanzar este hito significativo.",
-      "Te deseo un futuro lleno de éxito y felicidad.",
-      "Que continúes logrando grandes cosas.",
-      "Aquí está tu brillante futuro por delante."
-    ],
-    baby: [
-      "¡Felicidades por la llegada de tu pequeño!",
-      "Te deseo a tu familia mucho amor y felicidad.",
-      "Que tu bebé te traiga alegría y risas interminables.",
-      "Aquí está nuevos comienzos y momentos hermosos.",
-      "Te deseo lo mejor mientras recibes tu nuevo paquete de alegría.",
-      "Que tu bebé sea bendecido con salud y felicidad.",
-      "Felicidades por tu familia en crecimiento.",
-      "Te deseo una vida llena de amor y felicidad con tu nuevo bebé.",
+function $(id){return document.getElementById(id);}
 
-::contentReference[oaicite:0]{index=0}
- 
+// Theme toggle
+function setThemeIcon(){
+  const p=$('themeIconPath');
+  const isDark=document.body.dataset.theme==='dark';
+  p.setAttribute('d',isDark?'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z':'M12 2a10 10 0 100 20 10 10 0 000-20z');
+}
+function toggleTheme(){
+  const body=document.body;
+  const newTheme=body.dataset.theme==='dark'?'light':'dark';
+  body.dataset.theme=newTheme;
+  localStorage.setItem('theme',newTheme);
+  setThemeIcon();
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=localStorage.getItem('theme')||'light';
+  document.body.dataset.theme=saved;
+  setThemeIcon();
+  $('themeToggle').addEventListener('click',toggleTheme);
+
+  $('occasion').addEventListener('change', displayMessage);
+  $('nextMessage').addEventListener('click', nextMessage);
+  $('clearMessage').addEventListener('click', clearMessage);
+  $('emojiButton').addEventListener('click', insertEmoji);
+  $('recipientName').addEventListener('input', displayMessage);
+  $('senderName').addEventListener('input', displayMessage);
+});
+
+// Messages
+const messages = {
+  birthday:["Happy Birthday! 🎉","Wishing you a joyful day!"],
+  anniversary:["Happy Anniversary! 💕","Celebrating your love!"],
+  "get-well":["Get well soon! 🌻","Wishing you a speedy recovery!"],
+  congrats:["Congratulations! 🏆","Well done!"],
+  "thank-you":["Thank you for your kindness! 🙏","Much appreciated!"],
+  "good-luck":["Good luck on your journey! 🍀","Wishing you success!"],
+  motivation:["Keep going — you can do this! 🚀","Believe in yourself!"],
+  appreciation:["You’re appreciated more than you know! 🌟","Thanks for everything!"],
+  farewell:["Wishing you the best in your next adventure! 👋","Goodbye and take care!"],
+  encouragement:["You’ve got this! 💪","Stay strong!"],
+  love:["You make life beautiful! ❤️","Sending love!"],
+  condolences:["Sending my deepest condolences. 🕊️","Thinking of you in this time."],
+  vacation:["Enjoy your well-deserved vacation! 🌴","Relax and have fun!"]
+};
+
+let currentIndex = 0;
+
+function displayMessage(){
+  const occ = $('occasion').value;
+  if(!occ) { $('customMessage').value=''; return; }
+  currentIndex = 0;
+  updateTextarea(messages[occ][currentIndex]);
+}
+
+function updateTextarea(baseMsg){
+  const r = $('recipientName').value.trim();
+  const s = $('senderName').value.trim();
+  let full = '';
+  if(r) full += `Hi ${r},\n\n`;
+  full += baseMsg + '\n\n';
+  if(s) full += `Regards\n${s}\n\n`;
+  full += "Generated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/";
+  $('customMessage').value = full;
+}
+
+function nextMessage(){
+  const occ = $('occasion').value;
+  if(!occ) return;
+  currentIndex = (currentIndex + 1) % messages[occ].length;
+  updateTextarea(messages[occ][currentIndex]);
+}
+
+function clearMessage(){
+  $('customMessage').value = '';
+}
+
+function copyMessage(){
+  const text = $('customMessage').value.trim();
+  if(!text) return alert('No message!');
+  navigator.clipboard.writeText(text);
+  alert('Copied!');
+}
+
+function insertEmoji(){
+  const emoji = prompt("Enter emoji to insert (or leave blank for 😊)","😊");
+  if(emoji) $('customMessage').value += emoji;
+}
