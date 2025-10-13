@@ -50,7 +50,8 @@ const messages = {
   vacation: [
     "Have an amazing vacation filled with fun!",
     "Enjoy your getaway and making new memories!"
-  ]
+  ],
+  custom: [] // Populated dynamically by generateCustomSuggestions
 };
 
 const emojis = {
@@ -67,7 +68,8 @@ const emojis = {
   love: ['❤️', '💕', '😘', '🌹'],
   condolences: ['🙏', '🕊️', '🌹', '💔'],
   vacation: ['🌴', '✈️', '🏖️', '☀️'],
-  default: ['😊', '👍', '❤️', '🌟']
+  default: ['😊', '👍', '❤️', '🌟'],
+  custom: ['🎉', '🌟', '🥳', '🙌'] // Generic positive emojis for custom occasion
 };
 
 let currentOccasion = '';
@@ -98,22 +100,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // Occasion selection
   const occasionSelect = document.getElementById('occasion');
   occasionSelect.addEventListener('change', () => {
+    const customWrap = document.getElementById('customOccasionWrap');
     if (occasionSelect.value === 'exit') {
       occasionSelect.value = '';
       currentOccasion = '';
       currentIndex = 0;
+      customWrap.classList.add('hidden');
+      document.getElementById('customOccasionDesc').value = '';
+      messages.custom = [];
       displayMessage();
       updateEmojiPicker();
     } else if (occasionSelect.value === 'custom') {
-      document.getElementById('customOccasionWrap').classList.remove('hidden');
+      customWrap.classList.remove('hidden');
       currentOccasion = 'custom';
       currentIndex = 0;
+      messages.custom = [];
       displayMessage();
       updateEmojiPicker();
     } else {
-      document.getElementById('customOccasionWrap').classList.add('hidden');
+      customWrap.classList.add('hidden');
+      document.getElementById('customOccasionDesc').value = '';
       currentOccasion = occasionSelect.value;
       currentIndex = 0;
+      messages.custom = [];
       displayMessage();
       updateEmojiPicker();
     }
@@ -125,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (desc) {
       generateCustomSuggestions(desc);
     } else {
-      alert('Please enter a description for the custom occasion.');
+      alert('Please enter a description for the custom occasion (e.g., new job).');
     }
   });
 
@@ -133,23 +142,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const textarea = document.getElementById('customMessage');
     textarea.value = 'Generating suggestions...';
     try {
-      const response = await fetch(`https://api.duckduckgo.com/?q=good+wishes+for+${encodeURIComponent(desc)}&format=json&pretty=1`);
-      const data = await response.json();
-      const suggestions = data.RelatedTopics.map(topic => topic.Text).filter(text => text.includes('wish') || text.includes('message')).slice(0, 3);
-      if (suggestions.length > 0) {
-        textarea.value = suggestions.join('\n\n');
-      } else {
-        textarea.value = 'No suggestions found. Try a different description.';
+      // Try multiple queries to improve results
+      const queries = [
+        `congratulations for ${desc}`,
+        `best wishes for ${desc}`,
+        `good wishes for ${desc}`
+      ];
+      let suggestions = [];
+      for (const query of queries) {
+        const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&pretty=1`);
+        const data = await response.json();
+        // Check AbstractText first
+        if (data.AbstractText) {
+          suggestions.push(data.AbstractText);
+        }
+        // Then check RelatedTopics
+        const related = data.RelatedTopics
+          .map(topic => topic.Text)
+          .filter(text => text && (text.toLowerCase().includes('wish') || text.toLowerCase().includes('congrat') || text.toLowerCase().includes('message')))
+          .slice(0, 3 - suggestions.length);
+        suggestions = [...suggestions, ...related];
+        if (suggestions.length >= 3) break;
       }
+      // Fallback messages if no results
+      if (suggestions.length === 0) {
+        suggestions = [
+          `Wishing you joy and success in your ${desc}!`,
+          `Congratulations on your ${desc}! Keep shining!`,
+          `Best wishes for your ${desc}! May it bring you happiness.`
+        ];
+      }
+      // Clean and limit to 3 suggestions
+      suggestions = suggestions
+        .filter(text => text.length <= 100) // Short messages only
+        .slice(0, 3);
+      messages.custom = suggestions;
+      currentIndex = 0;
+      displayMessage();
     } catch (error) {
       console.error('Error fetching suggestions:', error);
-      textarea.value = 'Error generating suggestions. Please try again.';
+      messages.custom = [
+        `Wishing you joy and success in your ${desc}!`,
+        `Congratulations on your ${desc}! Keep shining!`,
+        `Best wishes for your ${desc}! May it bring you happiness.`
+      ];
+      currentIndex = 0;
+      displayMessage();
+      alert('Error fetching suggestions. Using default messages. Try a shorter description like "wedding" or "new job".');
     }
   }
 
   // Next Message
   document.getElementById('nextMessage').addEventListener('click', () => {
-    if (currentOccasion && messages[currentOccasion]) {
+    if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0) {
       currentIndex = (currentIndex + 1) % messages[currentOccasion].length;
       displayMessage();
     }
@@ -160,9 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('customMessage').value = '';
     document.getElementById('senderName').value = '';
     document.getElementById('recipientName').value = '';
+    document.getElementById('customOccasionDesc').value = '';
+    document.getElementById('customOccasionWrap').classList.add('hidden');
     currentIndex = 0;
     occasionSelect.value = '';
     currentOccasion = '';
+    messages.custom = [];
     updateEmojiPicker();
   });
 
@@ -228,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sender = document.getElementById('senderName').value.trim();
     const recipient = document.getElementById('recipientName').value.trim();
     let messageBody = '';
-    if (currentOccasion && messages[currentOccasion]) {
+    if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0) {
       messageBody = messages[currentOccasion][currentIndex];
     } else if (textarea.value && !sender && !recipient) {
       messageBody = textarea.value;
@@ -261,8 +309,28 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.openFeedbackModal = () => {
-    document.getElementById('feedbackModal').classList.remove('hidden');
-    setRating(0); // Reset rating on open
+    const modal = document.getElementById('feedbackModal');
+    const content = document.querySelector('#feedbackModal .modal-content');
+    content.innerHTML = `
+      <h2>Feedback</h2>
+      <div class="rating-wrap">
+        <div class="rating-col"><button onclick="setRating(1)" class="rating-btn">X</button><span>20%</span></div>
+        <div class="rating-col"><button onclick="setRating(2)" class="rating-btn">X</button><span>40%</span></div>
+        <div class="rating-col"><button onclick="setRating(3)" class="rating-btn">X</button><span>60%</span></div>
+        <div class="rating-col"><button onclick="setRating(4)" class="rating-btn">X</button><span>80%</span></div>
+        <div class="rating-col"><button onclick="setRating(5)" class="rating-btn">X</button><span>100%</span></div>
+      </div>
+      <div id="ratingScore" class="rating-score">Score: 0%</div>
+      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+      <div id="feedbackMessage" class="feedback-message hidden"></div>
+      <div class="modal-actions">
+        <button onclick="submitFeedback()" class="btn light">Send</button>
+        <button onclick="viewPreviousFeedback()" class="btn light">View Previous</button>
+        <button onclick="closeFeedbackModal()" class="btn light">Close</button>
+      </div>
+    `;
+    modal.classList.remove('hidden');
+    setRating(0);
   };
 
   // Helper function to get full shareable message
@@ -390,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.rating-btn');
     buttons.forEach((btn, index) => {
       btn.classList.toggle('selected', index < rating);
-      btn.style.display = 'block'; // Ensure buttons are visible
+      btn.style.display = 'block';
     });
     document.getElementById('ratingScore').textContent = `Score: ${rating * 20}%`;
   };
@@ -421,7 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setRating(0);
   };
 
-  // View previous feedback
   window.viewPreviousFeedback = () => {
     const feedbackDisplay = feedbackList.length
       ? feedbackList.map(f => `<p>Rating: ${f.rating} stars (${f.rating * 20}%), Text: ${f.text}, Time: ${f.timestamp}</p>`).join('')
