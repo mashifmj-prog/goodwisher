@@ -43,31 +43,17 @@ body {
 input, select, textarea {
   width: 100%;
   margin-bottom: 10px;
-  padding: 6px 10px;
+  padding: 6px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--card-bg);
   color: var(--text-color);
+  font-size: 0.95rem;
 }
 
-.textarea-wrap { position: relative; margin-bottom: 12px; }
-.textarea-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.textarea-wrap { position: relative; }
 
-.names-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
-.name-input { position: relative; flex: 1; display: flex; flex-direction: column; }
-.name-input input { width: 100%; padding-right: 24px; }
-.clear-btn {
-  position: absolute;
-  right: 6px;
-  top: 32px;
-  border: none;
-  background: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.actions, .share-options { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 6px; }
 
 .btn {
   background: var(--accent);
@@ -76,9 +62,32 @@ input, select, textarea {
   border-radius: 8px;
   padding: 6px 10px;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 .btn.light { background: transparent; color: var(--accent); border: 1px solid var(--border); }
 .btn.big { width: 100%; margin-top: 12px; }
+
+.action-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.names-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
+.name-input { position: relative; flex: 1; }
+.name-input input { width: 100%; padding-right: 28px; }
+.clear-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--muted);
+}
 
 .modal {
   position: fixed;
@@ -87,7 +96,6 @@ input, select, textarea {
   justify-content: center;
   align-items: center;
   background: rgba(0,0,0,0.5);
-  z-index: 999;
 }
 .modal.hidden { display: none; }
 .modal-content {
@@ -98,7 +106,11 @@ input, select, textarea {
   max-width: 400px;
 }
 
-.star-percent-wrap { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.star-percent-wrap {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
 .star-col { display: flex; flex-direction: column; align-items: center; width: 18%; }
 .star { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--muted); }
 .star.selected { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.6); }
@@ -107,26 +119,3 @@ input, select, textarea {
 
 .modal-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
 .modal-content h2 { text-align: center; margin-top: 0; margin-bottom: 10px; color: var(--accent); }
-
-.delete-label { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; cursor: pointer; }
-.delete-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
-
-.emoji-popup {
-  position: absolute;
-  top: 36px;
-  right: 0;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  z-index: 1000;
-}
-.emoji-popup button {
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  cursor: pointer;
-}
