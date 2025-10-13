@@ -1,215 +1,31 @@
-:root {
-  --bg: #f7fafc;
-  --card-bg: #fff;
-  --text-color: #1f2937;
-  --muted: #6b7280;
-  --accent: #0f766e;
-  --accent-hover: #0d5e58;
-  --border: #e5e7eb;
-}
+function $(id){return document.getElementById(id);}
+let selectedRating=0;
 
-[data-theme="dark"] {
-  --bg: #0f172a;
-  --card-bg: #111827;
-  --text-color: #e5e7eb;
-  --muted: #9ca3af;
-  --accent: #34d399;
-  --accent-hover: #10b981;
-  --border: #374151;
+// THEME
+function setThemeIcon(){
+  const p=$('themeIconPath');
+  const isDark=document.body.dataset.theme==='dark';
+  p.setAttribute('d',isDark
+    ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z'
+    : 'M12 2a10 10 0 100 20 10 10 0 000-20z'
+  );
 }
+function toggleTheme(){
+  const body=document.body;
+  const newTheme=body.dataset.theme==='dark'?'light':'dark';
+  body.dataset.theme=newTheme;
+  localStorage.setItem('theme',newTheme);
+  setThemeIcon();
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=localStorage.getItem('theme')||'light';
+  document.body.dataset.theme=saved;
+  setThemeIcon();
+  $('themeToggle').addEventListener('click',toggleTheme);
+});
 
-body {
-  font-family: Inter, sans-serif;
-  background: var(--bg);
-  color: var(--text-color);
-  margin: 0;
-  padding: 16px;
-  transition: 0.3s;
-}
-
-.container {
-  max-width: 720px;
-  margin: auto;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.title {
-  color: var(--accent);
-  font-size: 1.6rem;
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px;
-}
-
-.sub {
-  text-align: center;
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-
-label {
-  font-weight: 500;
-  margin-top: 6px;
-  display: block;
-}
-
-select, textarea, input {
-  width: 100%;
-  padding: 8px 10px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  color: var(--text-color);
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-.actions-top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.btn {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-.btn.light:hover {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent-hover);
-}
-
-.names-wrap {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.name-input {
-  flex: 1;
-}
-
-.name-input label {
-  font-weight: 500;
-  margin-bottom: 4px;
-  display: block;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 6px;
-}
-
-.tiny {
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 12px;
-}
-
-/* Feedback Modal */
-.modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0,0,0,0.5);
-  z-index: 999;
-}
-
-.modal.hidden {
-  display: none;
-}
-
-.modal-content {
-  background: var(--card-bg);
-  border-radius: 10px;
-  padding: 16px;
-  width: 90%;
-  max-width: 400px;
-}
-
-.star-percent-wrap {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.star-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 18%;
-}
-
-.star {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-.star.selected {
-  color: #fbbf24;
-  text-shadow: 0 0 6px rgba(251,191,36,0.6);
-}
-
-.star-col span {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.rating-score {
-  text-align: center;
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-
-.modal-content h2 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: var(--accent);
-}
+// ----------------- MESSAGES -----------------
+const occasions = {
+  birthday:["Another year older, wiser! 🥳","Wishing you a day full of happiness and a year full of joy! 🎉"],
+  anniversary:["Happy Anniversary! 💕","Celebrating another year of love and togetherness! ❤️"],
+  condolence:["Sending heartfelt condolences in this time of loss. 🕊️","May you find comfort and peace during this
