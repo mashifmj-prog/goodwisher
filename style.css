@@ -16,11 +16,6 @@
   --accent: #34d399;
   --accent-hover: #10b981;
   --border: #374151;
-  --twitter-bg: #ffffff;
-}
-
-[data-theme="light"] {
-  --twitter-bg: #000000;
 }
 
 body {
@@ -267,13 +262,14 @@ textarea {
 }
 
 .share-twitter {
-  background: var(--twitter-bg);
-  color: var(--text-color);
+  background: #000000;
+  color: #ffffff;
   border: none;
 }
 
 .share-twitter:hover {
-  background: #333333;
+  background: #4a4a4a;
+  color: #ffffff;
 }
 
 .share-tiktok {
