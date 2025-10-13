@@ -21,35 +21,14 @@
       <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
       <div class="row">
-        <select id="language" aria-label="Language">
-          <option value="en" selected>English</option>
-          <option value="es">Español</option>
-          <option value="af">Afrikaans</option>
-          <option value="hi">हिन्दी (Hindi)</option>
-          <option value="zh">中文 (Mandarin)</option>
-        </select>
-
-        <select id="occasion" aria-label="Occasion">
-          <option value="" disabled selected>Select an occasion</option>
-          <option value="birthday">Birthday</option>
-          <option value="anniversary">Anniversary</option>
-          <option value="get-well">Get Well Soon</option>
-          <option value="congrats">Congratulations</option>
-          <option value="thank-you">Thank You</option>
-          <option value="good-luck">Good Luck</option>
-          <option value="motivation">Motivation</option>
-          <option value="appreciation">Appreciation</option>
-          <option value="farewell">Farewell</option>
-          <option value="encouragement">Encouragement</option>
-          <option value="love">Love</option>
-          <option value="condolences">Condolences</option>
-          <option value="vacation">Vacation</option>
-        </select>
+        <select id="language" aria-label="Language"></select>
+        <select id="occasion" aria-label="Occasion"></select>
       </div>
 
       <div class="textarea-wrap">
-        <button id="clearButton" class="btn light clear-center">🧹 Clear Content</button>
-        <button id="emojiButton" class="emoji-btn" aria-label="Open emoji picker">😊</button>
+        <button id="clearButton" class="btn light clear-center" title="Clear content">🧹 Clear Content</button>
+        <!-- emoji button sits above & right of the textarea, outside the textarea element -->
+        <button id="emojiButton" class="btn light emoji-btn" title="Emoji">😊</button>
         <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
       </div>
 
@@ -88,9 +67,11 @@
         <button id="feedbackBtn" class="btn light big">Give Feedback</button>
       </div>
 
-      <p class="tiny">Multilingual (EN, ES, AF, HI, ZH). Signature appended on share/copy only if "From" is filled.</p>
+      <p class="tiny">Multilingual (EN/ES/AF + HI/ZH fallback). Signature appended on share/copy only if "From" is filled.</p>
     </main>
   </div>
+
+  <!-- Emoji popup container (inserted by JS) -->
 
   <!-- Feedback Modal -->
   <div id="feedbackModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
