@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoodWisher</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoodWisher</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body data-theme="light">
+
 <div class="container">
   <header class="header">
     <h1 class="title">GoodWisher</h1>
@@ -21,8 +22,8 @@
     <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
     <label for="occasion">Occasion</label>
-    <select id="occasion">
-      <option value="" selected>Select an occasion</option>
+    <select id="occasion" onchange="displayMessage()">
+      <option value="" disabled selected>Select an occasion</option>
       <option value="birthday">Birthday</option>
       <option value="anniversary">Anniversary</option>
       <option value="condolence">Condolence</option>
@@ -38,38 +39,55 @@
     </select>
 
     <div class="actions-top">
-      <button id="nextMessage" class="btn light">Next Message</button>
-      <button id="clearContent" class="btn light">Clear Content</button>
-      <button id="emojiButton" class="btn light">😊</button>
+      <button class="btn light" onclick="nextMessage()">Next Message</button>
+      <button class="btn light" onclick="clearContent()">Clear Content</button>
+      <button class="btn light" id="emojiButton">😊</button>
     </div>
 
-    <textarea id="customMessage" placeholder="Your message will appear here…" rows="8"></textarea>
+    <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
 
     <div class="names-wrap">
       <div class="name-input">
-        <label>From:</label>
-        <input id="senderName" placeholder="Your name (optional)">
+        <label for="senderName">From:</label>
+        <input id="senderName" placeholder="Your name (optional)" oninput="updateMessage()">
       </div>
       <div class="name-input">
-        <label>To:</label>
-        <input id="recipientName" placeholder="Recipient's name (optional)">
+        <label for="recipientName">To:</label>
+        <input id="recipientName" placeholder="Recipient's name (optional)" oninput="updateMessage()">
       </div>
     </div>
 
     <div class="actions">
-      <button id="copyBtn" class="btn light">Copy</button>
-      <button id="shareBtn" class="btn light">Share</button>
-      <button id="feedbackBtn" class="btn light">Feedback</button>
+      <button class="btn light" onclick="copyMessage()">Copy</button>
+      <button class="btn light" onclick="saveMessage()">Save</button>
+      <button class="btn light" onclick="saveTemplate()">Save as Template</button>
+      <button class="btn light" onclick="openShareModal()">Share</button>
+      <button class="btn light" onclick="openFeedbackModal()">Feedback</button>
     </div>
 
     <p class="tiny">All messages are in English. Dark/Light mode supported.</p>
   </main>
 </div>
 
+<!-- Share Modal -->
+<div id="shareModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Share Via</h2>
+    <div class="modal-actions">
+      <button onclick="shareWhatsApp()" class="btn light">WhatsApp</button>
+      <button onclick="shareFacebook()" class="btn light">Facebook</button>
+      <button onclick="shareTwitter()" class="btn light">Twitter</button>
+      <button onclick="shareTelegram()" class="btn light">Telegram</button>
+      <button onclick="shareEmail()" class="btn light">Email</button>
+      <button onclick="closeShareModal()" class="btn light">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- Feedback Modal -->
 <div id="feedbackModal" class="modal hidden">
   <div class="modal-content">
-    <h2>Your Feedback</h2>
+    <h2>Your Feedback Matters!</h2>
     <div class="star-percent-wrap">
       <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
       <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
@@ -81,8 +99,7 @@
     <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
     <div class="modal-actions">
       <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
-      <button id="submitFeedbackBtn" class="btn">Send</button>
-      <button id="viewFeedbackBtn" class="btn light">View Previous Feedback</button>
+      <button onclick="submitFeedback()" class="btn light">Send</button>
     </div>
   </div>
 </div>
