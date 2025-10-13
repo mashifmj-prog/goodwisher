@@ -192,6 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const recipient = document.getElementById('recipientName').value;
     const signature = sender ? `\n\nFrom: ${sender}` : '';
     const fullMessage = recipient ? `To: ${recipient}\n${textarea.value}${signature}` : `${textarea.value}${signature}`;
+    if (!fullMessage.trim()) {
+      alert('Please enter or select a message to copy.');
+      return;
+    }
     navigator.clipboard.writeText(fullMessage).then(() => alert('Message copied!'));
   };
 
