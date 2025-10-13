@@ -1,4 +1,3 @@
-// Helper
 function $(id){return document.getElementById(id);}
 let selectedRating = 0;
 let currentMsgIndex = 0;
@@ -28,19 +27,8 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 // MESSAGES
 const messages = {
-  birthday: [
-    "Happy Birthday! 🎉","Wishing you joy on your birthday! 🎂",
-    "Another year older, wiser and happier! 🥳","Have a fantastic birthday! 🎈",
-    "Cheers to you on your special day! 🍰","Birthday hugs and wishes! 🤗",
-    "May your birthday be full of smiles! 😄","Celebrate your day with love! 💖",
-    "Happy Birthday! Keep shining! ✨","Hope your birthday is amazing! 🌟"
-  ],
-  anniversary:[
-    "Happy Anniversary! 💕","Wishing you endless love! ❤️","Another year together! 🥂",
-    "Cheers to your love! 💖","May your bond grow stronger! 🌹","Celebrating your love today! 💘",
-    "Sending warm wishes on your anniversary! 💝","Love and happiness forever! 💑","Happy Anniversary! Enjoy your day! 🎉",
-    "Together forever! 💕"
-  ],
+  birthday: ["Happy Birthday! 🎉","Wishing you joy on your birthday! 🎂","Another year older, wiser! 🥳","Have a fantastic birthday! 🎈","Cheers to you! 🍰","Birthday hugs! 🤗","May your birthday be full of smiles! 😄","Celebrate your day with love! 💖","Keep shining! ✨","Hope your birthday is amazing! 🌟"],
+  anniversary:["Happy Anniversary! 💕","Wishing you endless love! ❤️","Another year together! 🥂","Cheers to your love! 💖","May your bond grow stronger! 🌹","Celebrating your love today! 💘","Sending warm wishes! 💝","Love and happiness forever! 💑","Enjoy your day! 🎉","Together forever! 💕"],
   'get-well':[...Array(10)].map((_,i)=>`Get well soon message ${i+1} 🌻`),
   congrats:[...Array(10)].map((_,i)=>`Congratulations message ${i+1} 🏆`),
   'thank-you':[...Array(10)].map((_,i)=>`Thank you message ${i+1} 🙏`),
@@ -70,6 +58,7 @@ const emojiSets = {
   vacation:["🌴","☀️","🏖️","✈️"]
 };
 
+// DISPLAY
 function displayMessage(){
   const occ=$('occasion').value;
   const lang=$('language').value;
@@ -87,10 +76,12 @@ function updateMessage(){
   const r=$('recipientName').value.trim();
   const s=$('senderName').value.trim();
   let msg = baseMsg;
-  if(r) msg = `Hi ${r},\n\n${msg}`;
-  if(s) msg += `\n\nFrom:\n${s}`;
-  $('customMessage').value = msg;
-  renderEmoji();
+  let displayMsg = msg; // visible in textarea
+  if(r) displayMsg = `Hi ${r},\n\n${msg}`;
+  $('customMessage').value = displayMsg; // editable area
+
+  // Compose full message for copy/share
+  $('customMessage').dataset.fullMessage = `${displayMsg}${s?`\n\nRegards\n${s}`:''}\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
 }
 
 function nextMessage(){
@@ -102,6 +93,7 @@ function nextMessage(){
 
 function clearContent(){
   $('customMessage').value='';
+  $('customMessage').dataset.fullMessage='';
 }
 
 // NAMES
@@ -123,7 +115,7 @@ function showEmojiPicker(set){
     const b = document.createElement('button');
     b.textContent = e;
     b.className='emoji-btn';
-    b.onclick = ()=>{ $('customMessage').value += e; picker.remove();}
+    b.onclick = ()=>{ $('customMessage').value += e; picker.remove(); }
     picker.appendChild(b);
   });
   document.body.appendChild(picker);
@@ -140,7 +132,11 @@ function showEmojiPicker(set){
 }
 
 // COPY
-function copyMessage(){navigator.clipboard.writeText($('customMessage').value); alert('Copied!');}
+function copyMessage(){
+  const text = $('customMessage').dataset.fullMessage || $('customMessage').value;
+  navigator.clipboard.writeText(text);
+  alert('Copied!');
+}
 
 // FEEDBACK
 function openFeedbackModal(){$('feedbackModal').classList.remove('hidden');}
@@ -166,7 +162,7 @@ function submitFeedback(){
 // SHARE
 function openShareModal(){$('shareModal').classList.remove('hidden');}
 function closeShareModal(){$('shareModal').classList.add('hidden');}
-function getMessageForShare(){return $('customMessage').value.trim();}
+function getMessageForShare(){return $('customMessage').dataset.fullMessage || $('customMessage').value;}
 function shareWhatsApp(){window.open(`https://wa.me/?text=${encodeURIComponent(getMessageForShare())}`,'_blank'); closeShareModal();}
 function shareFacebook(){const url=encodeURIComponent(location.href); window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(getMessageForShare())}`,'_blank'); closeShareModal();}
 function shareTwitter(){window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(getMessageForShare())}`,'_blank'); closeShareModal();}
