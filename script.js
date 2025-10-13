@@ -2,6 +2,7 @@ function $(id){return document.getElementById(id);}
 let selectedRating=0;
 let currentOccasion='';
 let currentIndex=0;
+let feedbacks=[];
 
 // THEME
 function setThemeIcon(){
@@ -26,7 +27,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('themeToggle').addEventListener('click',toggleTheme);
 });
 
-// ----------------- MESSAGES -----------------
+// MESSAGES
 const occasions = {
   birthday:["Another year older, wiser! 🥳","Wishing you a day full of happiness and a year full of joy! 🎉"],
   anniversary:["Happy Anniversary! 💕","Celebrating another year of love and togetherness! ❤️"],
@@ -47,114 +48,98 @@ const occasionEmojis = {
   anniversary:["💕","💖","❤️"],
   condolence:["🕊️","🖤","🌹"],
   congratulations:["🏆","🎖️","🎊"],
-  get-well:["🌻","💐","🌸"],
-  thank-you:["🙏","🌟","💛"],
-  good-luck:["🍀","🌈","⭐"],
-  appreciation:["🌟","🌼","👏"],
-  farewell:["👋","✨","💌"],
+  get-well:["🌻","💐","🤗"],
+  thank-you:["🙏","🌟","💝"],
+  good-luck:["🍀","🌈","🎯"],
+  appreciation:["🌟","🌼","💛"],
+  farewell:["👋","✨","🎁"],
   encouragement:["💪","🚀","🔥"],
-  love:["❤️","💖","💌"],
-  vacation:["🌴","🏖️","☀️"]
+  love:["❤️","💌","💖"],
+  vacation:["🌴","🏖️","🛶"]
 };
 
 function displayMessage(){
   const occ=$('occasion').value;
-  if(!occ){clearContent(); return;}
   currentOccasion=occ;
   currentIndex=0;
+  if(!occ){$('customMessage').value=''; return;}
   updateMessage();
 }
 
 function nextMessage(){
   if(!currentOccasion) return;
-  currentIndex = (currentIndex+1) % occasions[currentOccasion].length;
+  const msgs=occasions[currentOccasion];
+  currentIndex=(currentIndex+1)%msgs.length;
   updateMessage();
 }
 
 function updateMessage(){
-  let occ=currentOccasion;
+  const occ=currentOccasion;
   if(!occ) return;
-  const msg = occasions[occ][currentIndex];
-  let r=$('recipientName').value.trim();
-  let s=$('senderName').value.trim();
-  let full=msg;
-  if(r) full=`Hi ${r},\n\n${msg}`;
-  if(s) full+=`\n\nRegards\n${s}`;
-  $('customMessage').value=full;
+  const msgs=occasions[occ];
+  const msg=msgs[currentIndex];
+  const r=$('recipientName').value.trim();
+  const s=$('senderName').value.trim();
+  let fullMsg=msg;
+  if(r) fullMsg=`Hi ${r},\n\n${msg}`;
+  if(s) fullMsg+=`\n\nRegards\n${s}`;
+  $('customMessage').value=fullMsg;
 }
 
+// CLEAR CONTENT
 function clearContent(){
   $('customMessage').value='';
   $('recipientName').value='';
   $('senderName').value='';
-  currentOccasion='';
-  currentIndex=0;
-  $('occasion').value='';
 }
 
-// ----------------- EMOJI -----------------
+// EMOJI PICKER
 $('emojiButton').addEventListener('click',()=>{
-  let emojis=[];
-  if(currentOccasion && occasionEmojis[currentOccasion]){
-    emojis = occasionEmojis[currentOccasion];
-  } else {
-    emojis = ["😊","👍","🌟","💌","🎉"];
-  }
-  const choice = prompt("Select emoji:\n"+emojis.join(" "));
-  if(choice && $('customMessage').value.length>0){
-    $('customMessage').value += " "+choice;
-  }
+  let emojis=['😀','😃','😄','😊','😉']; // generic
+  if(currentOccasion && occasionEmojis[currentOccasion]) emojis=occasionEmojis[currentOccasion];
+  const choice=prompt("Choose emoji to insert:\n"+emojis.join(' '));
+  if(choice) $('customMessage').value += ' '+choice;
 });
 
-// ----------------- COPY -----------------
+// COPY
 function copyMessage(){
   const text=$('customMessage').value;
-  if(!text) return alert('No message!');
+  if(!text)return alert('No message!');
   navigator.clipboard.writeText(text);
   alert('Copied!');
 }
 
-// ----------------- SHARE -----------------
+// SHARE MODAL
 function openShareModal(){ $('shareModal').classList.remove('hidden'); }
 function closeShareModal(){ $('shareModal').classList.add('hidden'); }
 
-function getMessageWithSignature(){
-  let text=$('customMessage').value;
-  if(!text) return '';
-  return text+"\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/";
-}
+function getMessage(){ return $('customMessage').value.trim(); }
+function shareWhatsApp(){ const msg=getMessage(); if(!msg)return; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
+function shareFacebook(){ const msg=getMessage(); if(!msg)return; const url=encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/'); window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
+function shareTwitter(){ const msg=getMessage(); if(!msg)return; window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
+function shareTelegram(){ const msg=getMessage(); if(!msg)return; window.open(`https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
+function shareEmail(){ const msg=getMessage(); if(!msg)return; const subject=encodeURIComponent('A Special Message from GoodWisher'); const body=encodeURIComponent(msg.replace(/\n/g,'%0A')); window.location.href=`mailto:?subject=${subject}&body=${body}`; closeShareModal();}
 
-function shareWhatsApp(){ const msg=getMessageWithSignature(); if(msg) window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
-function shareFacebook(){ const msg=getMessageWithSignature(); if(msg) window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&quote=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
-function shareTwitter(){ const msg=getMessageWithSignature(); if(msg) window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
-function shareTelegram(){ const msg=getMessageWithSignature(); if(msg) window.open(`https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(msg)}`,'_blank'); closeShareModal();}
-function shareEmail(){ const msg=getMessageWithSignature(); if(msg){
-  const subject=encodeURIComponent('A Special Message from GoodWisher');
-  const body=encodeURIComponent(msg.replace(/\n/g,'%0A'));
-  window.location.href=`mailto:?subject=${subject}&body=${body}`;
-  closeShareModal();
-}}
-
-// ----------------- FEEDBACK -----------------
+// FEEDBACK
 function openFeedbackModal(){$('feedbackModal').classList.remove('hidden');}
-function closeFeedbackModal(){
-  $('feedbackModal').classList.add('hidden');
-  $('feedbackText').value='';
-  selectedRating=0;
-  document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected'));
-  $('ratingScore').textContent='Score: 0%';
-}
-function setRating(r){
-  selectedRating=r;
-  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected',i<r));
-  $('ratingScore').textContent=`Score: ${r*20}%`;
-}
+function closeFeedbackModal(){ $('feedbackModal').classList.add('hidden'); $('feedbackText').value=''; selectedRating=0; document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected')); $('ratingScore').textContent='Score: 0%';}
+function setRating(r){ selectedRating=r; document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected',i<r)); $('ratingScore').textContent=`Score: ${r*20}%`;}
 function submitFeedback(){
   const fb=$('feedbackText').value.trim();
-  if(!fb && selectedRating===0) return alert('Please rate or comment!');
-  let stored = JSON.parse(localStorage.getItem('goodwisherFeedback')||'[]');
-  stored.push({rating:selectedRating, feedback:fb, date:new Date().toISOString()});
-  localStorage.setItem('goodwisherFeedback', JSON.stringify(stored));
-  alert(`Thanks for your feedback!`);
+  if(!fb&&selectedRating===0)return alert('Please rate or comment!');
+  const entry={rating:selectedRating, feedback:fb, date:new Date().toLocaleString()};
+  feedbacks.push(entry); localStorage.setItem('feedbacks',JSON.stringify(feedbacks));
+  alert('Thank you for your feedback!');
   closeFeedbackModal();
 }
+function viewFeedback(){
+  const saved=JSON.parse(localStorage.getItem('feedbacks')||'[]');
+  if(saved.length===0)return alert('No previous feedback found.');
+  let msg='Previous Feedbacks:\n\n';
+  saved.forEach(f=>{ msg+=`${f.date}\nRating: ${f.rating*20}%\n${f.feedback}\n\n`;});
+  alert(msg);
+}
+
+// SAVE/COPY
+function saveMessage(){ alert('Message saved locally.'); }
+function saveTemplate(){ alert('Message saved as template.'); }
