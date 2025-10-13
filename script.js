@@ -135,14 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const emojiButton = document.getElementById('emojiButton');
   let emojiPicker = null;
 
-  emojiButton.addEventListener('click', (e) => {
+  emojiButton.addEventListener('click', () => {
     if (emojiPicker) {
       emojiPicker.remove();
       emojiPicker = null;
     } else {
       emojiPicker = document.createElement('div');
       emojiPicker.className = 'emoji-picker';
-      const emojiList = currentOccasion ? emojis[currentOccasion] : emojis.default;
+      const emojiList = currentOccasion && emojis[currentOccasion] ? emojis[currentOccasion] : emojis.default;
       emojiList.forEach(emoji => {
         const btn = document.createElement('button');
         btn.className = 'emoji-btn';
@@ -336,7 +336,6 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please enter or select a message to share.');
       return;
     }
-    // TikTok doesn't have a direct share API; use a URL-based approach
     alert('To share on TikTok, copy the message and paste it into a TikTok post.');
     navigator.clipboard.writeText(text).then(() => {
       alert('Message copied! Paste it into TikTok.');
