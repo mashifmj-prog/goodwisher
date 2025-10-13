@@ -51,7 +51,8 @@
       <div class="name-input">
         <input id="senderName" placeholder="From (Your name, optional)" oninput="updateMessageWithName()">
         <button class="clear-btn" onclick="clearSender()">×</button>
-      </div>
+      </div | truncated>
+
       <div class="name-input">
         <input id="recipientName" placeholder="To (Recipient's name, optional)" oninput="updateMessageWithName()">
         <button class="clear-btn" onclick="clearRecipient()">×</button>
@@ -96,6 +97,11 @@
   <div class="modal-content">
     <h2>Share Via</h2>
     <div class="modal-actions">
+      <div class="phone-input">
+        <input id="phoneNumber" type="tel" placeholder="Phone number for SMS (optional, e.g., +1234567890)">
+        <button class="clear-btn" onclick="document.getElementById('phoneNumber').value = ''">×</button>
+      </div>
+      <button onclick="shareDevice()" class="btn light">📱 Device (SMS, etc.)</button>
       <button onclick="shareWhatsApp()" class="btn light">WhatsApp</button>
       <button onclick="shareFacebook()" class="btn light">Facebook</button>
       <button onclick="shareTwitter()" class="btn light">X (Twitter)</button>
