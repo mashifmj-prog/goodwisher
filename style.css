@@ -6,7 +6,6 @@
   --accent: #0f766e;
   --accent-hover: #0d5e58;
   --border: #e5e7eb;
-  --twitter-border: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -17,7 +16,6 @@
   --accent: #34d399;
   --accent-hover: #10b981;
   --border: #374151;
-  --twitter-border: #000000;
 }
 
 body {
