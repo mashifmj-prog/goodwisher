@@ -21,18 +21,8 @@
   <main class="card">
     <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
-    <label for="language">Language</label>
-    <select id="language" onchange="displayMessage()">
-      <option value="en" selected>English</option>
-      <option value="es">Español</option>
-      <option value="hi">हिन्दी</option>
-      <option value="zh">中文</option>
-      <option value="af">Afrikaans</option>
-      <option value="exit">Exit</option>
-    </select>
-
-    <label for="occasion">Occasion</label>
-    <select id="occasion" onchange="displayMessage()">
+    <label>Occasion</label>
+    <select id="occasion">
       <option value="" disabled selected>Select an occasion</option>
       <option value="birthday">Birthday</option>
       <option value="anniversary">Anniversary</option>
@@ -47,74 +37,32 @@
       <option value="love">Love</option>
       <option value="condolences">Condolences</option>
       <option value="vacation">Vacation</option>
-      <option value="exit">Exit</option>
     </select>
 
-    <div class="action-line">
-      <button id="nextMessage" class="btn light">Next Message</button>
-      <button id="clearContent" class="btn light">Clear Content</button>
-      <button id="emojiButton" class="btn light">😊</button>
+    <div class="textarea-wrap">
+      <button id="emojiButton" class="emoji-btn" title="Insert emoji">😊</button>
+      <textarea id="customMessage" placeholder="Your message will appear here…" rows="6"></textarea>
+      <div class="textarea-actions">
+        <button id="nextMessage" class="btn light">Next Message</button>
+        <button id="clearMessage" class="btn light">Clear Content</button>
+      </div>
     </div>
-
-    <textarea id="customMessage" rows="6" placeholder="Your message will appear here…"></textarea>
 
     <div class="names-wrap">
       <div class="name-input">
-        <input id="senderName" placeholder="From (Your name, optional)" oninput="updateMessageWithName()">
-        <button class="clear-btn" onclick="clearSender()">×</button>
+        <input id="recipientName" placeholder="To: Recipient's name (optional)">
       </div>
       <div class="name-input">
-        <input id="recipientName" placeholder="To (Recipient's name, optional)" oninput="updateMessageWithName()">
-        <button class="clear-btn" onclick="clearRecipient()">×</button>
+        <input id="senderName" placeholder="From: Your name (optional)">
       </div>
     </div>
 
     <div class="actions">
       <button onclick="copyMessage()" class="btn light">Copy</button>
-      <button onclick="saveMessage()" class="btn light">Save</button>
-      <button onclick="saveTemplate()" class="btn light">Save as Template</button>
-      <button onclick="openShareModal()" class="btn light">Share</button>
-      <button onclick="openFeedbackModal()" class="btn light">Feedback</button>
     </div>
 
-    <div id="message" class="message"></div>
-    <p class="tiny">Multilingual (EN, 中文, हिन्दी, Español, Afrikaans)</p>
+    <div class="tiny">English only</div>
   </main>
-</div>
-
-<!-- Feedback Modal -->
-<div id="feedbackModal" class="modal hidden">
-  <div class="modal-content">
-    <h2>Your Feedback Matters!</h2>
-    <div class="star-percent-wrap">
-      <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
-      <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
-      <div class="star-col"><button onclick="setRating(3)" class="star">★</button><span>60%</span></div>
-      <div class="star-col"><button onclick="setRating(4)" class="star">★</button><span>80%</span></div>
-      <div class="star-col"><button onclick="setRating(5)" class="star">★</button><span>100%</span></div>
-    </div>
-    <div id="ratingScore" class="rating-score">Score: 0%</div>
-    <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
-    <div class="modal-actions">
-      <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
-      <button onclick="submitFeedback()" class="btn light">Send</button>
-    </div>
-  </div>
-</div>
-
-<!-- Share Modal -->
-<div id="shareModal" class="modal hidden">
-  <div class="modal-content">
-    <h2>Share Via</h2>
-    <div class="modal-actions">
-      <button onclick="shareWhatsApp()" class="btn light">WhatsApp</button>
-      <button onclick="shareFacebook()" class="btn light">Facebook</button>
-      <button onclick="shareTwitter()" class="btn light">X (Twitter)</button>
-      <button onclick="shareTelegram()" class="btn light">Telegram</button>
-      <button onclick="shareEmail()" class="btn light">Email</button>
-      <button onclick="closeShareModal()" class="btn light" style="margin-top:10px">Cancel</button>
-    </div>
-  </div>
 </div>
 
 <script src="script.js"></script>
