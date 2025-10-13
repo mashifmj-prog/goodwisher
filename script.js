@@ -14,21 +14,6 @@ function toggleTheme(){
   setThemeIcon();
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-  const saved=localStorage.getItem('theme')||'light';
-  document.body.dataset.theme=saved;
-  setThemeIcon();
-  $('themeToggle').addEventListener('click',toggleTheme);
-
-  $('occasion').addEventListener('change', displayMessage);
-  $('nextMessage').addEventListener('click', nextMessage);
-  $('clearMessage').addEventListener('click', clearMessage);
-  $('emojiButton').addEventListener('click', showEmojiPicker);
-  $('copyBtn').addEventListener('click', copyMessage);
-  $('recipientName').addEventListener('input', displayMessage);
-  $('senderName').addEventListener('input', displayMessage);
-});
-
 // Messages
 const messages = {
   birthday:["Happy Birthday! 🎉","Wishing you a joyful day! 🎂"],
@@ -48,19 +33,39 @@ const messages = {
 
 let currentIndex = 0;
 
+// Initialization
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=localStorage.getItem('theme')||'light';
+  document.body.dataset.theme=saved;
+  setThemeIcon();
+  $('themeToggle').addEventListener('click',toggleTheme);
+
+  $('occasion').addEventListener('change', displayMessage);
+  $('nextMessage').addEventListener('click', nextMessage);
+  $('clearMessage').addEventListener('click', clearMessage);
+  $('emojiButton').addEventListener('click', showEmojiPopup);
+
+  $('copyBtn').addEventListener('click', copyMessage);
+  $('shareBtn').addEventListener('click', openShareModal);
+  $('saveBtn').addEventListener('click', saveMessage);
+  $('saveTemplateBtn').addEventListener('click', saveTemplate);
+  $('feedbackBtn').addEventListener('click', openFeedbackModal);
+});
+
+// Textarea functions
 function displayMessage(){
   const occ = $('occasion').value;
-  if(!occ) { $('customMessage').value=''; return; }
+  if(!occ) return;
   currentIndex = 0;
   updateTextarea(messages[occ][currentIndex]);
 }
 
-function updateTextarea(baseMsg){
+function updateTextarea(msg){
   const r = $('recipientName').value.trim();
   const s = $('senderName').value.trim();
   let full = '';
   if(r) full += `Hi ${r},\n\n`;
-  full += baseMsg + '\n\n';
+  full += msg + '\n\n';
   if(s) full += `Regards\n${s}\n\n`;
   full += "Generated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/";
   $('customMessage').value = full;
@@ -73,19 +78,3 @@ function nextMessage(){
   updateTextarea(messages[occ][currentIndex]);
 }
 
-function clearMessage(){
-  $('customMessage').value = '';
-}
-
-function copyMessage(){
-  const text = $('customMessage').value.trim();
-  if(!text) return alert('No message!');
-  navigator.clipboard.writeText(text);
-  alert('Copied!');
-}
-
-function showEmojiPicker(){
-  const emojiSet = ["😊","❤️","🎉","🌟","🍀","🌹","💌","🎂","🎖️","🌴"];
-  const emoji = prompt("Select emoji to insert:\n"+emojiSet.join(" "), "😊");
-  if(emoji) $('customMessage').value += emoji;
-}
