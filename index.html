@@ -20,14 +20,17 @@
   <main class="card">
     <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
+    <label for="language">Language</label>
     <select id="language" onchange="displayMessage()">
       <option value="en" selected>English</option>
       <option value="zh">中文 (Mandarin)</option>
       <option value="hi">हिन्दी (Hindi)</option>
       <option value="es">Español (Spanish)</option>
       <option value="af">Afrikaans</option>
+      <option value="" disabled>Close Dropdown</option>
     </select>
 
+    <label for="occasion">Occasion</label>
     <select id="occasion" onchange="displayMessage()">
       <option value="" disabled selected>Select an occasion</option>
       <option value="birthday">Birthday</option>
@@ -43,10 +46,12 @@
       <option value="love">Love</option>
       <option value="condolences">Condolences</option>
       <option value="vacation">Vacation</option>
+      <option value="" disabled>Close Dropdown</option>
     </select>
 
-    <!-- Clear Content + Emoji button line -->
+    <!-- Buttons above textarea -->
     <div class="action-line">
+      <button id="nextMessage" class="btn light">Next Message</button>
       <button id="clearContent" class="btn light">Clear Content</button>
       <button id="emojiButton" class="btn light">😊</button>
     </div>
@@ -72,7 +77,6 @@
       <button onclick="saveMessage()" class="btn light">Save</button>
       <button onclick="saveTemplate()" class="btn light">Save as Template</button>
       <button onclick="openShareModal()" class="btn light">Share</button>
-      <button onclick="nextMessage()" class="btn light">Next Message</button>
       <button onclick="openFeedbackModal()" class="btn light">Feedback</button>
     </div>
 
