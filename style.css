@@ -4,7 +4,6 @@
   --text-color: #1f2937;
   --muted: #6b7280;
   --accent: #0f766e;
-  --accent-hover: #0d5e58;
   --border: #e5e7eb;
 }
 
@@ -14,7 +13,6 @@
   --text-color: #e5e7eb;
   --muted: #9ca3af;
   --accent: #34d399;
-  --accent-hover: #10b981;
   --border: #374151;
 }
 
@@ -29,184 +27,23 @@ body {
 
 .container { max-width: 720px; margin: auto; }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .title { color: var(--accent); font-size: 1.4rem; }
+.icon-btn { background: none; border: none; cursor: pointer; color: var(--muted); }
 
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-/* Card */
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px;
-}
-
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
 .sub { text-align: center; color: var(--muted); }
 
-input, select, textarea {
-  width: 100%;
-  margin-bottom: 8px;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  color: var(--text-color);
-  font-size: 0.95rem;
-  box-sizing: border-box;
-}
+input, select, textarea { width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-color); }
+
+.names-wrap { display: flex; gap: 8px; margin-top: 8px; }
+.name-input { flex: 1; }
 
 .textarea-wrap { position: relative; margin-bottom: 12px; }
+.emoji-btn { position: absolute; top: -2px; right: 0; font-size: 1.4rem; background: none; border: none; cursor: pointer; }
+.textarea-actions { display: flex; justify-content: space-between; margin-top: 4px; }
 
-textarea {
-  resize: vertical;
-  min-height: 100px;
-  padding: 8px;
-}
+.btn.light { background: transparent; color: var(--accent); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
 
-/* Buttons */
-.btn {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-.btn.light:hover {
-  background: var(--accent);
-  color: #fff;
-}
-
-.actions, .action-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-  margin-top: 6px;
-}
-
-/* Emoji button positioning */
-#emojiButton {
-  margin-left: auto;
-}
-
-/* Names input */
-.names-wrap {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.name-input { position: relative; flex: 1; }
-.name-input input { width: 100%; padding-right: 28px; font-size: 0.95rem; }
-.clear-btn {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  background: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-/* Modal */
-.modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-}
-.modal.hidden { display: none; }
-.modal-content {
-  background: var(--card-bg);
-  border-radius: 10px;
-  padding: 16px;
-  width: 90%;
-  max-width: 400px;
-  box-sizing: border-box;
-}
-
-.star-percent-wrap {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-.star-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 18%;
-}
-.star {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: var(--muted);
-}
-.star.selected {
-  color: #fbbf24;
-  text-shadow: 0 0 6px rgba(251,191,36,0.6);
-}
-.star-col span {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-.rating-score {
-  text-align: center;
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-.modal-content h2 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: var(--accent);
-}
-
-/* Small note */
-.tiny {
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 8px;
-}
-
-/* Emoji Picker */
-.emoji-picker {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  padding: 6px;
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  border-radius: 6px;
-  z-index: 1100;
-}
-.emoji-picker .emoji-b
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.tiny { text-align: center; font-size: 0.8rem; margin-top: 8px; }
