@@ -1,92 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoodWisher</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoodWisher</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
-  <div class="container">
-    <header class="header">
-      <h1 class="title">GoodWisher</h1>
-      <button id="themeToggle" class="icon-btn" title="Toggle theme">
-        <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path id="themeIconPath" fill="currentColor"></path>
-        </svg>
-      </button>
-    </header>
+<div class="container">
+  <header class="header">
+    <h1 class="title">GoodWisher</h1>
+    <button id="themeToggle" class="icon-btn" title="Toggle theme">
+      <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path id="themeIconPath" fill="currentColor"></path>
+      </svg>
+    </button>
+  </header>
 
-    <main class="card">
-      <p class="sub">Choose an occasion and share a warm message instantly.</p>
+  <main class="card">
+    <p class="sub">Choose an occasion and share a warm message instantly.</p>
 
-      <label for="occasion">Occasion</label>
-      <select id="occasion">
-        <option value="" selected>Select an occasion</option>
-        <option value="birthday">Birthday</option>
-        <option value="anniversary">Anniversary</option>
-        <option value="condolence">Condolence</option>
-        <option value="congratulations">Congratulations</option>
-        <option value="get-well">Get Well Soon</option>
-        <option value="thank-you">Thank You</option>
-        <option value="good-luck">Good Luck</option>
-        <option value="appreciation">Appreciation</option>
-        <option value="farewell">Farewell</option>
-        <option value="encouragement">Encouragement</option>
-        <option value="love">Love</option>
-        <option value="vacation">Vacation</option>
-      </select>
+    <label for="occasion">Occasion</label>
+    <select id="occasion">
+      <option value="" selected>Select an occasion</option>
+      <option value="birthday">Birthday</option>
+      <option value="anniversary">Anniversary</option>
+      <option value="condolence">Condolence</option>
+      <option value="congratulations">Congratulations</option>
+      <option value="get-well">Get Well Soon</option>
+      <option value="thank-you">Thank You</option>
+      <option value="good-luck">Good Luck</option>
+      <option value="appreciation">Appreciation</option>
+      <option value="farewell">Farewell</option>
+      <option value="encouragement">Encouragement</option>
+      <option value="love">Love</option>
+      <option value="vacation">Vacation</option>
+    </select>
 
-      <div class="actions-top">
-        <button id="nextMessage" class="btn light">Next Message</button>
-        <button id="clearContent" class="btn light">Clear Content</button>
-        <button id="emojiButton" class="btn light">😊</button>
+    <div class="actions-top">
+      <button id="nextMessage" class="btn light">Next Message</button>
+      <button id="clearContent" class="btn light">Clear Content</button>
+      <button id="emojiButton" class="btn light">😊</button>
+    </div>
+
+    <textarea id="customMessage" placeholder="Your message will appear here…" rows="8"></textarea>
+
+    <div class="names-wrap">
+      <div class="name-input">
+        <label>From:</label>
+        <input id="senderName" placeholder="Your name (optional)">
       </div>
-
-      <textarea id="customMessage" placeholder="Your message will appear here…" rows="8"></textarea>
-
-      <div class="names-wrap">
-        <div class="name-input">
-          <label>From:</label>
-          <input id="senderName" placeholder="Your name (optional)">
-        </div>
-        <div class="name-input">
-          <label>To:</label>
-          <input id="recipientName" placeholder="Recipient's name (optional)">
-        </div>
-      </div>
-
-      <div class="actions">
-        <button id="copyBtn" class="btn light">Copy</button>
-        <button id="shareBtn" class="btn light">Share</button>
-        <button id="feedbackBtn" class="btn light">Feedback</button>
-      </div>
-
-      <p class="tiny">All messages are in English. Dark/Light mode supported.</p>
-    </main>
-  </div>
-
-  <!-- Feedback Modal -->
-  <div id="feedbackModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Your Feedback</h2>
-      <div class="star-percent-wrap">
-        <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
-        <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
-        <div class="star-col"><button onclick="setRating(3)" class="star">★</button><span>60%</span></div>
-        <div class="star-col"><button onclick="setRating(4)" class="star">★</button><span>80%</span></div>
-        <div class="star-col"><button onclick="setRating(5)" class="star">★</button><span>100%</span></div>
-      </div>
-      <div id="ratingScore" class="rating-score">Score: 0%</div>
-      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
-      <div class="modal-actions">
-        <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
-        <button id="submitFeedbackBtn" class="btn">Send</button>
-        <button id="viewFeedbackBtn" class="btn light">View Previous Feedback</button>
+      <div class="name-input">
+        <label>To:</label>
+        <input id="recipientName" placeholder="Recipient's name (optional)">
       </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <div class="actions">
+      <button id="copyBtn" class="btn light">Copy</button>
+      <button id="shareBtn" class="btn light">Share</button>
+      <button id="feedbackBtn" class="btn light">Feedback</button>
+    </div>
+
+    <p class="tiny">All messages are in English. Dark/Light mode supported.</p>
+  </main>
+</div>
+
+<!-- Feedback Modal -->
+<div id="feedbackModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Your Feedback</h2>
+    <div class="star-percent-wrap">
+      <div class="star-col"><button onclick="setRating(1)" class="star">★</button><span>20%</span></div>
+      <div class="star-col"><button onclick="setRating(2)" class="star">★</button><span>40%</span></div>
+      <div class="star-col"><button onclick="setRating(3)" class="star">★</button><span>60%</span></div>
+      <div class="star-col"><button onclick="setRating(4)" class="star">★</button><span>80%</span></div>
+      <div class="star-col"><button onclick="setRating(5)" class="star">★</button><span>100%</span></div>
+    </div>
+    <div id="ratingScore" class="rating-score">Score: 0%</div>
+    <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+    <div class="modal-actions">
+      <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
+      <button id="submitFeedbackBtn" class="btn">Send</button>
+      <button id="viewFeedbackBtn" class="btn light">View Previous Feedback</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
