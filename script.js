@@ -1,46 +1,16 @@
 function $(id){return document.getElementById(id);}
 let selectedRating=0;
+let currentMessageIndex=0;
+let currentOccasionMessages=[];
 
-const occasions = {
-  "birthday":["Happy Birthday! 🎉","Wishing you a fantastic birthday!","Enjoy your special day!","Many happy returns!","Celebrate with joy!","Have a blast!","Birthday hugs!","Cake & smiles!","Cheers to you!","Joyful birthday wishes!"],
-  "anniversary":["Happy Anniversary! 💕","Celebrating your love!","Wishing you many more years!","Love always!","Cheers to your journey!","Anniversary hugs!","Together forever!","Joyful love day!","Heartfelt wishes!","Love & laughter!"],
-  "get-well":["Get well soon! 🌻","Wishing you a speedy recovery!","Feel better soon!","Health & happiness!","Sending healing vibes!","Rest & recover!","Hugs & strength!","Better days ahead!","Take care!","Warm wishes!"],
-  "congrats":["Congratulations! 🏆","Well done!","Cheers to your success!","Proud of you!","Keep shining!","Amazing achievement!","You did it!","Way to go!","Celebrate your win!","Kudos!"],
-  "thank-you":["Thank you! 🙏","Much appreciated!","Thanks a ton!","Grateful for you!","Thanks sincerely!","Heartfelt thanks!","Many thanks!","Thanks kindly!","Appreciate it!","Thanks a lot!"],
-  "good-luck":["Good luck! 🍀","Wishing you success!","All the best!","May fortune favor you!","Luck & success!","You got this!","Cheering for you!","Best wishes!","Fingers crossed!","Smooth journey!"],
-  "motivation":["Keep going! 🚀","Never give up!","Believe in yourself!","You can do it!","Stay strong!","Chase your dreams!","Push forward!","Stay positive!","Keep moving!","Shine bright!"],
-  "appreciation":["You’re appreciated! 🌟","Thanks for everything!","Grateful always!","Big thanks!","Appreciate your effort!","You rock!","Much respect!","Many thanks!","Thanks sincerely!","Warm appreciation!"],
-  "farewell":["Farewell! 👋","All the best ahead!","Goodbye & good luck!","Wishing you well!","Parting wishes!","Safe journeys!","Best of luck!","Goodbye hugs!","Until next time!","Cheers & farewells!"],
-  "encouragement":["You’ve got this! 💪","Keep your head up!","Stay strong!","Believe in yourself!","Push forward!","Cheer up!","Stay motivated!","Don’t give up!","You are amazing!","Keep shining!"],
-  "love":["You make life beautiful! ❤️","Love always!","Heartfelt love!","With love!","Cherish every moment!","Endless love!","Sweet hugs!","Affection always!","Warm love!","Much love!"],
-  "condolences":["My deepest condolences. 🕊️","Thinking of you","Sending sympathy","Heartfelt condolences","With sympathy","Peace & comfort","In thoughts with you","Warm condolences","Sincere sympathy","Comfort & prayers"],
-  "vacation":["Enjoy your vacation! 🌴","Relax & unwind!","Have fun!","Safe travels!","Enjoy every moment!","Happy holidays!","Beach vibes!","Adventure awaits!","Travel safely!","Wonderful break!"]
-};
-
-const emojiSets = {
-  "birthday":["🎂","🎉","🥳","🎈","🍰"],
-  "anniversary":["💖","💑","💞","🥂","💕"],
-  "get-well":["🌻","🌿","💊","🩹","🌸"],
-  "congrats":["🏆","🎯","🎉","🥳","👏"],
-  "thank-you":["🙏","🤝","💐","😊","🌹"],
-  "good-luck":["🍀","🤞","🌟","💫","🎯"],
-  "motivation":["🚀","💪","🔥","🌟","🌈"],
-  "appreciation":["🌟","👏","💖","🎖️","🙏"],
-  "farewell":["👋","✈️","💌","🎁","💐"],
-  "encouragement":["💪","🌈","🌟","🔥","😊"],
-  "love":["❤️","💌","💞","🌹","💖"],
-  "condolences":["🕊️","🌹","🙏","💐","🕯️"],
-  "vacation":["🌴","🏖️","☀️","✈️","🏝️"],
-  "generic":["😊","🌟","👍","💖","✨"]
-};
-
-let currentMessageIndex = 0;
-
-// THEME
+/* THEME */
 function setThemeIcon(){
   const p=$('themeIconPath');
   const isDark=document.body.dataset.theme==='dark';
-  p.setAttribute('d',isDark?'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z':'M12 2a10 10 0 100 20 10 10 0 000-20z');
+  p.setAttribute('d',isDark
+    ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z'
+    : 'M12 2a10 10 0 100 20 10 10 0 000-20z'
+  );
 }
 function toggleTheme(){
   const body=document.body;
@@ -50,40 +20,158 @@ function toggleTheme(){
   setThemeIcon();
 }
 window.addEventListener('DOMContentLoaded',()=>{
-  document.body.dataset.theme = localStorage.getItem('theme')||'light';
+  const saved=localStorage.getItem('theme')||'light';
+  document.body.dataset.theme=saved;
   setThemeIcon();
   $('themeToggle').addEventListener('click',toggleTheme);
 
-  $('emojiButton').addEventListener('click',showEmojiPicker);
-  $('clearContent').addEventListener('click',clearContent);
-  displayMessage();
+  $('nextMessage').addEventListener('click', displayNextMessage);
+  $('clearContent').addEventListener('click', ()=>{$('customMessage').value='';});
+  $('emojiButton').addEventListener('click', showEmojiPicker);
 });
 
-// MESSAGE
+/* MESSAGES */
+const messagesData = {
+  birthday: {
+    en: [
+      "Happy Birthday! 🎉","Wishing you a fantastic birthday! 🥳","Hope your birthday is full of joy! 🎂",
+      "Many happy returns of the day! 🎈","Celebrate your special day! 🎊","Cheers to another year! 🍰",
+      "Happy B-day! 🎁","May your birthday be amazing! 🌟","Have a wonderful birthday! 🎉","Birthday hugs and smiles! 😊"
+    ],
+    es: [
+      "¡Feliz cumpleaños! 🎉","¡Te deseo un cumpleaños fantástico! 🥳","¡Espero que tu cumpleaños esté lleno de alegría! 🎂",
+      "¡Muchas felicidades en tu día! 🎈","¡Celebra tu día especial! 🎊","¡Salud por otro año! 🍰",
+      "¡Feliz cumple! 🎁","¡Que tu cumpleaños sea increíble! 🌟","¡Ten un cumpleaños maravilloso! 🎉","¡Abrazos y sonrisas en tu cumpleaños! 😊"
+    ],
+    zh: [
+      "生日快乐！🎉","祝你生日愉快！🥳","希望你的生日充满快乐！🎂",
+      "祝你生日快乐！🎈","庆祝你的特别日子！🎊","为新的一年干杯！🍰",
+      "生日快乐！🎁","愿你的生日精彩！🌟","祝你有个美好的生日！🎉","生日拥抱和微笑！😊"
+    ],
+    hi: [
+      "जन्मदिन मुबारक हो! 🎉","आपको शानदार जन्मदिन की शुभकामनाएँ! 🥳","आशा है आपका जन्मदिन खुशी से भरा हो! 🎂",
+      "आपको जन्मदिन की बहुत बधाई! 🎈","अपने खास दिन को सेलिब्रेट करें! 🎊","एक और साल के लिए चीयर्स! 🍰",
+      "हैप्पी बर्थडे! 🎁","आपका जन्मदिन अद्भुत हो! 🌟","शानदार जन्मदिन की शुभकामनाएँ! 🎉","जन्मदिन की हँसी और मुस्कान! 😊"
+    ],
+    af: [
+      "Gelukkige Verjaarsdag! 🎉","Ek wens jou 'n fantastiese verjaarsdag toe! 🥳","Hoop jou verjaarsdag is vol vreugde! 🎂",
+      "Baie geluk met jou dag! 🎈","Vier jou spesiale dag! 🎊","Cheers op nog 'n jaar! 🍰",
+      "Gelukkige B-dag! 🎁","Mag jou verjaarsdag wonderlik wees! 🌟","Geniet jou verjaarsdag! 🎉","Verjaarsdag drukkies en glimlagte! 😊"
+    ]
+  },
+  // ... add similar structure for all 13 occasions
+};
+
+const emojiSets = {
+  birthday: ["🎉","🎂","🥳","🎈","🎁"],
+  anniversary: ["💖","🥂","🌹","💑","💕"],
+  "get-well": ["🌻","💊","🤗","🛌","💙"],
+  congrats: ["🏆","🎉","👏","🥳","🌟"],
+  "thank-you": ["🙏","🤝","💛","🌸","💐"],
+  "good-luck": ["🍀","🤞","✨","🎯","🌟"],
+  motivation: ["🚀","💪","🔥","🌟","🏋️"],
+  appreciation: ["🌟","👏","💐","❤️","💖"],
+  farewell: ["👋","✈️","💌","🌅","💛"],
+  encouragement: ["💪","🌈","🤗","🔥","⭐"],
+  love: ["❤️","💌","💕","🥰","💖"],
+  condolences: ["🕊️","💙","🙏","🌹","🕯️"],
+  vacation: ["🌴","☀️","🏖️","✈️","🍹"]
+};
+
 function displayMessage(){
-  const occ=$('occasion').value;
-  if(!occ){$('customMessage').value=''; return;}
-  const msgs = occasions[occ];
-  currentMessageIndex = Math.floor(Math.random()*msgs.length);
-  $('customMessage').value = msgs[currentMessageIndex];
+  const occ = $('occasion').value;
+  const lang = $('language').value;
+  if(!occ) return;
+  currentOccasionMessages = messagesData[occ][lang] || messagesData[occ]['en'];
+  currentMessageIndex = 0;
+  $('customMessage').value = currentOccasionMessages[currentMessageIndex];
+  updateMessageWithName();
 }
 
-function nextMessage(){
-  const occ=$('occasion').value;
-  if(!occ)return;
-  const msgs = occasions[occ];
-  currentMessageIndex = (currentMessageIndex + 1) % msgs.length;
-  $('customMessage').value = msgs[currentMessageIndex];
+function displayNextMessage(){
+  if(!currentOccasionMessages.length) return;
+  currentMessageIndex = (currentMessageIndex+1)%currentOccasionMessages.length;
+  $('customMessage').value = currentOccasionMessages[currentMessageIndex];
+  updateMessageWithName();
 }
 
 function updateMessageWithName(){
   const r=$('recipientName').value.trim();
   const s=$('senderName').value.trim();
-  let msg = $('customMessage').value.split('\n')[0]; // keep only main message
-  if(r) msg = `Hi ${r},\n\n${msg}`;
-  if(s) msg = `${msg}\n\nFrom,\n${s}`;
-  $('customMessage').value = msg;
+  let msg=$('customMessage').value.split('\n')[0]; // remove previous signature
+  let full=msg;
+  if(r) full=`Hi ${r},\n\n${msg}`;
+  if(s) full=`${full}\n\nRegards\n${s}`;
+  $('customMessage').value=full;
 }
 
-function clearContent(){ $('customMessage').value = ''; }
-function clearSender(){ $('senderName').value=''; update
+function clearRecipient(){ $('recipientName').value=''; updateMessageWithName(); }
+function clearSender(){ $('senderName').value=''; updateMessageWithName(); }
+
+/* COPY */
+function copyMessage(){
+  const text=$('customMessage').value;
+  if(!text) return alert('No message!');
+  navigator.clipboard.writeText(text);
+  alert('Copied!');
+}
+
+/* FEEDBACK */
+function openFeedbackModal(){$('feedbackModal').classList.remove('hidden');}
+function closeFeedbackModal(){
+  $('feedbackModal').classList.add('hidden');
+  $('feedbackText').value='';
+  selectedRating=0;
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected'));
+  $('ratingScore').textContent='Score: 0%';
+}
+function setRating(r){
+  selectedRating=r;
+  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected',i<r));
+  $('ratingScore').textContent=`Score: ${r*20}%`;
+}
+function submitFeedback(){
+  const fb=$('feedbackText').value.trim();
+  if(!fb && selectedRating===0) return alert('Please rate or comment!');
+  alert(`Thanks for rating ${selectedRating}/5 (${selectedRating*20}%)!`);
+  closeFeedbackModal();
+}
+
+/* SHARE */
+function openShareModal(){ $('shareModal').classList.remove('hidden'); }
+function closeShareModal(){ $('shareModal').classList.add('hidden'); }
+
+function shareWhatsApp(){ shareWithURL(`https://wa.me/?text=${encodeURIComponent(getMessage())}`); }
+function shareFacebook(){ 
+  const url=encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/');
+  shareWithURL(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(getMessage())}`);
+}
+function shareTwitter(){ shareWithURL(`https://x.com/intent/tweet?text=${encodeURIComponent(getMessage())}`); }
+function shareTelegram(){ shareWithURL(`https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(getMessage())}`); }
+function shareEmail(){ 
+  const subject=encodeURIComponent('A Special Message from GoodWisher');
+  const body=encodeURIComponent(getMessage().replace(/\n/g,'%0A'));
+  window.location.href=`mailto:?subject=${subject}&body=${body}`;
+}
+function shareDevice(){
+  if(navigator.share){
+    navigator.share({text:getMessage()}).catch(()=>{});
+  } else {
+    alert('Share not supported on this device.');
+  }
+}
+function shareWithURL(url){ window.open(url,'_blank'); closeShareModal(); }
+
+function getMessage(){
+  const text=$('customMessage').value.trim();
+  if(!text) return '';
+  return text; // signature already appended
+}
+
+/* EMOJI */
+function showEmojiPicker(){
+  const occ = $('occasion').value;
+  let emojis = occ && emojiSets[occ] ? emojiSets[occ] : ["😊","👍","💖","🌟","🎉"];
+  const chosen = prompt(`Choose emoji:\n${emojis.join(' ')}`);
+  if(chosen) $('customMessage').value += ' ' + chosen;
+}
