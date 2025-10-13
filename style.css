@@ -27,6 +27,8 @@ body {
   transition: 0.3s;
 }
 
+ bod | truncated>
+
 .container { max-width: 720px; margin: auto; }
 
 .header {
@@ -120,6 +122,20 @@ textarea {
   cursor: pointer;
   color: var(--muted);
 }
+
+.phone-input {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.phone-input input {
+  width: 100%;
+  padding-right: 28px;
+  font-size: 0.95rem;
+}
+.phone-input .clear-btn {
+  position: absolute;
+  right  | truncated>
 
 .modal {
   position: fixed;
