@@ -1,375 +1,220 @@
-// Shortcut for getElementById
-function $(id){return document.getElementById(id);}
-let selectedRating=0;
-
-// THEME TOGGLE
-function setThemeIcon(){
-  const p=$('themeIconPath');
-  const isDark=document.body.dataset.theme==='dark';
-  p.setAttribute('d',isDark
-    ? 'M21.64 13a9 9 0 11-9-9c0 4.97 4.03 9 9 9z'
-    : 'M12 2a10 10 0 100 20 10 10 0 000-20z'
-  );
-}
-function toggleTheme(){
-  const body=document.body;
-  const newTheme=body.dataset.theme==='dark'?'light':'dark';
-  body.dataset.theme=newTheme;
-  localStorage.setItem('theme',newTheme);
-  setThemeIcon();
-}
-window.addEventListener('DOMContentLoaded',()=>{
-  const saved=localStorage.getItem('theme')||'light';
-  document.body.dataset.theme=saved;
-  setThemeIcon();
-  $('themeToggle').addEventListener('click',toggleTheme);
-});
-
-// =======================
-// MULTILINGUAL MESSAGES
-// =======================
 const messages = {
   en: {
+    condolences: [
+      "I'm so sorry for your loss.",
+      "My deepest condolences to you and your family.",
+      "You are in my thoughts and prayers.",
+      "May the soul of your loved one rest in peace.",
+      "Wishing you strength and comfort during this difficult time.",
+      "Please accept my heartfelt sympathies.",
+      "I am here for you during this time of sorrow.",
+      "May you find peace and solace in the memories you shared.",
+      "Sending you love and support.",
+      "May the love of those around you help you through the days ahead."
+    ],
     birthday: [
-      "Happy Birthday! 🎉 Wishing you a day full of love, laughter, and happiness.",
-      "May your birthday be as amazing as you are! 🎂",
-      "Another year older, wiser, and even more fabulous! 🥳",
-      "Cheers to you on your special day! 🎈",
-      "Happy Birthday! Celebrate with joy and lots of cake! 🍰",
-      "Wishing you a birthday filled with hugs and smiles! 🤗",
-      "May your birthday bring you endless happiness! 😄",
-      "Celebrate your day with love and laughter! 💖",
-      "Wishing you a bright and wonderful year ahead! ✨",
-      "Happy Birthday! Hope your day is truly unforgettable! 🌟"
+      "Wishing you a day filled with love and happiness.",
+      "May this year bring you joy and success.",
+      "Happy Birthday! Enjoy your special day.",
+      "Wishing you all the best on your birthday.",
+      "May your birthday be the start of a year filled with good luck, good health, and much happiness.",
+      "Have a wonderful birthday celebration.",
+      "Cheers to you and your accomplishments.",
+      "Here's to another year of great adventures.",
+      "May your birthday be as amazing as you are.",
+      "Wishing you a day as special as you are."
+    ],
+    wedding: [
+      "Congratulations on your wedding day.",
+      "Wishing you a lifetime of love and happiness.",
+      "May your marriage be filled with joy and laughter.",
+      "Here's to love, laughter, and happily ever after.",
+      "May your union be blessed with love and prosperity.",
+      "Wishing you both a wonderful journey as you build your new lives together.",
+      "May the years ahead be filled with lasting joy.",
+      "Congratulations on finding each other.",
+      "Wishing you a lifetime of love and happiness.",
+      "Here's to a beautiful future together."
     ],
     anniversary: [
-      "Happy Anniversary! 💕 Wishing you many more years of love and happiness.",
-      "Cheers to another year of togetherness! 🥂",
-      "May your bond grow stronger with each passing year! ❤️",
-      "Happy Anniversary! Celebrating your love today and always! 💖",
-      "Sending warm wishes for a lifetime of happiness together! 💘",
-      "Another year of wonderful memories! 💝",
-      "Happy Anniversary! Love and joy always surround you! 💑",
-      "Celebrating the beautiful journey of your love! 🌹",
-      "Wishing you endless love and laughter! 💕",
-      "May your love story continue to shine brightly! ✨"
+      "Happy Anniversary! Wishing you many more years of happiness.",
+      "May your love continue to grow each and every year.",
+      "Here's to celebrating your love and commitment.",
+      "Wishing you a lifetime of love and happiness.",
+      "May your anniversary be filled with love and joy.",
+      "Cheers to another year of wonderful memories.",
+      "Wishing you both a lifetime of happiness together.",
+      "May your love story continue to inspire others.",
+      "Here's to many more years of love and laughter.",
+      "Happy Anniversary to a wonderful couple."
     ],
-    "get-well": [
-      "Wishing you a speedy recovery! 🌻 Take care and get well soon.",
-      "Sending healing thoughts your way! 💊",
-      "Get well soon! Your health is our priority. 🛌",
-      "May each day bring you strength and comfort. 🤕",
-      "Feel better soon! Thinking of you. 🌼",
-      "Sending positive vibes for your recovery. 🌟",
-      "Get well soon! Hope to see you smiling again. 😊",
-      "Take your time to rest and heal. 💛",
-      "Wishing you comfort and peace during your recovery. 🌸",
-      "Hope you feel stronger and better each day! 💪"
+    graduation: [
+      "Congratulations on your graduation!",
+      "Wishing you success in all your future endeavors.",
+      "May your hard work and dedication lead you to great achievements.",
+      "Here's to new beginnings and exciting opportunities.",
+      "Wishing you all the best as you embark on this new chapter.",
+      "May your dreams take you to the highest of heights.",
+      "Congratulations on reaching this significant milestone.",
+      "Wishing you a future filled with success and happiness.",
+      "May you continue to achieve great things.",
+      "Here's to your bright future ahead."
     ],
-    congrats: [
-      "Congratulations on your amazing achievement! 🏆",
-      "Well done! Your hard work paid off! 🎖️",
-      "Hats off to your success! 🎊",
-      "Cheers to your accomplishment! 🥂",
-      "You did it! So proud of you! 👏",
-      "Congratulations! Wishing you continued success! 🌟",
-      "Your dedication has truly paid off! 💐",
-      "Celebrate your success! 🎉",
-      "Amazing job! Keep reaching for the stars! ✨",
-      "Congrats! This is just the beginning of your success! 🚀"
+    baby: [
+      "Congratulations on the arrival of your little one!",
+      "Wishing your family lots of love and happiness.",
+      "May your baby bring you endless joy and laughter.",
+      "Here's to new beginnings and beautiful moments.",
+      "Wishing you all the best as you welcome your new bundle of joy.",
+      "May your baby be blessed with health and happiness.",
+      "Congratulations on your growing family.",
+      "Wishing you a lifetime of love and happiness with your new baby.",
+      "May your home be filled with love and joy.",
+      "Here's to a future filled with beautiful moments."
     ],
-    "thank-you": [
-      "Thank you for your kindness and support! 🙏",
-      "Grateful for everything you do! 💌",
-      "Thanks for being such an amazing person! 🤝",
-      "I truly appreciate your help and generosity! 🌸",
-      "Thank you for making a difference! 💖",
-      "Sending heartfelt thanks your way! 💛",
-      "Thanks a lot for your support and care! 🌟",
-      "I appreciate your efforts more than words can say! 💐",
-      "Thank you for always being there for me! 🤗",
-      "Grateful for your kindness and thoughtfulness! 💝"
+    housewarming: [
+      "Congratulations on your new home!",
+      "Wishing you many years of happiness and comfort in your new space.",
+      "May your new home be filled with love and laughter.",
+      "Here's to new beginnings and wonderful memories.",
+      "Wishing you all the best as you settle into your new home.",
+      "May your new home be a place of peace and happiness.",
+      "Congratulations on this exciting new chapter.",
+      "Wishing you a lifetime of happiness in your new home.",
+      "May your new home be filled with warmth and joy.",
+      "Here's to creating beautiful memories in your new space."
     ],
-    "good-luck": [
-      "Good luck on your journey! 🍀 Wishing you all the best.",
-      "May fortune favor you in everything you do! ⭐",
-      "Wishing you success and happiness! 🎯",
-      "Good luck! You’ve got this! 💪",
-      "All the best for your upcoming endeavors! ✨",
-      "May luck and success be always with you! 🌟",
-      "Sending you positive vibes and good fortune! 🍀",
-      "Wishing you the best of luck today and always! 🌈",
-      "Go for it! Luck is on your side! 💫",
-      "Good luck! Make your dreams come true! 🚀"
+    newJob: [
+      "Congratulations on your new job!",
+      "Wishing you success and fulfillment in your new role.",
+      "May this new opportunity bring you growth and happiness.",
+      "Here's to new challenges and exciting adventures.",
+      "Wishing you all the best as you start this new chapter.",
+      "May your new job be everything you've hoped for and more.",
+      "Congratulations on this exciting new opportunity.",
+      "Wishing you success and happiness in your new position.",
+      "May this new job bring you joy and satisfaction.",
+      "Here's to a bright future ahead."
     ],
-    motivation: [
-      "Keep going — you can do this! 🚀",
-      "Believe in yourself and all that you are! 💪",
-      "Every step counts — stay motivated! ✨",
-      "Push forward, success is near! 🌟",
-      "Stay focused and never give up! 💥",
-      "Your hard work will pay off! 🔥",
-      "Keep striving for your dreams! 🌈",
-      "Believe, achieve, and succeed! 💫",
-      "Stay positive and keep moving forward! 🌻",
-      "You have the power to make it happen! 💪"
+    retirement: [
+      "Congratulations on your retirement!",
+      "Wishing you a relaxing and fulfilling retirement.",
+      "May this new chapter be filled with joy and adventure.",
+      "Here's to enjoying the fruits of your labor.",
+      "Wishing you all the best as you embark on this new journey.",
+      "May your retirement be everything you've dreamed of.",
+      "Congratulations on reaching this significant milestone.",
+      "Wishing you a retirement filled with happiness and relaxation.",
+      "May you find joy in every new day.",
+      "Here's to a well-deserved and enjoyable retirement."
     ],
-    appreciation: [
-      "You’re appreciated more than you know! 🌟",
-      "Thank you for all that you do! 💐",
-      "Your efforts do not go unnoticed! 🙌",
-      "I truly value everything you contribute! 🌸",
-      "Sending gratitude your way! 💖",
-      "You make a positive difference! 🌈",
-      "Appreciating all your hard work and dedication! 💪",
-      "Thank you for your time and effort! 💛",
-      "Your support is deeply appreciated! 🤗",
-      "Grateful for your commitment and care! 💝"
+    engagement: [
+      "Congratulations on your engagement!",
+      "Wishing you both a lifetime of love and happiness.",
+      "May your engagement be the beginning of a beautiful journey.",
+      "Here's to love, laughter, and a lifetime of happiness.",
+      "Wishing you all the best as you plan your future together.",
+      "May your engagement be filled with joy and excitement.",
+      "Congratulations on finding each other.",
+      "Wishing you both a wonderful journey ahead.",
+      "May your love continue to grow and flourish.",
+      "Here's to a beautiful future together."
     ],
-    farewell: [
-      "Wishing you the best in your next adventure! 👋",
-      "Farewell! May your future be bright and successful! 🌟",
-      "Goodbye and good luck on your journey! ✈️",
-      "Sending warm wishes as you move on! 💌",
-      "Farewell! Hoping your new path brings happiness! 🌼",
-      "Best wishes for the exciting times ahead! 🎉",
-      "Goodbye! Keep shining wherever you go! ✨",
-      "Wishing you success in all your endeavors! 💐",
-      "Farewell and take care! 🌈",
-      "Wishing you joy and growth in your next chapter! 🌹"
+    sympathy: [
+      "I'm so sorry for your loss.",
+      "My deepest condolences to you and your family.",
+      "You are in my thoughts and prayers.",
+      "May the soul of your loved one rest in peace.",
+      "Wishing you strength and comfort during this difficult time.",
+      "Please accept my heartfelt sympathies.",
+      "I am here for you during this time of sorrow.",
+      "May you find peace and solace in the memories you shared.",
+      "Sending you love and support.",
+      "May the love of those around you help you through the days ahead."
     ],
-    encouragement: [
-      "You’ve got this! 💪 Keep going!",
-      "Believe in yourself and keep pushing forward! 🌟",
-      "Stay strong and never give up! 💥",
-      "Your determination will lead you to success! 🚀",
-      "Keep your head up and keep moving! 🌈",
-      "Stay focused and positive! ✨",
-      "You can overcome any challenge! 💪",
-      "Believe, act, and achieve! 🌻",
-      "Keep striving! The best is yet to come! 💖",
-      "Don’t give up — you are capable of amazing things! 🌟"
-    ],
-    love: [
-      "You make life beautiful! ❤️",
-      "Sending love and warmth your way! 💖",
-      "You are cherished and adored! 💘",
-      "My heart is always with you! 💕",
-      "Love you endlessly! 💝",
-      "You bring joy to my life! 🌹",
-      "Forever yours! 💌",
-      "With all my love and affection! 💞",
-      "You are my everything! ❤️",
-      "Love always surrounds us! 💖"
-    ],
-    condolences: [
-      "Sending heartfelt condolences in this time of loss. 🕊️",
-      "May your memories bring you comfort and peace. 🌹",
-      "Thinking of you and your family during this difficult time. 💛",
-      "My deepest sympathy to you and your loved ones. 🖤",
-      "Wishing you strength and comfort in the days ahead. 🌸",
-      "Holding you close in my thoughts. 🤍",
-      "May you find solace in the love around you. 🌼",
-      "Sharing in your sorrow and sending support. 💌",
-      "Sending prayers and condolences to you. 🙏",
-      "May peace and comfort find you during this time. 🕊️"
-    ],
-    vacation: [
-      "Enjoy your well-deserved vacation! 🌴",
-      "Relax and soak up the sun! ☀️",
-      "Wishing you fun and adventure on your trip! 🏖️",
-      "Have a fantastic holiday! ✈️",
-      "Enjoy every moment of your getaway! 🌺",
-      "Time to unwind and recharge! 🌊",
-      "Have a memorable vacation full of joy! 🏝️",
-      "Sending travel wishes and sunshine! 🌞",
-      "Relax, explore, and enjoy your break! 🌴",
-      "Safe travels and happy adventures! ✈️"
+    thankYou: [
+      "Thank you for your kindness and support.",
+      "I appreciate everything you've done for me.",
+      "Your generosity means the world to me.",
+      "Thank you for being there when I needed you.",
+      "I am so grateful for your help and support.",
+      "Thank you for your thoughtful gesture.",
+      "Your kindness has made a difference in my life.",
+      "I appreciate your time and effort.",
+      "Thank you for your understanding and patience.",
+      "I am truly thankful for your support."
     ]
   },
-  // =================================
-  // Spanish
   es: {
+    condolences: [
+      "Lo siento mucho por tu pérdida.",
+      "Mis más profundas condolencias para ti y tu familia.",
+      "Estás en mis pensamientos y oraciones.",
+      "Que el alma de tu ser querido descanse en paz.",
+      "Te deseo fuerza y consuelo en este momento difícil.",
+      "Por favor acepta mis más sinceras condolencias.",
+      "Estoy aquí para ti en este momento de dolor.",
+      "Que encuentres paz y consuelo en los recuerdos compartidos.",
+      "Te envío amor y apoyo.",
+      "Que el amor de los que te rodean te ayude en los días venideros."
+    ],
     birthday: [
-      "¡Feliz cumpleaños! 🎉 Que tengas un día lleno de amor, risas y felicidad.",
-      "¡Que tu cumpleaños sea tan increíble como tú! 🎂",
-      "¡Un año más, más sabio y más fabuloso! 🥳",
-      "¡Salud por ti en tu día especial! 🎈",
-      "¡Feliz cumpleaños! ¡Celebra con alegría y mucho pastel! 🍰",
-      "Deseándote un cumpleaños lleno de abrazos y sonrisas! 🤗",
-      "¡Que tu cumpleaños te traiga felicidad sin fin! 😄",
-      "¡Celebra tu día con amor y risas! 💖",
-      "Deseándote un año brillante y maravilloso por delante! ✨",
-      "¡Feliz cumpleaños! ¡Espero que tu día sea inolvidable! 🌟"
+      "Te deseo un día lleno de amor y felicidad.",
+      "Que este año te traiga alegría y éxito.",
+      "¡Feliz cumpleaños! Disfruta de tu día especial.",
+      "Te deseo lo mejor en tu cumpleaños.",
+      "Que tu cumpleaños sea el comienzo de un año lleno de suerte, buena salud y mucha felicidad.",
+      "Que tengas una maravillosa celebración de cumpleaños.",
+      "Salud por ti y tus logros.",
+      "Aquí está otro año de grandes aventuras.",
+      "Que tu cumpleaños sea tan increíble como tú.",
+      "Te deseo un día tan especial como tú."
+    ],
+    wedding: [
+      "Felicidades en tu día de boda.",
+      "Te deseo una vida llena de amor y felicidad.",
+      "Que tu matrimonio esté lleno de alegría y risas.",
+      "Aquí está el amor, la risa y el felices para siempre.",
+      "Que tu unión esté bendecida con amor y prosperidad.",
+      "Te deseo a ambos un maravilloso viaje mientras construyen sus nuevas vidas juntos.",
+      "Que los años venideros estén llenos de alegría duradera.",
+      "Felicidades por haberse encontrado el uno al otro.",
+      "Te deseo una vida llena de amor y felicidad.",
+      "Aquí está un hermoso futuro juntos."
     ],
     anniversary: [
-      "¡Feliz aniversario! 💕 Que tengas muchos años más de amor y felicidad.",
-      "¡Salud por otro año juntos! 🥂",
-      "¡Que su vínculo se fortalezca con cada año que pasa! ❤️",
-      "¡Feliz aniversario! ¡Celebrando tu amor hoy y siempre! 💖",
-      "¡Enviando cálidos deseos para una vida de felicidad juntos! 💘",
-      "¡Otro año de recuerdos maravillosos! 💝",
-      "¡Feliz aniversario! ¡El amor y la alegría siempre te rodeen! 💑",
-      "¡Celebrando el hermoso viaje de su amor! 🌹",
-      "¡Deseándote amor y risas infinitas! 💕",
-      "¡Que tu historia de amor continúe brillando! ✨"
+      "¡Feliz aniversario! Te deseo muchos más años de felicidad.",
+      "Que tu amor continúe creciendo cada año.",
+      "Aquí está celebrando tu amor y compromiso.",
+      "Te deseo una vida llena de amor y felicidad.",
+      "Que tu aniversario esté lleno de amor y alegría.",
+      "Salud por otro año de recuerdos maravillosos.",
+      "Te deseo a ambos una vida llena de felicidad juntos.",
+      "Que tu historia de amor continúe inspirando a otros.",
+      "Aquí está muchos más años de amor y risas.",
+      "Feliz aniversario a una pareja maravillosa."
     ],
-    "get-well": [
-      "¡Deseándote una pronta recuperación! 🌻 Cuídate y mejora pronto.",
-      "¡Enviando pensamientos de sanación! 💊",
-      "¡Mejórate pronto! Tu salud es nuestra prioridad. 🛌",
-      "Que cada día te traiga fuerza y confort. 🤕",
-      "¡Siéntete mejor pronto! Pensando en ti. 🌼",
-      "Enviando vibras positivas para tu recuperación. 🌟",
-      "¡Mejórate pronto! Espero verte sonreír otra vez. 😊",
-      "Tómate tu tiempo para descansar y sanar. 💛",
-      "Deseándote confort y paz durante tu recuperación. 🌸",
-      "¡Espero que te sientas más fuerte y mejor cada día! 💪"
+    graduation: [
+      "¡Felicidades en tu graduación!",
+      "Te deseo éxito en todos tus futuros esfuerzos.",
+      "Que tu arduo trabajo y dedicación te lleven a grandes logros.",
+      "Aquí está nuevos comienzos y emocionantes oportunidades.",
+      "Te deseo lo mejor mientras comienzas este nuevo capítulo.",
+      "Que tus sueños te lleven a las alturas más altas.",
+      "Felicidades por alcanzar este hito significativo.",
+      "Te deseo un futuro lleno de éxito y felicidad.",
+      "Que continúes logrando grandes cosas.",
+      "Aquí está tu brillante futuro por delante."
     ],
-    // ... and so on for all occasions
-  },
+    baby: [
+      "¡Felicidades por la llegada de tu pequeño!",
+      "Te deseo a tu familia mucho amor y felicidad.",
+      "Que tu bebé te traiga alegría y risas interminables.",
+      "Aquí está nuevos comienzos y momentos hermosos.",
+      "Te deseo lo mejor mientras recibes tu nuevo paquete de alegría.",
+      "Que tu bebé sea bendecido con salud y felicidad.",
+      "Felicidades por tu familia en crecimiento.",
+      "Te deseo una vida llena de amor y felicidad con tu nuevo bebé.",
 
-  // =================================
-  // Mandarin
-  zh: {
-    birthday: [
-      "生日快乐！🎉 祝你充满爱、欢笑和幸福的一天。",
-      "愿你的生日和你一样精彩！🎂",
-      "又长一岁，更聪明、更棒！🥳",
-      "祝你在特别的日子里开心！🎈",
-      "生日快乐！尽情庆祝，享受蛋糕！🍰",
-      "祝你生日充满拥抱和笑容！🤗",
-      "愿你的生日带来无尽的快乐！😄",
-      "用爱和笑声庆祝你的一天！💖",
-      "祝你未来一年光明而美好！✨",
-      "生日快乐！希望你度过难忘的一天！🌟"
-    ],
-    // ... all other occasions similarly translated
-  },
-
-  // =================================
-  // Hindi
-  hi: {
-    birthday: [
-      "जन्मदिन मुबारक हो! 🎉 आपका दिन प्यार, हंसी और खुशियों से भरा हो।",
-      "आपका जन्मदिन आपके जितना ही अद्भुत हो! 🎂",
-      "एक साल बड़ा, समझदार और और भी शानदार! 🥳",
-      "आपके विशेष दिन पर Cheers! 🎈",
-      "जन्मदिन मुबारक! आनंद और केक के साथ जश्न मनाएँ! 🍰",
-      "आपका जन्मदिन गले और मुस्कानों से भरा हो! 🤗",
-      "आपका जन्मदिन असीम खुशी लाए! 😄",
-      "प्यार और हंसी के साथ अपने दिन का जश्न मनाएँ! 💖",
-      "आगामी वर्ष उज्ज्वल और अद्भुत हो! ✨",
-      "जन्मदिन मुबारक! आशा है आपका दिन अविस्मरणीय हो! 🌟"
-    ],
-    // ... other occasions
-  },
-
-  // =================================
-  // Afrikaans
-  af: {
-    birthday: [
-      "Gelukkige verjaarsdag! 🎉 Ek wens jou 'n dag vol liefde, lag en geluk toe.",
-      "Mag jou verjaarsdag so ongelooflik wees soos jy! 🎂",
-      "Nog 'n jaar ouer, wyser en selfs meer fantasties! 🥳",
-      "Gesondheid op jou spesiale dag! 🎈",
-      "Gelukkige verjaarsdag! Vier met vreugde en baie koek! 🍰",
-      "Ek wens jou 'n verjaarsdag vol drukkies en glimlagte toe! 🤗",
-      "Mag jou verjaarsdag eindelose geluk bring! 😄",
-      "Vier jou dag met liefde en lag! 💖",
-      "Ek wens jou 'n helder en wonderlike jaar vorentoe toe! ✨",
-      "Gelukkige verjaarsdag! Hoop jou dag is onvergeetlik! 🌟"
-    ],
-    // ... other occasions
-  }
-};
-
-// =======================
-// GLOBAL VARIABLES
-// =======================
-let currentOccasion = "";
-let currentLanguage = "en";
-let currentIndex = 0;
-
-// =======================
-// DISPLAY MESSAGE
-// =======================
-function displayMessage() {
-  const occ = $('occasion').value;
-  currentOccasion = occ;
-  const msgs = messages[currentLanguage][occ] || ["Best wishes!"];
-  currentIndex = Math.floor(Math.random() * msgs.length);
-  const msg = msgs[currentIndex];
-  $('message').textContent = msg;
-  updateCustomMessage(msg);
-}
-
-// NEXT RANDOM MESSAGE
-function nextMessage() {
-  const msgs = messages[currentLanguage][currentOccasion];
-  if(!msgs) return;
-  currentIndex = (currentIndex + 1) % msgs.length;
-  const msg = msgs[currentIndex];
-  $('message').textContent = msg;
-  updateCustomMessage(msg);
-}
-
-// UPDATE TEXTAREA WITH NAME + SIGNATURE
-function updateCustomMessage(msg) {
-  const r=$('recipientName').value.trim();
-  const s=$('senderName').value.trim();
-  let full = msg;
-  if(r) full = `Hi ${r},\n\n${full}`;
-  if(s) full = `${full}\n\nRegards\n${s}`;
-  // add signature only if sender filled
-  $('customMessage').value = full;
-}
-
-// =======================
-// COPY MESSAGE
-// =======================
-function copyMessage(){
-  const text=$('customMessage').value;
-  if(!text) return alert('No message!');
-  navigator.clipboard.writeText(text);
-  alert('Copied!');
-}
-
-// =======================
-// FEEDBACK MODAL
-// =======================
-function openFeedbackModal(){$('feedbackModal').classList.remove('hidden');}
-function closeFeedbackModal(){
-  $('feedbackModal').classList.add('hidden');
-  $('feedbackText').value='';
-  selectedRating=0;
-  document.querySelectorAll('.star').forEach(s=>s.classList.remove('selected'));
-  $('ratingScore').textContent='Score: 0%';
-}
-function setRating(r){
-  selectedRating=r;
-  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('selected',i<r));
-  $('ratingScore').textContent=`Score: ${r*20}%`;
-}
-function submitFeedback(){
-  const fb=$('feedbackText').value.trim();
-  if(!fb&&selectedRating===0)return alert('Please rate or comment!');
-  alert(`Thanks for rating ${selectedRating}/5 (${selectedRating*20}%)!`);
-  closeFeedbackModal();
-}
-
-// =======================
-// SHARE MODAL
-// =======================
-function openShareModal(){ $('shareModal').classList.remove('hidden'); }
-function closeShareModal(){ $('shareModal').classList.add('hidden'); }
-
-function getMessageWithPromo(){
-  const text=$('customMessage').value.trim();
-  if(!text){alert('Please generate a message first!');return '';}
-  return text + `\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
-}
-
-function shareWhatsApp(){
-  const msg=getMessageWithPromo(); if(!msg)return;
-  window.open(`https://wa.me/?text
+::contentReference[oaicite:0]{index=0}
+ 
