@@ -28,6 +28,7 @@ body {
 }
 
 .container { max-width: 720px; margin: auto; }
+
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .title { color: var(--accent); font-size: 1.4rem; }
 .icon-btn { background: none; border: none; cursor: pointer; color: var(--muted); }
@@ -38,41 +39,23 @@ body {
   border-radius: 12px;
   padding: 14px;
 }
+
 .sub { text-align: center; color: var(--muted); }
+
+label { display: block; margin-top: 10px; margin-bottom: 4px; font-weight: 500; }
 
 input, select, textarea {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 6px;
-  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--card-bg);
   color: var(--text-color);
-  font-size: 0.95rem;
+  box-sizing: border-box;
 }
 
-.textarea-wrap { position: relative; }
-
-.actions, .share-options { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 6px; }
-
-.btn {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 10px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-.btn.light { background: transparent; color: var(--accent); border: 1px solid var(--border); }
-.btn.big { width: 100%; margin-top: 12px; }
-
-.action-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
+textarea { resize: vertical; }
 
 .names-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
 .name-input { position: relative; flex: 1; }
@@ -89,6 +72,31 @@ input, select, textarea {
   color: var(--muted);
 }
 
+.action-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn.light {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--border);
+}
+
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
 .modal {
   position: fixed;
   inset: 0;
@@ -96,8 +104,10 @@ input, select, textarea {
   justify-content: center;
   align-items: center;
   background: rgba(0,0,0,0.5);
+  z-index: 1000;
 }
 .modal.hidden { display: none; }
+
 .modal-content {
   background: var(--card-bg);
   border-radius: 10px;
@@ -112,10 +122,27 @@ input, select, textarea {
   margin-bottom: 6px;
 }
 .star-col { display: flex; flex-direction: column; align-items: center; width: 18%; }
-.star { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--muted); }
-.star.selected { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.6); }
+.star {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+.star.selected {
+  color: #fbbf24;
+  text-shadow: 0 0 6px rgba(251,191,36,0.6);
+}
 .star-col span { font-size: 0.8rem; color: var(--muted); }
 .rating-score { text-align: center; font-weight: 600; color: var(--accent); margin-bottom: 10px; }
 
-.modal-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.modal-content h2 { text-align: center; margin-top: 0; margin-bottom: 10px; color: var(--accent); }
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.message { white-space: pre-line; margin-top: 10px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); }
+
+.share-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
