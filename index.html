@@ -64,7 +64,17 @@
       <button onclick="saveMessage()" class="btn light">Save</button>
       <button onclick="saveTemplate()" class="btn light">Save as Template</button>
       <button onclick="openShareModal()" class="btn light">Share</button>
-      <button id="feedbackButton" class="btn light" data-watermark="Your Feedback Matters!">Feedback</button>
+      <button id="feedbackButton" class="btn light">Feedback</button>
+      <div id="ratingPreview" class="rating-preview hidden">
+        <div class="rating-wrap">
+          <div class="rating-col"><span class="rating-btn">X</span><span>20%</span></div>
+          <div class="rating-col"><span class="rating-btn">X</span><span>40%</span></div>
+          <div class="rating-col"><span class="rating-btn">X</span><span>60%</span></div>
+          <div class="rating-col"><span class="rating-btn">X</span><span>80%</span></div>
+          <div class="rating-col"><span class="rating-btn">X</span><span>100%</span></div>
+        </div>
+        <div class="rating-score">Score: 0%</div>
+      </div>
     </div>
 
     <p class="tiny">All messages are in English. Dark/Light mode supported.</p>
@@ -84,6 +94,7 @@
     </div>
     <div id="ratingScore" class="rating-score">Score: 0%</div>
     <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+    <div id="feedbackMessage" class="feedback-message hidden"></div>
     <div class="modal-actions">
       <button onclick="closeFeedbackModal()" class="btn light">Cancel</button>
       <button onclick="submitFeedback()" class="btn light">Send</button>
@@ -100,25 +111,16 @@
       <input id="phoneNumber" type="tel" placeholder="Phone number for SMS (e.g., +27 for South Africa)">
       <button class="clear-btn" onclick="document.getElementById('phoneNumber').value = ''">×</button>
     </div>
-    <div class="modal-actions">
-      <button onclick="shareMessage()" class="btn light">Share</button>
-      <button onclick="closeShareModal()" class="btn light">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- Share Options Modal -->
-<div id="shareOptionsModal" class="modal hidden">
-  <div class="modal-content">
-    <h2>Choose Sharing Method</h2>
-    <div class="modal-actions">
-      <button onclick="shareDevice()" class="btn light">📱 Device (SMS, etc.)</button>
+    <div id="shareOptions" class="share-options hidden">
       <button onclick="shareWhatsApp()" class="btn light">WhatsApp</button>
       <button onclick="shareFacebook()" class="btn light">Facebook</button>
       <button onclick="shareTwitter()" class="btn light">X (Twitter)</button>
       <button onclick="shareTelegram()" class="btn light">Telegram</button>
       <button onclick="shareEmail()" class="btn light">Email</button>
-      <button onclick="closeShareOptionsModal()" class="btn light">Cancel</button>
+    </div>
+    <div class="modal-actions">
+      <button onclick="shareMessage()" class="btn light">Share</button>
+      <button onclick="closeShareModal()" class="btn light">Cancel</button>
     </div>
   </div>
 </div>
