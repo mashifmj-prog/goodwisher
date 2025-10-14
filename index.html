@@ -88,19 +88,49 @@
   <div class="modal-content">
     <h2>Feedback</h2>
     <div class="rating-wrap">
-      <div class="rating-col"><button onclick="setRating(1)" class="rating-btn">⭐</button><span>20%</span></div>
-      <div class="rating-col"><button onclick="setRating(2)" class="rating-btn">⭐</button><span>40%</span></div>
-      <div class="rating-col"><button onclick="setRating(3)" class="rating-btn">⭐</button><span>60%</span></div>
-      <div class="rating-col"><button onclick="setRating(4)" class="rating-btn">⭐</button><span>80%</span></div>
-      <div class="rating-col"><button onclick="setRating(5)" class="rating-btn">⭐</button><span>100%</span></div>
+      <div class="rating-col"><button onclick="setRating(1)" class="rating-btn" aria-label="Rate 1 star">⭐</button><span>20%</span></div>
+      <div class="rating-col"><button onclick="setRating(2)" class="rating-btn" aria-label="Rate 2 stars">⭐</button><span>40%</span></div>
+      <div class="rating-col"><button onclick="setRating(3)" class="rating-btn" aria-label="Rate 3 stars">⭐</button><span>60%</span></div>
+      <div class="rating-col"><button onclick="setRating(4)" class="rating-btn" aria-label="Rate 4 stars">⭐</button><span>80%</span></div>
+      <div class="rating-col"><button onclick="setRating(5)" class="rating-btn" aria-label="Rate 5 stars">⭐</button><span>100%</span></div>
     </div>
     <div id="ratingScore" class="rating-score">Score: 0%</div>
-    <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+    <textarea id="feedbackText" rows="4" placeholder="Your feedback…" aria-label="Enter your feedback"></textarea>
     <div id="feedbackMessage" class="feedback-message hidden"></div>
     <div class="modal-actions">
-      <button onclick="submitFeedback()" class="btn light">Send</button>
-      <button onclick="viewPreviousFeedback()" class="btn light">View Previous</button>
-      <button onclick="closeFeedbackModal()" class="btn light">Close</button>
+      <button onclick="submitFeedback()" class="btn light" aria-label="Submit feedback">Send</button>
+      <button onclick="viewPreviousFeedback()" class="btn light" aria-label="View previous feedback">View Previous</button>
+      <button onclick="openAnalyticsModal()" class="btn light" aria-label="Open feedback analysis dashboard" data-watermark="View feedback analysis dashboard">View Analytics</button>
+      <button onclick="closeFeedbackModal()" class="btn light" aria-label="Close feedback modal">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Analytics Modal -->
+<div id="analyticsModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Feedback Analysis Dashboard</h2>
+    <div id="analyticsSummary"></div>
+    <div id="analyticsGraphs">
+      <canvas id="ratingChart" aria-label="Bar chart of rating distribution"></canvas>
+      <canvas id="categoryChart" aria-label="Pie chart of feedback category distribution"></canvas>
+      <canvas id="sentimentChart" aria-label="Bar chart of sentiment distribution"></canvas>
+    </div>
+    <table id="analyticsTable" aria-label="Feedback details table">
+      <thead>
+        <tr>
+          <th>Rating</th>
+          <th>Sentiment</th>
+          <th>Category</th>
+          <th>Top Words</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="modal-actions">
+      <button id="myResultsBtn" onclick="toggleMyResults()" class="btn light" aria-label="View my device feedback">My Results</button>
+      <button id="allEvaluationsBtn" onclick="toggleAllEvaluations()" class="btn light hidden" aria-label="View all feedback">All Evaluations</button>
+      <button onclick="closeAnalyticsModal()" class="btn light" aria-label="Close analytics dashboard">Close</button>
     </div>
   </div>
 </div>
