@@ -111,7 +111,7 @@ textarea {
   color: #fff;
 }
 
-#feedbackButton:hover::after {
+.btn[data-watermark]:hover::after {
   content: attr(data-watermark);
   position: absolute;
   top: -30px;
@@ -126,22 +126,7 @@ textarea {
   z-index: 1000;
 }
 
-#archiveButton:hover::after {
-  content: "Retrieve your saved messages";
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--card-bg);
-  opacity: 0.7;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  color: var(--muted);
-  z-index: 1000;
-}
-
-.actions, .action-line {
+.actions, .action-line, .modal-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -199,10 +184,10 @@ textarea {
   border-radius: 10px;
   padding: 16px;
   width: 90%;
-  max-width: 400px;
-  box-sizing: border-box;
+  max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .rating-wrap {
@@ -253,13 +238,6 @@ textarea {
 }
 
 .feedback-message.hidden { display: none; }
-
-.modal-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
 
 .share-options {
   display: flex;
@@ -320,16 +298,6 @@ textarea {
 .share-tiktok:hover {
   background: #333333;
   border-color: #FF0050;
-}
-
-.share-telegram {
-  background: #0088cc;
-  color: #fff;
-  border: none;
-}
-
-.share-telegram:hover {
-  background: #006699;
 }
 
 .share-copy {
@@ -454,4 +422,40 @@ textarea {
 .archive-entry p {
   margin: 4px 0;
   font-size: 0.9rem;
+}
+
+#analyticsGraphs {
+  margin: 16px 0;
+}
+
+#analyticsGraphs canvas {
+  margin-bottom: 16px;
+  max-width: 100%;
+}
+
+#analyticsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+#analyticsTable th, #analyticsTable td {
+  border: 1px solid var(--border);
+  padding: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+#analyticsTable th {
+  background: var(--accent);
+  color: #fff;
+}
+
+#analyticsSummary {
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+#analyticsSummary p {
+  margin: 4px 0;
 }
