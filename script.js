@@ -179,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
       list.appendChild(entry);
     });
     modal.classList.remove('hidden');
+    resetInactivityTimer();
   };
 
   window.restoreArchivedMessage = (index) => {
@@ -207,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.closeArchiveModal = () => {
     document.getElementById('archiveModal').classList.add('hidden');
+    resetInactivityTimer();
   };
 
   updateArchiveButton(); // Initialize on load
@@ -331,13 +333,13 @@ document.addEventListener('DOMContentLoaded', () => {
           `May you find peace and healing through your ${desc}.`
         ];
       } else if (isNeutralSpiritual) {
-        messages.custom = [
+        suggestions = [
           `May your ${desc} bring you peace and clarity.`,
           `Wishing you strength and focus in your ${desc}.`,
           `Blessings for your ${desc}.`
         ];
       } else {
-        messages.custom = [
+        suggestions = [
           `Congratulations on your ${desc}! Keep shining!`,
           `Wishing you joy and success in your ${desc}!`,
           `Best wishes for your ${desc}! May it bring happiness.`
