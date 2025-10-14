@@ -155,7 +155,7 @@ const messages = {
     "Take time to unwind and relax.",
     "Bon voyage! Have fun."
   ],
-  custom: [] // Populated dynamically
+  custom: []
 };
 
 const emojis = {
@@ -176,6 +176,9 @@ const emojis = {
   custom: ['🎉', '⭐', '🥳', '🙌']
 };
 
+const positiveWords = ['good', 'great', 'awesome', 'happy', 'excellent', 'wonderful', 'fantastic', 'amazing', 'love', 'like', 'nice', 'positive', 'super', 'best', 'cool', 'perfect', 'brilliant', 'outstanding', 'terrific', 'superb', 'fabulous', 'delightful', 'joyful', 'cheerful', 'vibrant', 'uplifting', 'inspiring', 'motivating', 'encouraging'];
+const negativeWords = ['bad', 'hate', 'terrible', 'awful', 'horrible', 'sad', 'angry', 'disappointed', 'poor', 'worse', 'nasty', 'ugly', 'stupid', 'awful', 'horrible', 'terrible', 'disgusting', 'evil', 'gross', 'nasty', 'vile', 'miserable', 'depressing', 'frustrating', 'annoying', 'irritating', 'boring', 'dull', 'mediocre', 'subpar'];
+
 let currentOccasion = '';
 let currentIndex = 0;
 let messageHistory = [];
@@ -185,10 +188,19 @@ const MAX_ARCHIVES = 5;
 let inactivityTimeout = null;
 let countdownInterval = null;
 let countdownSeconds = 60;
+let currentRating = 0;
+let isMyResults = false;
 
-const positiveWords = ['good', 'great', 'awesome', 'happy', 'excellent', 'wonderful', 'fantastic', 'amazing', 'love', 'like', 'nice', 'positive', 'super', 'best', 'cool', 'perfect', 'brilliant', 'outstanding', 'terrific', 'superb', 'fabulous', 'delightful', 'joyful', 'cheerful', 'vibrant', 'uplifting', 'inspiring', 'motivating', 'encouraging'];
-
-const negativeWords = ['bad', 'hate', 'terrible', 'awful', 'horrible', 'sad', 'angry', 'disappointed', 'poor', 'worse', 'nasty', 'ugly', 'stupid', 'awful', 'horrible', 'terrible', 'disgusting', 'evil', 'gross', 'nasty', 'vile', 'miserable', 'depressing', 'frustrating', 'annoying', 'irritating', 'boring', 'dull', 'mediocre', 'subpar'];
+// Generate or retrieve device ID
+let deviceId = localStorage.getItem('deviceId');
+if (!deviceId) {
+  deviceId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+  localStorage.setItem('deviceId', deviceId);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Theme toggle
@@ -237,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }, 1000);
-    }, 120000); // 120s delay before countdown starts
+    }, 120000);
   }
 
   function resetInactivityTimer() {
@@ -269,11 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
       textarea.value = '';
       textarea.classList.remove('announcement-text');
       messageHistory = [];
-      resetOccasion(); // Optional: Reset occasion state on focus if needed
+      resetOccasion();
     }
   });
 
-  // Reset occasion function
+  // Reset occasion
   function resetOccasion() {
     const textarea = document.getElementById('customMessage');
     const currentMessage = textarea.value.trim();
@@ -301,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInactivityTimers();
   }
 
-  // Archive message function
+  // Archive message
   function archiveMessage() {
     const textarea = document.getElementById('customMessage');
     const sender = document.getElementById('senderName').value.trim();
@@ -315,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recipient: recipient,
         timestamp: new Date().toISOString()
       };
-      archivedMessages.unshift(archiveItem); // Add to beginning
+      archivedMessages.unshift(archiveItem);
       if (archivedMessages.length > MAX_ARCHIVES) {
         archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
       }
@@ -380,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.deleteArchivedMessage = (index) => {
     archivedMessages.splice(index, 1);
     localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
-    openArchiveModal(); // Refresh list
+    openArchiveModal();
     updateArchiveButton();
   };
 
@@ -389,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetInactivityTimer();
   };
 
-  updateArchiveButton(); // Initialize on load
+  updateArchiveButton();
 
   // Occasion selection
   const occasionSelect = document.getElementById('occasion');
@@ -552,8 +564,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Previous Message
   document.getElementById('prevMessage').addEventListener('click', () => {
     if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0 && messageHistory.length > 1) {
-      messageHistory.pop(); // Remove current message
-      currentIndex = messageHistory[messageHistory.length - 1]; // Go to previous message
+      messageHistory.pop();
+      currentIndex = messageHistory[messageHistory.length - 1];
       displayMessage();
       resetInactivityTimer();
     }
@@ -631,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetInactivityTimer();
   };
 
-  // Display message with full preview
+  // Display message
   function displayMessage() {
     const textarea = document.getElementById('customMessage');
     const sender = document.getElementById('senderName').value.trim();
@@ -675,175 +687,33 @@ document.addEventListener('DOMContentLoaded', () => {
     resetInactivityTimer();
   };
 
+  // Feedback modal
   window.openFeedbackModal = () => {
     const modal = document.getElementById('feedbackModal');
     const content = document.querySelector('#feedbackModal .modal-content');
     content.innerHTML = `
       <h2>Feedback</h2>
       <div class="rating-wrap">
-        <div class="rating-col"><button onclick="setRating(1)" class="rating-btn">⭐</button><span>20%</span></div>
-        <div class="rating-col"><button onclick="setRating(2)" class="rating-btn">⭐</button><span>40%</span></div>
-        <div class="rating-col"><button onclick="setRating(3)" class="rating-btn">⭐</button><span>60%</span></div>
-        <div class="rating-col"><button onclick="setRating(4)" class="rating-btn">⭐</button><span>80%</span></div>
-        <div class="rating-col"><button onclick="setRating(5)" class="rating-btn">⭐</button><span>100%</span></div>
+        <div class="rating-col"><button onclick="setRating(1)" class="rating-btn" aria-label="Rate 1 star">⭐</button><span>20%</span></div>
+        <div class="rating-col"><button onclick="setRating(2)" class="rating-btn" aria-label="Rate 2 stars">⭐</button><span>40%</span></div>
+        <div class="rating-col"><button onclick="setRating(3)" class="rating-btn" aria-label="Rate 3 stars">⭐</button><span>60%</span></div>
+        <div class="rating-col"><button onclick="setRating(4)" class="rating-btn" aria-label="Rate 4 stars">⭐</button><span>80%</span></div>
+        <div class="rating-col"><button onclick="setRating(5)" class="rating-btn" aria-label="Rate 5 stars">⭐</button><span>100%</span></div>
       </div>
       <div id="ratingScore" class="rating-score">Score: 0%</div>
-      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+      <textarea id="feedbackText" rows="4" placeholder="Your feedback…" aria-label="Enter your feedback"></textarea>
       <div id="feedbackMessage" class="feedback-message hidden"></div>
       <div class="modal-actions">
-        <button onclick="submitFeedback()" class="btn light">Send</button>
-        <button onclick="viewPreviousFeedback()" class="btn light">View Previous</button>
-        <button onclick="closeFeedbackModal()" class="btn light">Close</button>
+        <button onclick="submitFeedback()" class="btn light" aria-label="Submit feedback">Send</button>
+        <button onclick="viewPreviousFeedback()" class="btn light" aria-label="View previous feedback">View Previous</button>
+        <button onclick="openAnalyticsModal()" class="btn light" aria-label="Open feedback analysis dashboard" data-watermark="View feedback analysis dashboard">View Analytics</button>
+        <button onclick="closeFeedbackModal()" class="btn light" aria-label="Close feedback modal">Close</button>
       </div>
     `;
     modal.classList.remove('hidden');
     setRating(0);
     resetInactivityTimer();
   };
-
-  // Helper function to get full shareable message
-  function getShareableMessage() {
-    const textarea = document.getElementById('customMessage');
-    const messageText = textarea.value.trim();
-    if (!messageText || textarea.classList.contains('announcement-text')) return '';
-    return `${messageText}\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
-  }
-
-  // Share modal functions
-  window.shareDevice = async () => {
-    const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'GoodWisher Message',
-          text: text
-        });
-        closeShareModal();
-        resetInactivityTimer();
-      } catch (error) {
-        console.error('Error sharing:', error);
-        fallbackToSMS(text);
-      }
-    } else {
-      fallbackToSMS(text);
-    }
-  };
-
-  async function fallbackToSMS(text) {
-    if ('contacts' in navigator && 'select' in navigator.contacts) {
-      try {
-        const contacts = await navigator.contacts.select(['tel'], { multiple: false });
-        if (contacts.length > 0) {
-          const phoneNumber = contacts[0].tel[0];
-          const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(text)}`;
-          window.open(smsUrl, '_blank');
-          closeShareModal();
-          resetInactivityTimer();
-        } else {
-          promptForPhoneNumber(text);
-        }
-      } catch (error) {
-        console.error('Error accessing contacts:', error);
-        promptForPhoneNumber(text);
-      }
-    } else {
-      promptForPhoneNumber(text);
-    }
-  }
-
-  function promptForPhoneNumber(text) {
-    const phoneNumber = prompt('Enter a phone number for SMS (e.g., +27123456789):');
-    if (phoneNumber) {
-      const cleanedNumber = phoneNumber.replace(/[^0-9+]/g, '');
-      if (/^\+?[1-9]\d{1,14}$/.test(cleanedNumber)) {
-        const smsUrl = `sms:${cleanedNumber}?body=${encodeURIComponent(text)}`;
-        window.open(smsUrl, '_blank');
-        closeShareModal();
-        resetInactivityTimer();
-      } else {
-        alert('Please enter a valid phone number (e.g., +27 for South Africa).');
-      }
-    } else {
-      const smsUrl = `sms:?body=${encodeURIComponent(text)}`;
-      window.open(smsUrl, '_blank');
-      closeShareModal();
-      resetInactivityTimer();
-    }
-  }
-
-  window.shareWhatsApp = () => {
-    const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-    closeShareModal();
-    resetInactivityTimer();
-  };
-
-  window.shareFacebook = () => {
-    const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Message copied! Paste it into a Facebook post.');
-      window.open('https://www.facebook.com/', '_blank');
-      closeShareModal();
-      resetInactivityTimer();
-    }).catch(() => {
-      alert('Failed to copy message. Please copy it manually.');
-    });
-  };
-
-  window.shareTwitter = () => {
-    const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-    closeShareModal();
-    resetInactivityTimer();
-  };
-
-  window.shareTikTok = () => {
-    const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Message copied! Paste it into a TikTok post.');
-      closeShareModal();
-      resetInactivityTimer();
-    });
-  };
-
-  window.shareTelegram = () => {
-    const text = getShareableMessage();
-    if (!text.trim()) {
-      alert('Please enter or select a message to share.');
-      return;
-    }
-    window.open(`https://t.me/share/url?url=${encodeURIComponent('https://mashifmj-prog.github.io/goodwisher/')}&text=${encodeURIComponent(text)}`, '_blank');
-    closeShareModal();
-    resetInactivityTimer();
-  };
-
-  window.closeShareModal = () => {
-    document.getElementById('shareModal').classList.add('hidden');
-    resetInactivityTimer();
-  };
-
-  // Feedback modal
-  let currentRating = 0;
 
   window.setRating = (rating) => {
     currentRating = rating;
@@ -857,41 +727,231 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.submitFeedback = () => {
-    const feedbackText = document.getElementById('feedbackText').value;
+    const feedbackText = document.getElementById('feedbackText').value.trim();
     const feedbackMessage = document.getElementById('feedbackMessage');
     if (currentRating > 0) {
-      feedbackList.push({ rating: currentRating, text: feedbackText, timestamp: new Date().toISOString() });
-      localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
-      feedbackMessage.textContent = 'Submitted';
-      feedbackMessage.classList.remove('hidden');
-      setTimeout(() => {
-        feedbackMessage.textContent = 'Thank you';
+      const sentimentScore = calculateSentiment(feedbackText);
+      const ratingScore = currentRating * 0.2;
+      const blendedScore = (ratingScore + sentimentScore) / 2;
+      const category = blendedScore < 0.4 ? 'Negative' : blendedScore <= 0.6 ? 'Moderate' : 'Positive';
+      const topWords = getTopWords(feedbackText);
+      try {
+        feedbackList.push({
+          rating: currentRating,
+          text: feedbackText,
+          timestamp: new Date().toISOString(),
+          sentiment: sentimentScore,
+          category: category,
+          deviceId: deviceId,
+          topWords: topWords
+        });
+        localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
+        feedbackMessage.textContent = 'Submitted';
+        feedbackMessage.classList.remove('hidden');
         setTimeout(() => {
-          closeFeedbackModal();
-        }, 1000);
-      }, 1500);
+          feedbackMessage.textContent = 'Thank you';
+          setTimeout(() => {
+            closeFeedbackModal();
+          }, 1000);
+        }, 1500);
+      } catch (error) {
+        console.error('Error saving feedback:', error);
+        alert('Failed to save feedback. Try clearing localStorage.');
+      }
       resetInactivityTimer();
     } else {
       alert('Please select a rating.');
     }
   };
 
-  window.closeFeedbackModal = () => {
-    document.getElementById('feedbackModal').classList.add('hidden');
-    document.getElementById('feedbackText').value = '';
-    document.getElementById('feedbackMessage').classList.add('hidden');
-    setRating(0);
-    resetInactivityTimer();
-  };
+  function calculateSentiment(text) {
+    if (!text) return 0.5;
+    const words = text.toLowerCase().split(/\W+/).filter(w => w);
+    const positiveCount = words.filter(w => positiveWords.includes(w)).length;
+    const negativeCount = words.filter(w => negativeWords.includes(w)).length;
+    const totalWords = words.length || 1;
+    const rawScore = (positiveCount - negativeCount) / totalWords;
+    return (rawScore + 1) / 2; // Normalize to 0-1
+  }
+
+  function getTopWords(text) {
+    if (!text) return '';
+    const words = text.toLowerCase().split(/\W+/).filter(w => w);
+    const wordCounts = {};
+    words.forEach(w => {
+      if (positiveWords.includes(w) || negativeWords.includes(w)) {
+        wordCounts[w] = (wordCounts[w] || 0) + 1;
+      }
+    });
+    return Object.entries(wordCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([word, count]) => `${word} (${count})`)
+      .join(', ');
+  }
 
   window.viewPreviousFeedback = () => {
     const feedbackDisplay = feedbackList.length
-      ? feedbackList.map(f => `<p>Rating: ${f.rating * 20}% , Text: ${f.text}, Time: ${new Date(f.timestamp).toLocaleString()}</p>`).join('')
+      ? feedbackList.map(f => `
+          <p>Rating: ${f.rating * 20}% (${f.rating} stars)<br>
+          Text: ${f.text}<br>
+          Category: ${f.category}<br>
+          Time: ${new Date(f.timestamp).toLocaleString()}</p>
+        `).join('')
       : '<p>No previous feedback.</p>';
     const modal = document.getElementById('feedbackModal');
     const content = document.querySelector('#feedbackModal .modal-content');
-    content.innerHTML = `<h2>Previous Feedback</h2>${feedbackDisplay}<div class="modal-actions"><button onclick="closeFeedbackModal()" class="btn light">Close</button></div>`;
+    content.innerHTML = `
+      <h2>Previous Feedback</h2>
+      ${feedbackDisplay}
+      <div id="analyticsSummary"></div>
+      <div id="analyticsGraphs">
+        <canvas id="ratingChart" aria-label="Bar chart of rating distribution"></canvas>
+        <canvas id="categoryChart" aria-label="Pie chart of feedback category distribution"></canvas>
+        <canvas id="sentimentChart" aria-label="Bar chart of sentiment distribution"></canvas>
+      </div>
+      <div class="modal-actions">
+        <button onclick="openFeedbackModal()" class="btn light" aria-label="Back to feedback form">Back</button>
+        <button onclick="closeFeedbackModal()" class="btn light" aria-label="Close feedback modal">Close</button>
+      </div>
+    `;
     modal.classList.remove('hidden');
+    renderAnalytics(feedbackList, false);
     resetInactivityTimer();
   };
-});
+
+  window.openAnalyticsModal = () => {
+    const modal = document.getElementById('analyticsModal');
+    modal.classList.remove('hidden');
+    isMyResults = false;
+    document.getElementById('myResultsBtn').classList.remove('hidden');
+    document.getElementById('allEvaluationsBtn').classList.add('hidden');
+    renderAnalytics(feedbackList, false);
+    resetInactivityTimer();
+  };
+
+  window.toggleMyResults = () => {
+    isMyResults = true;
+    document.getElementById('myResultsBtn').classList.add('hidden');
+    document.getElementById('allEvaluationsBtn').classList.remove('hidden');
+    const filteredFeedback = feedbackList.filter(f => f.deviceId === deviceId);
+    renderAnalytics(filteredFeedback, true);
+    resetInactivityTimer();
+  };
+
+  window.toggleAllEvaluations = () => {
+    isMyResults = false;
+    document.getElementById('myResultsBtn').classList.remove('hidden');
+    document.getElementById('allEvaluationsBtn').classList.add('hidden');
+    renderAnalytics(feedbackList, false);
+    resetInactivityTimer();
+  };
+
+  window.closeAnalyticsModal = () => {
+    document.getElementById('analyticsModal').classList.add('hidden');
+    resetInactivityTimer();
+  };
+
+  function renderAnalytics(feedbackData, isDeviceSpecific) {
+    if (!feedbackData.length) {
+      document.getElementById('analyticsSummary').innerHTML = '<p>No feedback available.</p>';
+      document.getElementById('analyticsGraphs').style.display = 'none';
+      document.getElementById('analyticsTable').style.display = 'none';
+      return;
+    }
+    document.getElementById('analyticsGraphs').style.display = 'block';
+    document.getElementById('analyticsTable').style.display = 'table';
+
+    // Summary
+    const avgRating = feedbackData.reduce((sum, f) => sum + f.rating, 0) / feedbackData.length;
+    const avgSentiment = feedbackData.reduce((sum, f) => sum + f.sentiment, 0) / feedbackData.length;
+    const categories = { Negative: 0, Moderate: 0, Positive: 0 };
+    feedbackData.forEach(f => categories[f.category]++;
+    const total = feedbackData.length;
+    const categoryPercentages = {
+      Negative: ((categories.Negative / total) * 100).toFixed(0),
+      Moderate: ((categories.Moderate / total) * 100).toFixed(0),
+      Positive: ((categories.Positive / total) * 100).toFixed(0)
+    };
+    const wordCounts = {};
+    feedbackData.forEach(f => {
+      if (f.topWords) {
+        f.topWords.split(', ').forEach(w => {
+          const [word, count] = w.split(' (');
+          wordCounts[word] = (wordCounts[word] || 0) + (parseInt(count) || 0);
+        });
+      }
+    });
+    const topWords = Object.entries(wordCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([word, count]) => `${word} (${count})`)
+      .join(', ');
+
+    document.getElementById('analyticsSummary').innerHTML = `
+      <h3>${isDeviceSpecific ? 'Your Device Evaluations' : 'All Evaluations'}</h3>
+      <p>Average Rating: ${(avgRating * 20).toFixed(0)}% (${avgRating.toFixed(1)} stars)</p>
+      <p>Average Sentiment: ${avgSentiment.toFixed(2)} (${avgSentiment < 0.4 ? 'Negative' : avgSentiment <= 0.6 ? 'Moderate' : 'Positive'})</p>
+      <p>Categories: Negative ${categoryPercentages.Negative}%, Moderate ${categoryPercentages.Moderate}%, Positive ${categoryPercentages.Positive}%</p>
+      <p>Common Words: ${topWords || 'None'}</p>
+    `;
+
+    // Rating Distribution
+    const ratingCounts = Array(5).fill(0);
+    feedbackData.forEach(f => ratingCounts[f.rating - 1]++;
+    const ratingChart = new Chart(document.getElementById('ratingChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+        datasets: [{
+          label: 'Rating Distribution',
+          data: ratingCounts,
+          backgroundColor: 'var(--accent)',
+          borderColor: 'var(--accent-hover)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, title: { display: true, text: 'Count' } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // Category Distribution
+    const categoryChart = new Chart(document.getElementById('categoryChart').getContext('2d'), {
+      type: 'pie',
+      data: {
+        labels: ['Negative', 'Moderate', 'Positive'],
+        datasets: [{
+          data: [categories.Negative, categories.Moderate, categories.Positive],
+          backgroundColor: ['#ef4444', '#facc15', '#22c55e']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    // Sentiment Distribution
+    const sentimentCounts = { Negative: 0, Moderate: 0, Positive: 0 };
+    feedbackData.forEach(f => {
+      const score = f.sentiment;
+      sentimentCounts[score < 0.4 ? 'Negative' : score <= 0.6 ? 'Moderate' : 'Positive']++;
+    });
+    const sentimentChart = new Chart(document.getElementById('sentimentChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Negative', 'Moderate', 'Positive'],
+        datasets: [{
+          label: 'Sentiment Distribution',
+          data: [sentimentCounts.Negative, sentimentCounts.Moderate, sentimentCounts.Positive],
+          backgroundColor: ['#ef4444', '#facc15', '#22c55e'],
+          borderColor: ['#dc2626', '#eab308', '#16a34a'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, title: { display: true, text: '
