@@ -1,55 +1,159 @@
 const messages = {
   birthday: [
     "Another year older, wiser! 🥳",
-    "Happy Birthday! Enjoy your special day."
+    "Happy Birthday! Enjoy your special day.",
+    "May your day be filled with laughter and joy.",
+    "Wishing you endless happiness on your birthday.",
+    "Celebrate this day with love and cheer.",
+    "A year wiser and even more fabulous!",
+    "Here's to another fantastic year!",
+    "Happy Birthday! Make it memorable.",
+    "Cheers to your health and happiness.",
+    "Wishing you a year full of adventures.",
   ],
   anniversary: [
     "Happy Anniversary! Wishing you many more years of happiness.",
-    "Here's to celebrating your love and commitment."
+    "Here's to celebrating your love and commitment.",
+    "May your love continue to grow stronger.",
+    "Another year of wonderful memories together.",
+    "Cheers to your enduring love!",
+    "Wishing you joy on your special day.",
+    "Happy Anniversary! Keep the love alive.",
+    "Celebrating your beautiful journey together.",
+    "To many more years of happiness.",
+    "Your love is an inspiration to us all."
   ],
   'get-well': [
     "Wishing you a speedy recovery!",
-    "Get well soon! Sending you lots of love and strength."
+    "Get well soon! Sending you lots of love and strength.",
+    "Hope you feel better soon.",
+    "Sending healing thoughts your way.",
+    "Take care and get well quickly.",
+    "Wishing you good health and rest.",
+    "You'll be back on your feet in no time.",
+    "Sending positive vibes for your recovery.",
+    "Get well soon! We miss you.",
+    "Rest up and feel better soon."
   ],
   congrats: [
     "Congratulations on your amazing achievement!",
-    "Well done! Your hard work has paid off."
+    "Well done! Your hard work has paid off.",
+    "Proud of you! Great job.",
+    "Congratulations! You deserve it.",
+    "Way to go! Keep up the good work.",
+    "Awesome achievement! Congrats.",
+    "You did it! Congratulations.",
+    "Huge congrats on your success.",
+    "Celebrating your accomplishment!",
+    "Kudos to you! Well deserved."
   ],
   'thank-you': [
     "Thank you for your kindness and support.",
-    "I appreciate everything you've done for me."
+    "I appreciate everything you've done for me.",
+    "Your help means the world to me. Thank you.",
+    "Thanks a million for your generosity.",
+    "Grateful for your thoughtful gesture.",
+    "Thank you from the bottom of my heart.",
+    "Your support is greatly appreciated.",
+    "Thanks for being there for me.",
+    "Appreciate your kindness. Thank you.",
+    "Your thoughtfulness is truly appreciated."
   ],
   'good-luck': [
     "Best of luck in your new adventure!",
-    "Wishing you success and good fortune!"
+    "Wishing you success and good fortune!",
+    "Good luck! You've got this.",
+    "All the best in your endeavors.",
+    "Wishing you the best of luck.",
+    "Break a leg! You'll do great.",
+    "Good luck on your journey.",
+    "Wishing you positive vibes and success.",
+    "You can do it! Good luck.",
+    "Best wishes for your future."
   ],
   motivation: [
     "Keep pushing forward; you've got this!",
-    "Stay strong and keep chasing your dreams."
+    "Stay strong and keep chasing your dreams.",
+    "Believe in yourself; you're capable of great things.",
+    "Every step brings you closer to your goal.",
+    "You have the power to make it happen.",
+    "Rise and grind; success awaits.",
+    "Your potential is limitless.",
+    "Keep going; the best is yet to come.",
+    "You are stronger than you think.",
+    "Embrace the challenge; grow stronger."
   ],
   appreciation: [
     "Your efforts are truly appreciated!",
-    "Thank you for being so amazing."
+    "Thank you for being so amazing.",
+    "I value your hard work and dedication.",
+    "Your contributions make a difference.",
+    "Appreciate all that you do.",
+    "You're a star! Thank you.",
+    "Grateful for your commitment.",
+    "Your support is invaluable.",
+    "Thanks for your outstanding effort.",
+    "You make a positive impact."
   ],
   farewell: [
     "Wishing you all the best in your next chapter!",
-    "You'll be missed, but your future is bright!"
+    "You'll be missed, but your future is bright!",
+    "Farewell and good luck on your new path.",
+    "Thanks for the memories. Stay in touch.",
+    "Wishing you success in your new adventure.",
+    "Goodbye and best wishes.",
+    "Farewell; keep achieving great things.",
+    "All the best in your future endeavors.",
+    "We'll miss you. Take care.",
+    "Farewell; may your journey be fulfilling."
   ],
   encouragement: [
     "You're stronger than you know—keep going!",
-    "Believe in yourself; you're capable of great things."
+    "Believe in yourself; you're capable of great things.",
+    "You can overcome any obstacle.",
+    "Keep believing; better days are ahead.",
+    "You're doing great; don't give up.",
+    "Your resilience is inspiring.",
+    "Stay positive; you've got this.",
+    "Encouraging you to reach new heights.",
+    "You're on the right path; keep moving.",
+    "Believe and achieve."
   ],
   love: [
     "You mean the world to me.",
-    "My heart is yours, always and forever."
+    "My heart is yours, always and forever.",
+    "I love you more than words can say.",
+    "You're my everything.",
+    "Forever in my heart.",
+    "Love you to the moon and back.",
+    "You're the light of my life.",
+    "Our love is eternal.",
+    "Cherishing you always.",
+    "You complete me."
   ],
   condolences: [
     "I'm so sorry for your loss.",
-    "My deepest condolences to you and your family."
+    "My deepest condolences to you and your family.",
+    "Sending thoughts and prayers during this difficult time.",
+    "May you find comfort in your memories.",
+    "Heartfelt sympathies for your loss.",
+    "Wishing you peace and strength.",
+    "Condolences on your loss.",
+    "Thinking of you in this time of sorrow.",
+    "May they rest in peace.",
+    "Sharing in your sorrow."
   ],
   vacation: [
     "Have an amazing vacation filled with fun!",
-    "Enjoy your getaway and making new memories!"
+    "Enjoy your getaway and making new memories!",
+    "Relax and recharge on your vacation.",
+    "Wishing you a wonderful trip.",
+    "Safe travels and lots of adventures.",
+    "Have a fantastic time away.",
+    "Enjoy every moment of your vacation.",
+    "Wishing you sunny skies and happy times.",
+    "Take time to unwind and relax.",
+    "Bon voyage! Have fun."
   ],
   custom: [] // Populated dynamically
 };
