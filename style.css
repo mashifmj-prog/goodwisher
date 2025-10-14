@@ -78,6 +78,13 @@ textarea.announcement-text {
   color: var(--muted);
   font-style: italic;
   opacity: 0.7;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(0, 0, 0, 0.1) 10px,
+    rgba(0, 0, 0, 0.1) 20px
+  );
 }
 
 textarea {
@@ -280,16 +287,6 @@ textarea {
   background: #20b358;
 }
 
-.share-facebook {
-  background: #1877F2;
-  color: #fff;
-  border: none;
-}
-
-.share-facebook:hover {
-  background: #1566c9;
-}
-
 .share-twitter {
   background: #000000;
   color: #ffffff;
@@ -372,8 +369,9 @@ textarea {
   position: relative;
   margin-bottom: 8px;
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .occasion-wrap select {
