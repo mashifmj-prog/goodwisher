@@ -110,10 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const timerDisplay = document.getElementById('inactivityTimer');
       timerDisplay.classList.remove('hidden');
       countdownSeconds = 60;
-      timerDisplay.textContent = `Inactivity Timeout: ${countdownSeconds}s`;
+      timerDisplay.textContent = `Timeout: ${countdownSeconds}s`;
       countdownInterval = setInterval(() => {
         countdownSeconds--;
-        timerDisplay.textContent = `Inactivity Timeout: ${countdownSeconds}s`;
+        timerDisplay.textContent = `Timeout: ${countdownSeconds}s`;
         if (countdownSeconds <= 0) {
           clearInterval(countdownInterval);
           timerDisplay.classList.add('hidden');
