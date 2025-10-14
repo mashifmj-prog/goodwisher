@@ -9,7 +9,7 @@ const messages = {
     "Here's to another fantastic year!",
     "Happy Birthday! Make it memorable.",
     "Cheers to your health and happiness.",
-    "Wishing you a year full of adventures.",
+    "Wishing you a year full of adventures."
   ],
   anniversary: [
     "Happy Anniversary! Wishing you many more years of happiness.",
@@ -226,9 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (currentMessage) {
             archiveMessage();
             textarea.value = 'Your message has been archived. Click "Archived Messages" to retrieve it.';
-            setTimeout(() => {
-              resetOccasion();
-            }, 3000); // Display announcement for 3 seconds
+            textarea.classList.add('announcement-text');
           } else {
             resetOccasion();
           }
@@ -251,11 +249,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Textarea input handling
-  document.getElementById('customMessage').addEventListener('input', () => {
-    const textarea = document.getElementById('customMessage');
+  const textarea = document.getElementById('customMessage');
+  textarea.addEventListener('input', () => {
     const currentMessage = textarea.value.trim();
-    if (currentMessage && !currentMessage.startsWith('Your message has been archived.')) {
-      resetInactivityTimer();
+    if (currentMessage && textarea.classList.contains('announcement-text')) {
+      textarea.classList.remove('announcement-text');
+    }
+    resetInactivityTimer();
+  });
+
+  textarea.addEventListener('focus', () => {
+    if (textarea.classList.contains('announcement-text')) {
+      textarea.value = '';
+      textarea.classList.remove('announcement-text');
+      resetOccasion(); // Optional: Reset occasion state on focus if needed
     }
   });
 
@@ -263,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetOccasion() {
     const textarea = document.getElementById('customMessage');
     const currentMessage = textarea.value.trim();
-    if (currentMessage && !currentMessage.startsWith('Your message has been archived.')) {
+    if (currentMessage && !textarea.classList.contains('announcement-text')) {
       archiveMessage();
     }
     const occasionSelect = document.getElementById('occasion');
@@ -291,21 +298,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const sender = document.getElementById('senderName').value.trim();
     const recipient = document.getElementById('recipientName').value.trim();
     const currentMessage = textarea.value.trim();
-    if (currentMessage && !currentMessage.startsWith('Your message has been archived.')) {
-      const archiveItem = {
-        message: currentMessage,
-        occasion: currentOccasion,
-        sender: sender,
-        recipient: recipient,
-        timestamp: new Date().toISOString()
-      };
-      archivedMessages.unshift(archiveItem); // Add to beginning
-      if (archivedMessages.length > MAX_ARCHIVES) {
-        archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
-      }
-      localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
-      updateArchiveButton();
+    const archiveItem = {
+      message: currentMessage,
+      occasion: currentOccasion,
+      sender: sender,
+      recipient: recipient,
+      timestamp: new Date().toISOString()
+    };
+    archivedMessages.unshift(archiveItem); // Add to beginning
+    if (archivedMessages.length > MAX_ARCHIVES) {
+      archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
     }
+    localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
+    updateArchiveButton();
   }
 
   // Update archive button
