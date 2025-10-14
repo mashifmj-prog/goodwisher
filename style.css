@@ -57,7 +57,7 @@ body {
 .sub { text-align: center; color: var(--muted); }
 
 label[for="occasion"] {
-  text-align: center;
+  text-align: left;
   display: block;
   margin-bottom: 8px;
 }
@@ -366,8 +366,9 @@ textarea {
   position: relative;
   margin-bottom: 8px;
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .occasion-wrap select {
