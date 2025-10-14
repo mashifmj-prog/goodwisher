@@ -852,6 +852,16 @@ document.addEventListener('DOMContentLoaded', () => {
     resetInactivityTimer();
   };
 
+  window.closeFeedbackModal = () => {
+    document.getElementById('feedbackModal').classList.add('hidden');
+    resetInactivityTimer();
+  };
+
+  window.closeShareModal = () => {
+    document.getElementById('shareModal').classList.add('hidden');
+    resetInactivityTimer();
+  };
+
   function renderAnalytics(feedbackData, isDeviceSpecific) {
     if (!feedbackData.length) {
       document.getElementById('analyticsSummary').innerHTML = '<p>No feedback available.</p>';
@@ -866,92 +876,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const avgRating = feedbackData.reduce((sum, f) => sum + f.rating, 0) / feedbackData.length;
     const avgSentiment = feedbackData.reduce((sum, f) => sum + f.sentiment, 0) / feedbackData.length;
     const categories = { Negative: 0, Moderate: 0, Positive: 0 };
-    feedbackData.forEach(f => categories[f.category]++;
-    const total = feedbackData.length;
-    const categoryPercentages = {
-      Negative: ((categories.Negative / total) * 100).toFixed(0),
-      Moderate: ((categories.Moderate / total) * 100).toFixed(0),
-      Positive: ((categories.Positive / total) * 100).toFixed(0)
-    };
-    const wordCounts = {};
-    feedbackData.forEach(f => {
-      if (f.topWords) {
-        f.topWords.split(', ').forEach(w => {
-          const [word, count] = w.split(' (');
-          wordCounts[word] = (wordCounts[word] || 0) + (parseInt(count) || 0);
-        });
-      }
-    });
-    const topWords = Object.entries(wordCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([word, count]) => `${word} (${count})`)
-      .join(', ');
-
-    document.getElementById('analyticsSummary').innerHTML = `
-      <h3>${isDeviceSpecific ? 'Your Device Evaluations' : 'All Evaluations'}</h3>
-      <p>Average Rating: ${(avgRating * 20).toFixed(0)}% (${avgRating.toFixed(1)} stars)</p>
-      <p>Average Sentiment: ${avgSentiment.toFixed(2)} (${avgSentiment < 0.4 ? 'Negative' : avgSentiment <= 0.6 ? 'Moderate' : 'Positive'})</p>
-      <p>Categories: Negative ${categoryPercentages.Negative}%, Moderate ${categoryPercentages.Moderate}%, Positive ${categoryPercentages.Positive}%</p>
-      <p>Common Words: ${topWords || 'None'}</p>
-    `;
-
-    // Rating Distribution
-    const ratingCounts = Array(5).fill(0);
-    feedbackData.forEach(f => ratingCounts[f.rating - 1]++;
-    const ratingChart = new Chart(document.getElementById('ratingChart').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
-        datasets: [{
-          label: 'Rating Distribution',
-          data: ratingCounts,
-          backgroundColor: 'var(--accent)',
-          borderColor: 'var(--accent-hover)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true, title: { display: true, text: 'Count' } } },
-        plugins: { legend: { display: false } }
-      }
-    });
-
-    // Category Distribution
-    const categoryChart = new Chart(document.getElementById('categoryChart').getContext('2d'), {
-      type: 'pie',
-      data: {
-        labels: ['Negative', 'Moderate', 'Positive'],
-        datasets: [{
-          data: [categories.Negative, categories.Moderate, categories.Positive],
-          backgroundColor: ['#ef4444', '#facc15', '#22c55e']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: 'bottom' } }
-      }
-    });
-
-    // Sentiment Distribution
-    const sentimentCounts = { Negative: 0, Moderate: 0, Positive: 0 };
-    feedbackData.forEach(f => {
-      const score = f.sentiment;
-      sentimentCounts[score < 0.4 ? 'Negative' : score <= 0.6 ? 'Moderate' : 'Positive']++;
-    });
-    const sentimentChart = new Chart(document.getElementById('sentimentChart').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: ['Negative', 'Moderate', 'Positive'],
-        datasets: [{
-          label: 'Sentiment Distribution',
-          data: [sentimentCounts.Negative, sentimentCounts.Moderate, sentimentCounts.Positive],
-          backgroundColor: ['#ef4444', '#facc15', '#22c55e'],
-          borderColor: ['#dc2626', '#eab308', '#16a34a'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true, title: { display: true, text: '
+    feedbackData.forEach(f => categories[f.category]++);
+    const total = feedback
