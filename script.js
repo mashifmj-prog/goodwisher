@@ -75,7 +75,8 @@ const emojis = {
 let currentOccasion = '';
 let currentIndex = 0;
 let feedbackList = JSON.parse(localStorage.getItem('feedbackList')) || [];
-let inactivityTimer = null;
+let archivedMessages = JSON.parse(localStorage.getItem('archivedMessages')) || [];
+const MAX_ARCHIVES = 5;
 
 document.addEventListener('DOMContentLoaded', () => {
   // Theme toggle
@@ -101,54 +102,114 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Reset occasion function
   function resetOccasion() {
+    const textarea = document.getElementById('customMessage');
+    const currentMessage = textarea.value.trim();
+    if (currentMessage) {
+      archiveMessage();
+    }
     const occasionSelect = document.getElementById('occasion');
     const customWrap = document.getElementById('customInputWrap');
     const closeButton = document.getElementById('closeOccasion');
+    const timerDisplay = document.getElementById('inactivityTimer');
     occasionSelect.value = '';
     currentOccasion = '';
     currentIndex = 0;
     customWrap.classList.add('hidden');
     closeButton.classList.add('hidden');
+    timerDisplay.classList.add('hidden');
     document.getElementById('customOccasionDesc').value = '';
-    document.getElementById('customMessage').value = '';
+    textarea.value = '';
     document.getElementById('senderName').value = '';
     document.getElementById('recipientName').value = '';
     messages.custom = [];
     updateEmojiPicker();
-    clearInactivityTimer();
+    clearInactivityTimers();
   }
 
-  // Inactivity timer
-  function startInactivityTimer() {
-    clearInactivityTimer();
-    if (currentOccasion) {
-      inactivityTimer = setTimeout(() => {
-        resetOccasion();
-      }, 60000); // 60 seconds
+  // Archive message function
+  function archiveMessage() {
+    const textarea = document.getElementById('customMessage');
+    const sender = document.getElementById('senderName').value.trim();
+    const recipient = document.getElementById('recipientName').value.trim();
+    const currentMessage = textarea.value.trim();
+    const archiveItem = {
+      message: currentMessage,
+      occasion: currentOccasion,
+      sender: sender,
+      recipient: recipient,
+      timestamp: new Date().toISOString()
+    };
+    archivedMessages.unshift(archiveItem); // Add to beginning
+    if (archivedMessages.length > MAX_ARCHIVES) {
+      archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
+    }
+    localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
+    updateArchiveButton();
+  }
+
+  // Update archive button
+  function updateArchiveButton() {
+    const archiveButton = document.getElementById('archiveButton');
+    const count = archivedMessages.length;
+    archiveButton.textContent = `Archived Messages (${count})`;
+    if (count > 0) {
+      archiveButton.classList.remove('hidden');
+    } else {
+      archiveButton.classList.add('hidden');
     }
   }
 
-  function clearInactivityTimer() {
-    if (inactivityTimer) {
-      clearTimeout(inactivityTimer);
-      inactivityTimer = null;
-    }
-  }
+  // Open archive modal
+  window.openArchiveModal = () => {
+    const modal = document.getElementById('archiveModal');
+    const list = document.getElementById('archiveList');
+    list.innerHTML = '';
+    archivedMessages.forEach((item, index) => {
+      const entry = document.createElement('div');
+      entry.className = 'archive-entry';
+      entry.innerHTML = `
+        <p>${item.message}</p>
+        <p>Occasion: ${item.occasion}</p>
+        <p>Sender: ${item.sender || 'None'}</p>
+        <p>Recipient: ${item.recipient || 'None'}</p>
+        <p>Time: ${new Date(item.timestamp).toLocaleString()}</p>
+        <button onclick="restoreArchivedMessage(${index})" class="btn light">Restore</button>
+        <button onclick="deleteArchivedMessage(${index})" class="btn light">Delete</button>
+      `;
+      list.appendChild(entry);
+    });
+    modal.classList.remove('hidden');
+  };
 
-  function resetInactivityTimer() {
-    if (currentOccasion) {
-      startInactivityTimer();
+  window.restoreArchivedMessage = (index) => {
+    const item = archivedMessages[index];
+    const occasionSelect = document.getElementById('occasion');
+    occasionSelect.value = item.occasion;
+    currentOccasion = item.occasion;
+    currentIndex = 0;
+    document.getElementById('senderName').value = item.sender;
+    document.getElementById('recipientName').value = item.recipient;
+    document.getElementById('customMessage').value = item.message;
+    if (item.occasion === 'custom') {
+      document.getElementById('customInputWrap').classList.remove('hidden');
     }
-  }
+    document.getElementById('closeOccasion').classList.remove('hidden');
+    startInactivityTimer();
+    closeArchiveModal();
+  };
 
-  // Track user interactions to reset timer
-  document.addEventListener('click', resetInactivityTimer);
-  document.addEventListener('keypress', resetInactivityTimer);
-  document.addEventListener('change', (e) => {
-    if (e.target.id === 'occasion' || e.target.id === 'customOccasionDesc') {
-      resetInactivityTimer();
-    }
-  });
+  window.deleteArchivedMessage = (index) => {
+    archivedMessages.splice(index, 1);
+    localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
+    openArchiveModal(); // Refresh list
+    updateArchiveButton();
+  };
+
+  window.closeArchiveModal = () => {
+    document.getElementById('archiveModal').classList.add('hidden');
+  };
+
+  updateArchiveButton(); // Initialize on load
 
   // Occasion selection
   const occasionSelect = document.getElementById('occasion');
@@ -333,6 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       emojiButton.parentElement.appendChild(emojiPicker);
     }
+    resetInactivityTimer();
   });
 
   function updateEmojiPicker() {
