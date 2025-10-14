@@ -10,14 +10,14 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0a0a0a; /* Deep black for body background */
-  --card-bg: #151a1b; /* Darker gray for card/modal background */
-  --text-color: #ffffff; /* Pure white for primary text */
-  --muted: #cccccc; /* Brighter gray for muted text */
-  --accent: #36e2cc; /* Vivid teal for buttons */
-  --accent-hover: #2cb8a0; /* Darker teal for hover */
-  --border: #5c6f7b; /* Lighter gray for borders */
-  --twitter-border: #5c6f7b; /* Match border for Twitter button */
+  --bg: #0a0a0a;
+  --card-bg: #151a1b;
+  --text-color: #ffffff;
+  --muted: #cccccc;
+  --accent: #36e2cc;
+  --accent-hover: #2cb8a0;
+  --border: #5c6f7b;
+  --twitter-border: #5c6f7b;
 }
 
 body {
@@ -82,7 +82,7 @@ textarea.announcement-text {
     45deg,
     transparent,
     transparent 10px,
-    rgba(255, 255, 255, 0.3) 10px, /* Brighter stripe for Dark Mode */
+    rgba(255, 255, 255, 0.3) 10px,
     rgba(255, 255, 255, 0.3) 20px
   );
 }
@@ -201,6 +201,8 @@ textarea {
   width: 90%;
   max-width: 400px;
   box-sizing: border-box;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .rating-wrap {
@@ -287,6 +289,16 @@ textarea {
   background: #20b358;
 }
 
+.share-facebook {
+  background: #1877F2;
+  color: #fff;
+  border: none;
+}
+
+.share-facebook:hover {
+  background: #1566c9;
+}
+
 .share-twitter {
   background: #000000;
   color: #ffffff;
@@ -337,7 +349,7 @@ textarea {
 }
 
 .share-close:hover {
-  background: #a0a0a0;
+  background: #5a626e;
 }
 
 .modal-content h2 {
