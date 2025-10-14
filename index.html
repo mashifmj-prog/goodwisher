@@ -41,16 +41,15 @@
         <option value="custom">Custom</option>
         <option value="exit">Exit</option>
       </select>
-      <button id="closeOccasion" class="btn light hidden">Close</button>
+      <button id="closeOccasion" class="btn light hidden">Close the occasion</button>
       <div id="customInputWrap" class="custom-input-wrap hidden">
         <input id="customOccasionDesc" placeholder="e.g., new job, recovery, prayer, encouragement" maxlength="30">
         <button id="generateSuggestions" class="btn light">Generate</button>
       </div>
-      <span id="inactivityTimer" class="timer hidden">Timeout: 60s</span>
+      <span id="inactivityTimer" class="timer hidden">Inactivity Timeout: 60s</span>
     </div>
 
     <div class="action-line">
-      <button id="prevMessage" class="btn light">Previous Message</button>
       <button id="nextMessage" class="btn light">Next Message</button>
       <button id="clearContent" class="btn light">Clear Content</button>
       <button id="emojiButton" class="btn light">😊</button>
@@ -75,10 +74,9 @@
       <button onclick="saveTemplate()" class="btn light">Save as Template</button>
       <button onclick="openShareModal()" class="btn light">Share</button>
       <button id="feedbackButton" class="btn light" onclick="openFeedbackModal()" data-watermark="Feedback">Feedback</button>
-      <button id="archiveButton" class="btn light hidden" title="Retrieve your saved messages">Archived Messages (0)</button>
     </div>
 
-    <p class="tiny">All messages are in English. Dark/Light mode supported.</p>
+    <p class="sub">All messages are in English. Dark/Light mode supported.</p>
   </main>
 </div>
 
@@ -116,17 +114,6 @@
       <button onclick="shareTikTok()" class="btn share-tiktok">TikTok</button>
       <button onclick="copyMessage()" class="btn share-copy">Copy Message</button>
       <button onclick="closeShareModal()" class="btn share-close">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- Archive Modal -->
-<div id="archiveModal" class="modal hidden">
-  <div class="modal-content">
-    <h2>Archived Messages</h2>
-    <div id="archiveList" class="archive-list"></div>
-    <div class="modal-actions">
-      <button onclick="closeArchiveModal()" class="btn light">Close</button>
     </div>
   </div>
 </div>
