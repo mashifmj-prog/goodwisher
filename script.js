@@ -155,7 +155,7 @@ const messages = {
     "Take time to unwind and relax.",
     "Bon voyage! Have fun."
   ],
-  custom: []
+  custom: [] // Populated dynamically
 };
 
 const emojis = {
@@ -186,6 +186,10 @@ let inactivityTimeout = null;
 let countdownInterval = null;
 let countdownSeconds = 60;
 
+const positiveWords = ['good', 'great', 'awesome', 'happy', 'excellent', 'wonderful', 'fantastic', 'amazing', 'love', 'like', 'nice', 'positive', 'super', 'best', 'cool', 'perfect', 'brilliant', 'outstanding', 'terrific', 'superb', 'fabulous', 'delightful', 'joyful', 'cheerful', 'vibrant', 'uplifting', 'inspiring', 'motivating', 'encouraging'];
+
+const negativeWords = ['bad', 'hate', 'terrible', 'awful', 'horrible', 'sad', 'angry', 'disappointed', 'poor', 'worse', 'nasty', 'ugly', 'stupid', 'awful', 'horrible', 'terrible', 'disgusting', 'evil', 'gross', 'nasty', 'vile', 'miserable', 'depressing', 'frustrating', 'annoying', 'irritating', 'boring', 'dull', 'mediocre', 'subpar'];
+
 document.addEventListener('DOMContentLoaded', () => {
   // Theme toggle
   const themeToggle = document.getElementById('themeToggle');
@@ -203,8 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function updateThemeIcon(theme) {
-    themeIconPath.setAttribute('d', theme === 'light' ?
-      'M12 3v1m0 16v1m9-9h-1m-16 0H3m15.364-6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M6.343 17.657l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z' :
+    themeIconPath.setAttribute('d', theme === 'light' ? 
+      'M12 3v1m0 16v1m9-9h-1m-16 0H3m15.364-6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M6.343 17.657l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z' : 
       'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z');
   }
 
@@ -233,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }, 1000);
-    }, 120000);
+    }, 120000); // 120s delay before countdown starts
   }
 
   function resetInactivityTimer() {
@@ -265,15 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
       textarea.value = '';
       textarea.classList.remove('announcement-text');
       messageHistory = [];
-      resetOccasion();
-    }
-  });
-
-  // Keyboard navigation for textarea
-  textarea.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab' && !e.shiftKey) {
-      e.preventDefault();
-      document.getElementById('senderName').focus();
+      resetOccasion(); // Optional: Reset occasion state on focus if needed
     }
   });
 
@@ -285,16 +281,16 @@ document.addEventListener('DOMContentLoaded', () => {
       archiveMessage();
     }
     const occasionSelect = document.getElementById('occasion');
-    const customWrap = document.getElementById('customInputWrap');
-    const closeButton = document.getElementById('closeOccasion');
-    const timerDisplay = document.getElementById('inactivityTimer');
     occasionSelect.value = '';
     currentOccasion = '';
     currentIndex = 0;
     messageHistory = [];
     localStorage.removeItem('messageHistory');
+    const customWrap = document.getElementById('customInputWrap');
     customWrap.classList.add('hidden');
+    const closeButton = document.getElementById('closeOccasion');
     closeButton.classList.add('hidden');
+    const timerDisplay = document.getElementById('inactivityTimer');
     timerDisplay.classList.add('hidden');
     document.getElementById('customOccasionDesc').value = '';
     textarea.value = '';
@@ -319,16 +315,11 @@ document.addEventListener('DOMContentLoaded', () => {
         recipient: recipient,
         timestamp: new Date().toISOString()
       };
-      archivedMessages.unshift(archiveItem);
+      archivedMessages.unshift(archiveItem); // Add to beginning
       if (archivedMessages.length > MAX_ARCHIVES) {
         archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
       }
-      try {
-        localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
-      } catch (e) {
-        console.error('localStorage error:', e);
-        alert('Storage limit reached. Please delete some archived messages.');
-      }
+      localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
       updateArchiveButton();
     }
   }
@@ -338,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const archiveButton = document.getElementById('archiveButton');
     const count = archivedMessages.length;
     archiveButton.textContent = `Archived Messages (${count})`;
-    archiveButton.setAttribute('aria-label', `View ${count} archived messages`);
     if (count > 0) {
       archiveButton.classList.remove('hidden');
     } else {
@@ -360,8 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>Sender: ${item.sender || 'None'}</p>
         <p>Recipient: ${item.recipient || 'None'}</p>
         <p>Time: ${new Date(item.timestamp).toLocaleString()}</p>
-        <button onclick="restoreArchivedMessage(${index})" class="btn light" aria-label="Restore message ${index + 1}">Restore</button>
-        <button onclick="deleteArchivedMessage(${index})" class="btn light" aria-label="Delete message ${index + 1}">Delete</button>
+        <button onclick="restoreArchivedMessage(${index})" class="btn light">Restore</button>
+        <button onclick="deleteArchivedMessage(${index})" class="btn light">Delete</button>
       `;
       list.appendChild(entry);
     });
@@ -376,7 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
     currentOccasion = item.occasion;
     currentIndex = 0;
     messageHistory = [];
-    localStorage.removeItem('messageHistory');
     document.getElementById('senderName').value = item.sender;
     document.getElementById('recipientName').value = item.recipient;
     document.getElementById('customMessage').value = item.message;
@@ -390,13 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.deleteArchivedMessage = (index) => {
     archivedMessages.splice(index, 1);
-    try {
-      localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
-    } catch (e) {
-      console.error('localStorage error:', e);
-      alert('Storage limit reached. Please delete some archived messages.');
-    }
-    openArchiveModal();
+    localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
+    openArchiveModal(); // Refresh list
     updateArchiveButton();
   };
 
@@ -405,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetInactivityTimer();
   };
 
-  updateArchiveButton();
+  updateArchiveButton(); // Initialize on load
 
   // Occasion selection
   const occasionSelect = document.getElementById('occasion');
@@ -420,7 +404,6 @@ document.addEventListener('DOMContentLoaded', () => {
       currentOccasion = 'custom';
       currentIndex = 0;
       messageHistory = [];
-      localStorage.removeItem('messageHistory');
       messages.custom = [];
       displayMessage();
       updateEmojiPicker();
@@ -431,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closeButton.classList.remove('hidden');
       currentOccasion = occasionSelect.value;
       currentIndex = 0;
-      messageHistory = JSON.parse(localStorage.getItem(`messageHistory_${currentOccasion}`)) || [];
+      messageHistory = [];
       messages.custom = [];
       displayMessage();
       updateEmojiPicker();
@@ -445,17 +428,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Generate Suggestions for Custom Occasion
-  const generateButton = document.getElementById('generateSuggestions');
-  generateButton.addEventListener('click', () => {
+  document.getElementById('generateSuggestions').addEventListener('click', () => {
     const desc = document.getElementById('customOccasionDesc').value.trim();
     if (desc) {
-      generateButton.classList.add('loading');
-      generateCustomSuggestions(desc).finally(() => {
-        generateButton.classList.remove('loading');
-      });
+      generateCustomSuggestions(desc);
       resetInactivityTimer();
     } else {
-      alert('Please enter a description for the custom occasion (e.g., new job, recovery, prayer).');
+      alert('Please enter a description for the custom occasion (e.g., new job, recovery, prayer, encouragement).');
     }
   });
 
@@ -484,11 +463,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ];
       currentIndex = 0;
       messageHistory = [0];
-      try {
-        localStorage.setItem('messageHistory_custom', JSON.stringify(messageHistory));
-      } catch (e) {
-        console.error('localStorage error:', e);
-      }
       displayMessage();
       alert('Offline mode: Using default suggestions.');
       return;
@@ -530,16 +504,12 @@ document.addEventListener('DOMContentLoaded', () => {
           `Best wishes for your ${desc}! May it bring happiness.`
         ];
       }
-      messages.custom = suggestions
+      suggestions = suggestions
         .filter(text => text && text.length <= 100)
         .slice(0, 3);
+      messages.custom = suggestions;
       currentIndex = 0;
       messageHistory = [0];
-      try {
-        localStorage.setItem('messageHistory_custom', JSON.stringify(messageHistory));
-      } catch (e) {
-        console.error('localStorage error:', e);
-      }
       displayMessage();
     } catch (error) {
       console.error('Error fetching suggestions:', error);
@@ -558,13 +528,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ];
       currentIndex = 0;
       messageHistory = [0];
-      try {
-        localStorage.setItem('messageHistory_custom', JSON.stringify(messageHistory));
-      } catch (e) {
-        console.error('localStorage error:', e);
-      }
       displayMessage();
-      alert('No suggestions found. Using default suggestions.');
+      alert('No suggestions found. Try a concise term like "new job," "recovery," "prayer," or "encouragement".');
     }
   }
 
@@ -579,11 +544,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       currentIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
       messageHistory.push(currentIndex);
-      try {
-        localStorage.setItem(`messageHistory_${currentOccasion}`, JSON.stringify(messageHistory));
-      } catch (e) {
-        console.error('localStorage error:', e);
-      }
       displayMessage();
       resetInactivityTimer();
     }
@@ -592,13 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Previous Message
   document.getElementById('prevMessage').addEventListener('click', () => {
     if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0 && messageHistory.length > 1) {
-      messageHistory.pop();
-      currentIndex = messageHistory[messageHistory.length - 1];
-      try {
-        localStorage.setItem(`messageHistory_${currentOccasion}`, JSON.stringify(messageHistory));
-      } catch (e) {
-        console.error('localStorage error:', e);
-      }
+      messageHistory.pop(); // Remove current message
+      currentIndex = messageHistory[messageHistory.length - 1]; // Go to previous message
       displayMessage();
       resetInactivityTimer();
     }
@@ -626,7 +581,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = document.createElement('button');
         btn.className = 'emoji-btn';
         btn.textContent = emoji;
-        btn.setAttribute('aria-label', `Add ${emoji} emoji`);
         btn.addEventListener('click', () => {
           const textarea = document.getElementById('customMessage');
           const currentText = textarea.value.split('\n');
@@ -702,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please enter or select a message to copy.');
       return;
     }
-    navigator.clipboard.writeText(text).then(() => alert('Message copied!')).catch(() => alert('Failed to copy message.'));
+    navigator.clipboard.writeText(text).then(() => alert('Message copied!'));
     resetInactivityTimer();
   };
 
@@ -727,19 +681,19 @@ document.addEventListener('DOMContentLoaded', () => {
     content.innerHTML = `
       <h2>Feedback</h2>
       <div class="rating-wrap">
-        <div class="rating-col"><button onclick="setRating(1)" class="rating-btn" aria-label="Rate 1 star">⭐</button><span>20%</span></div>
-        <div class="rating-col"><button onclick="setRating(2)" class="rating-btn" aria-label="Rate 2 stars">⭐</button><span>40%</span></div>
-        <div class="rating-col"><button onclick="setRating(3)" class="rating-btn" aria-label="Rate 3 stars">⭐</button><span>60%</span></div>
-        <div class="rating-col"><button onclick="setRating(4)" class="rating-btn" aria-label="Rate 4 stars">⭐</button><span>80%</span></div>
-        <div class="rating-col"><button onclick="setRating(5)" class="rating-btn" aria-label="Rate 5 stars">⭐</button><span>100%</span></div>
+        <div class="rating-col"><button onclick="setRating(1)" class="rating-btn">⭐</button><span>20%</span></div>
+        <div class="rating-col"><button onclick="setRating(2)" class="rating-btn">⭐</button><span>40%</span></div>
+        <div class="rating-col"><button onclick="setRating(3)" class="rating-btn">⭐</button><span>60%</span></div>
+        <div class="rating-col"><button onclick="setRating(4)" class="rating-btn">⭐</button><span>80%</span></div>
+        <div class="rating-col"><button onclick="setRating(5)" class="rating-btn">⭐</button><span>100%</span></div>
       </div>
       <div id="ratingScore" class="rating-score">Score: 0%</div>
-      <textarea id="feedbackText" rows="4" placeholder="Your feedback…" aria-label="Feedback text"></textarea>
-      <div id="feedbackMessage" class="feedback-message hidden" aria-live="polite"></div>
+      <textarea id="feedbackText" rows="4" placeholder="Your feedback…"></textarea>
+      <div id="feedbackMessage" class="feedback-message hidden"></div>
       <div class="modal-actions">
-        <button onclick="submitFeedback()" class="btn light" aria-label="Submit feedback">Send</button>
-        <button onclick="viewPreviousFeedback()" class="btn light" aria-label="View previous feedback">View Previous</button>
-        <button onclick="closeFeedbackModal()" class="btn light" aria-label="Close feedback modal">Close</button>
+        <button onclick="submitFeedback()" class="btn light">Send</button>
+        <button onclick="viewPreviousFeedback()" class="btn light">View Previous</button>
+        <button onclick="closeFeedbackModal()" class="btn light">Close</button>
       </div>
     `;
     modal.classList.remove('hidden');
@@ -907,12 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackMessage = document.getElementById('feedbackMessage');
     if (currentRating > 0) {
       feedbackList.push({ rating: currentRating, text: feedbackText, timestamp: new Date().toISOString() });
-      try {
-        localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
-      } catch (e) {
-        console.error('localStorage error:', e);
-        alert('Storage limit reached. Please clear some feedback.');
-      }
+      localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
       feedbackMessage.textContent = 'Submitted';
       feedbackMessage.classList.remove('hidden');
       setTimeout(() => {
@@ -937,17 +886,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.viewPreviousFeedback = () => {
     const feedbackDisplay = feedbackList.length
-      ? feedbackList.map(f => `<p>Rating: ${f.rating} stars (${f.rating * 20}%), Text: ${f.text}, Time: ${new Date(f.timestamp).toLocaleString()}</p>`).join('')
+      ? feedbackList.map(f => `<p>Rating: ${f.rating * 20}% , Text: ${f.text}, Time: ${new Date(f.timestamp).toLocaleString()}</p>`).join('')
       : '<p>No previous feedback.</p>';
     const modal = document.getElementById('feedbackModal');
     const content = document.querySelector('#feedbackModal .modal-content');
-    content.innerHTML = `<h2>Previous Feedback</h2>${feedbackDisplay}<div class="modal-actions"><button onclick="closeFeedbackModal()" class="btn light" aria-label="Close feedback modal">Close</button></div>`;
+    content.innerHTML = `<h2>Previous Feedback</h2>${feedbackDisplay}<div class="modal-actions"><button onclick="closeFeedbackModal()" class="btn light">Close</button></div>`;
     modal.classList.remove('hidden');
     resetInactivityTimer();
   };
-
-  // Initialize message history from localStorage
-  if (currentOccasion) {
-    messageHistory = JSON.parse(localStorage.getItem(`messageHistory_${currentOccasion}`)) || [];
-  }
 });
