@@ -178,6 +178,7 @@ const emojis = {
 
 let currentOccasion = '';
 let currentIndex = 0;
+let messageHistory = []; // Tracks viewed message indices
 let feedbackList = JSON.parse(localStorage.getItem('feedbackList')) || [];
 let archivedMessages = JSON.parse(localStorage.getItem('archivedMessages')) || [];
 const MAX_ARCHIVES = 5;
@@ -232,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }, 1000);
-    }, 15000); // 15s delay before countdown starts
+    }, 120000); // 120s delay before countdown starts
   }
 
   function resetInactivityTimer() {
@@ -254,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentMessage = textarea.value.trim();
     if (currentMessage && textarea.classList.contains('announcement-text')) {
       textarea.classList.remove('announcement-text');
+      messageHistory = []; // Reset history when user starts typing
     }
     resetInactivityTimer();
   });
@@ -262,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (textarea.classList.contains('announcement-text')) {
       textarea.value = '';
       textarea.classList.remove('announcement-text');
+      messageHistory = []; // Reset history on focus
       resetOccasion(); // Optional: Reset occasion state on focus if needed
     }
   });
@@ -280,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
     occasionSelect.value = '';
     currentOccasion = '';
     currentIndex = 0;
+    messageHistory = [];
     customWrap.classList.add('hidden');
     closeButton.classList.add('hidden');
     timerDisplay.classList.add('hidden');
@@ -298,19 +302,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const sender = document.getElementById('senderName').value.trim();
     const recipient = document.getElementById('recipientName').value.trim();
     const currentMessage = textarea.value.trim();
-    const archiveItem = {
-      message: currentMessage,
-      occasion: currentOccasion,
-      sender: sender,
-      recipient: recipient,
-      timestamp: new Date().toISOString()
-    };
-    archivedMessages.unshift(archiveItem); // Add to beginning
-    if (archivedMessages.length > MAX_ARCHIVES) {
-      archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
+    if (currentMessage && !textarea.classList.contains('announcement-text')) {
+      const archiveItem = {
+        message: currentMessage,
+        occasion: currentOccasion,
+        sender: sender,
+        recipient: recipient,
+        timestamp: new Date().toISOString()
+      };
+      archivedMessages.unshift(archiveItem); // Add to beginning
+      if (archivedMessages.length > MAX_ARCHIVES) {
+        archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
+      }
+      localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
+      updateArchiveButton();
     }
-    localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
-    updateArchiveButton();
   }
 
   // Update archive button
@@ -354,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     occasionSelect.value = item.occasion;
     currentOccasion = item.occasion;
     currentIndex = 0;
+    messageHistory = []; // Reset history when restoring
     document.getElementById('senderName').value = item.sender;
     document.getElementById('recipientName').value = item.recipient;
     document.getElementById('customMessage').value = item.message;
@@ -391,6 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closeButton.classList.remove('hidden');
       currentOccasion = 'custom';
       currentIndex = 0;
+      messageHistory = [];
       messages.custom = [];
       displayMessage();
       updateEmojiPicker();
@@ -401,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closeButton.classList.remove('hidden');
       currentOccasion = occasionSelect.value;
       currentIndex = 0;
+      messageHistory = [];
       messages.custom = [];
       displayMessage();
       updateEmojiPicker();
@@ -428,14 +437,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const textarea = document.getElementById('customMessage');
     textarea.value = 'Generating suggestions...';
     try {
-      // Sentiment check based on keywords (case-insensitive)
       const negativeKeywords = ['hurt', 'loss', 'sorry', 'pain', 'grief', 'sad', 'discouraged', 'disappointed', 'struggle', 'challenge'];
       const neutralSpiritualKeywords = ['fasting', 'prayer', 'meditation', 'retreat', 'reflection', 'worship', 'spiritual'];
       const lowerDesc = desc.toLowerCase();
       const isNegative = negativeKeywords.some(keyword => lowerDesc.includes(keyword));
       const isNeutralSpiritual = neutralSpiritualKeywords.some(keyword => lowerDesc.includes(keyword));
       
-      // Try multiple queries
       const queries = [
         `supportive messages for ${desc}`,
         `kind wishes for ${desc}`,
@@ -446,11 +453,9 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const query of queries) {
         const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&pretty=1`);
         const data = await response.json();
-        // Check AbstractText
         if (data.AbstractText && data.AbstractText.length <= 100) {
           suggestions.push(data.AbstractText);
         }
-        // Check RelatedTopics
         const related = data.RelatedTopics
           .map(topic => topic.Text)
           .filter(text => text && text.length <= 100 && /wish|message|support|blessing/i.test(text))
@@ -458,7 +463,6 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestions = [...suggestions, ...related];
         if (suggestions.length >= 3) break;
       }
-      // Fallback messages based on sentiment
       if (suggestions.length === 0) {
         if (isNegative) {
           suggestions = [
@@ -480,12 +484,12 @@ document.addEventListener('DOMContentLoaded', () => {
           ];
         }
       }
-      // Clean and limit to 3 suggestions
       suggestions = suggestions
         .filter(text => text && text.length <= 100)
         .slice(0, 3);
       messages.custom = suggestions;
       currentIndex = 0;
+      messageHistory = [0];
       displayMessage();
     } catch (error) {
       console.error('Error fetching suggestions:', error);
@@ -512,6 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
       }
       currentIndex = 0;
+      messageHistory = [0];
       displayMessage();
       alert('No suggestions found. Try a concise term like "new job," "recovery," "prayer," or "encouragement".');
     }
@@ -520,7 +525,24 @@ document.addEventListener('DOMContentLoaded', () => {
   // Next Message
   document.getElementById('nextMessage').addEventListener('click', () => {
     if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0) {
-      currentIndex = (currentIndex + 1) % messages[currentOccasion].length;
+      let availableIndices = Array.from({ length: messages[currentOccasion].length }, (_, i) => i)
+        .filter(i => !messageHistory.includes(i));
+      if (availableIndices.length === 0) {
+        availableIndices = Array.from({ length: messages[currentOccasion].length }, (_, i) => i);
+        messageHistory = [];
+      }
+      currentIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+      messageHistory.push(currentIndex);
+      displayMessage();
+      resetInactivityTimer();
+    }
+  });
+
+  // Previous Message
+  document.getElementById('prevMessage').addEventListener('click', () => {
+    if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0 && messageHistory.length > 1) {
+      messageHistory.pop(); // Remove current message
+      currentIndex = messageHistory[messageHistory.length - 1]; // Go to previous message
       displayMessage();
       resetInactivityTimer();
     }
@@ -606,12 +628,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let messageBody = '';
     if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0) {
       messageBody = messages[currentOccasion][currentIndex];
-    } else if (textarea.value && !sender && !recipient && !textarea.value.startsWith('Your message has been archived.')) {
+    } else if (textarea.value && !sender && !recipient && !textarea.classList.contains('announcement-text')) {
       messageBody = textarea.value;
     }
     const greeting = recipient ? `Hi ${recipient},\n\n` : '';
     const signature = sender ? `\n\nRegards\n${sender}` : '';
-    if (!textarea.value.startsWith('Your message has been archived.')) {
+    if (!textarea.classList.contains('announcement-text')) {
       textarea.value = `${greeting}${messageBody}${signature}`;
     }
   }
@@ -672,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function getShareableMessage() {
     const textarea = document.getElementById('customMessage');
     const messageText = textarea.value.trim();
-    if (!messageText || messageText.startsWith('Your message has been archived.')) return '';
+    if (!messageText || textarea.classList.contains('announcement-text')) return '';
     return `${messageText}\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
   }
 
