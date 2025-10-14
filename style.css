@@ -10,14 +10,14 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0f172a;
-  --card-bg: #111827;
-  --text-color: #e5e7eb;
-  --muted: #9ca3af;
-  --accent: #34d399;
-  --accent-hover: #10b981;
-  --border: #374151;
-  --twitter-border: #000000;
+  --bg: #0a0a0a; /* Deep black for body background */
+  --card-bg: #151a1b; /* Darker gray for card/modal background */
+  --text-color: #ffffff; /* Pure white for primary text */
+  --muted: #cccccc; /* Brighter gray for muted text */
+  --accent: #36e2cc; /* Vivid teal for buttons */
+  --accent-hover: #2cb8a0; /* Darker teal for hover */
+  --border: #5c6f7b; /* Lighter gray for borders */
+  --twitter-border: #5c6f7b; /* Match border for Twitter button */
 }
 
 body {
@@ -57,7 +57,7 @@ body {
 .sub { text-align: center; color: var(--muted); }
 
 label[for="occasion"] {
-  text-align: center;
+  text-align: left;
   display: block;
   margin-bottom: 8px;
 }
@@ -72,6 +72,19 @@ input, select, textarea {
   color: var(--text-color);
   font-size: 0.95rem;
   box-sizing: border-box;
+}
+
+textarea.announcement-text {
+  color: var(--muted);
+  font-style: italic;
+  opacity: 0.7;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 255, 255, 0.3) 10px, /* Brighter stripe for Dark Mode */
+    rgba(255, 255, 255, 0.3) 20px
+  );
 }
 
 textarea {
@@ -100,6 +113,21 @@ textarea {
 
 #feedbackButton:hover::after {
   content: attr(data-watermark);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card-bg);
+  opacity: 0.7;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  z-index: 1000;
+}
+
+#archiveButton:hover::after {
+  content: "Retrieve your saved messages";
   position: absolute;
   top: -30px;
   left: 50%;
@@ -259,16 +287,6 @@ textarea {
   background: #20b358;
 }
 
-.share-facebook {
-  background: #1877F2;
-  color: #fff;
-  border: none;
-}
-
-.share-facebook:hover {
-  background: #1566c9;
-}
-
 .share-twitter {
   background: #000000;
   color: #ffffff;
@@ -309,7 +327,7 @@ textarea {
 }
 
 .share-close:hover {
-  background: #5a626e;
+  background: #a0a0a0; /* Slightly darker for hover */
 }
 
 .modal-content h2 {
@@ -357,8 +375,7 @@ textarea {
 }
 
 .occasion-wrap select {
-  width: 65%;
-  max-width: 200px;
+  width: calc(100% - 80px);
 }
 
 .custom-input-wrap {
@@ -374,8 +391,15 @@ textarea {
   flex: 1;
 }
 
-.custom-input-wrap button, #closeOccasion {
+.custom-input-wrap button {
   flex-shrink: 0;
+  padding: 6px 12px;
+  font-size: 0.95rem;
+}
+
+#closeOccasion {
+  flex-shrink: 0;
+  width: 70px;
   padding: 6px 12px;
   font-size: 0.95rem;
 }
@@ -383,8 +407,9 @@ textarea {
 #closeOccasion.hidden { display: none; }
 
 .timer {
-  width: 100%;
-  text-align: center;
+  position: absolute;
+  top: -20px;
+  right: 0;
   font-size: 0.8rem;
   color: var(--muted);
   filter: blur(0.5px);
@@ -392,3 +417,19 @@ textarea {
 }
 
 .timer.hidden { display: none; }
+
+.archive-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.archive-entry {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+}
+
+.archive-entry p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
