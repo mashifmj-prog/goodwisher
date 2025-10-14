@@ -77,6 +77,9 @@ let currentIndex = 0;
 let feedbackList = JSON.parse(localStorage.getItem('feedbackList')) || [];
 let archivedMessages = JSON.parse(localStorage.getItem('archivedMessages')) || [];
 const MAX_ARCHIVES = 5;
+let inactivityTimeout = null;
+let countdownInterval = null;
+let countdownSeconds = 60;
 
 document.addEventListener('DOMContentLoaded', () => {
   // Theme toggle
@@ -100,11 +103,63 @@ document.addEventListener('DOMContentLoaded', () => {
       'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z');
   }
 
+  // Inactivity timer
+  function startInactivityTimer() {
+    clearInactivityTimers();
+    inactivityTimeout = setTimeout(() => {
+      const timerDisplay = document.getElementById('inactivityTimer');
+      timerDisplay.classList.remove('hidden');
+      countdownSeconds = 60;
+      timerDisplay.textContent = `Inactivity Timeout: ${countdownSeconds}s`;
+      countdownInterval = setInterval(() => {
+        countdownSeconds--;
+        timerDisplay.textContent = `Inactivity Timeout: ${countdownSeconds}s`;
+        if (countdownSeconds <= 0) {
+          clearInterval(countdownInterval);
+          timerDisplay.classList.add('hidden');
+          const textarea = document.getElementById('customMessage');
+          const currentMessage = textarea.value.trim();
+          if (currentMessage) {
+            archiveMessage();
+            textarea.value = 'Your message has been archived. Click "Archived Messages" to retrieve it.';
+            setTimeout(() => {
+              resetOccasion();
+            }, 3000); // Display announcement for 3 seconds
+          } else {
+            resetOccasion();
+          }
+        }
+      }, 1000);
+    }, 15000); // 15s delay before countdown starts
+  }
+
+  function resetInactivityTimer() {
+    const timerDisplay = document.getElementById('inactivityTimer');
+    timerDisplay.classList.add('hidden');
+    clearInactivityTimers();
+    startInactivityTimer();
+  }
+
+  function clearInactivityTimers() {
+    if (inactivityTimeout) clearTimeout(inactivityTimeout);
+    if (countdownInterval) clearInterval(countdownInterval);
+    countdownSeconds = 60;
+  }
+
+  // Textarea input handling
+  document.getElementById('customMessage').addEventListener('input', () => {
+    const textarea = document.getElementById('customMessage');
+    const currentMessage = textarea.value.trim();
+    if (currentMessage && !currentMessage.startsWith('Your message has been archived.')) {
+      resetInactivityTimer();
+    }
+  });
+
   // Reset occasion function
   function resetOccasion() {
     const textarea = document.getElementById('customMessage');
     const currentMessage = textarea.value.trim();
-    if (currentMessage) {
+    if (currentMessage && !currentMessage.startsWith('Your message has been archived.')) {
       archiveMessage();
     }
     const occasionSelect = document.getElementById('occasion');
@@ -132,19 +187,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const sender = document.getElementById('senderName').value.trim();
     const recipient = document.getElementById('recipientName').value.trim();
     const currentMessage = textarea.value.trim();
-    const archiveItem = {
-      message: currentMessage,
-      occasion: currentOccasion,
-      sender: sender,
-      recipient: recipient,
-      timestamp: new Date().toISOString()
-    };
-    archivedMessages.unshift(archiveItem); // Add to beginning
-    if (archivedMessages.length > MAX_ARCHIVES) {
-      archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
+    if (currentMessage && !currentMessage.startsWith('Your message has been archived.')) {
+      const archiveItem = {
+        message: currentMessage,
+        occasion: currentOccasion,
+        sender: sender,
+        recipient: recipient,
+        timestamp: new Date().toISOString()
+      };
+      archivedMessages.unshift(archiveItem); // Add to beginning
+      if (archivedMessages.length > MAX_ARCHIVES) {
+        archivedMessages = archivedMessages.slice(0, MAX_ARCHIVES);
+      }
+      localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
+      updateArchiveButton();
     }
-    localStorage.setItem('archivedMessages', JSON.stringify(archivedMessages));
-    updateArchiveButton();
   }
 
   // Update archive button
@@ -333,13 +390,13 @@ document.addEventListener('DOMContentLoaded', () => {
           `May you find peace and healing through your ${desc}.`
         ];
       } else if (isNeutralSpiritual) {
-        suggestions = [
+        messages.custom = [
           `May your ${desc} bring you peace and clarity.`,
           `Wishing you strength and focus in your ${desc}.`,
           `Blessings for your ${desc}.`
         ];
       } else {
-        suggestions = [
+        messages.custom = [
           `Congratulations on your ${desc}! Keep shining!`,
           `Wishing you joy and success in your ${desc}!`,
           `Best wishes for your ${desc}! May it bring happiness.`
@@ -440,12 +497,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let messageBody = '';
     if (currentOccasion && messages[currentOccasion] && messages[currentOccasion].length > 0) {
       messageBody = messages[currentOccasion][currentIndex];
-    } else if (textarea.value && !sender && !recipient) {
+    } else if (textarea.value && !sender && !recipient && !textarea.value.startsWith('Your message has been archived.')) {
       messageBody = textarea.value;
     }
     const greeting = recipient ? `Hi ${recipient},\n\n` : '';
     const signature = sender ? `\n\nRegards\n${sender}` : '';
-    textarea.value = `${greeting}${messageBody}${signature}`;
+    if (!textarea.value.startsWith('Your message has been archived.')) {
+      textarea.value = `${greeting}${messageBody}${signature}`;
+    }
   }
 
   // Action buttons
@@ -504,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function getShareableMessage() {
     const textarea = document.getElementById('customMessage');
     const messageText = textarea.value.trim();
-    if (!messageText) return '';
+    if (!messageText || messageText.startsWith('Your message has been archived.')) return '';
     return `${messageText}\n\nGenerated using GoodWisher\nhttps://mashifmj-prog.github.io/goodwisher/`;
   }
 
