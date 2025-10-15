@@ -687,6 +687,70 @@ document.addEventListener('DOMContentLoaded', () => {
     resetInactivityTimer();
   };
 
+  function getShareableMessage() {
+    const textarea = document.getElementById('customMessage');
+    return textarea.value.trim() || '';
+  }
+
+  window.shareDevice = () => {
+    const text = getShareableMessage();
+    if (text) {
+      if (navigator.share) {
+        navigator.share({ text: text })
+          .then(() => alert('Message shared!'))
+          .catch(() => alert('Sharing failed. Try copying the message.'));
+      } else {
+        alert('Web Share API not supported. Use Copy or another option.');
+      }
+    } else {
+      alert('Please enter or select a message to share.');
+    }
+    resetInactivityTimer();
+  };
+
+  window.shareWhatsApp = () => {
+    const text = getShareableMessage();
+    if (text) {
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    } else {
+      alert('Please enter or select a message to share.');
+    }
+    resetInactivityTimer();
+  };
+
+  window.shareTwitter = () => {
+    const text = getShareableMessage();
+    if (text) {
+      const url = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } else {
+      alert('Please enter or select a message to share.');
+    }
+    resetInactivityTimer();
+  };
+
+  window.shareFacebook = () => {
+    const text = getShareableMessage();
+    if (text) {
+      const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}&quote=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } else {
+      alert('Please enter or select a message to share.');
+    }
+    resetInactivityTimer();
+  };
+
+  window.shareTikTok = () => {
+    const text = getShareableMessage();
+    if (text) {
+      const url = `https://www.tiktok.com/share?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } else {
+      alert('Please enter or select a message to share.');
+    }
+    resetInactivityTimer();
+  };
+
   // Feedback modal
   window.openFeedbackModal = () => {
     const modal = document.getElementById('feedbackModal');
@@ -771,7 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const negativeCount = words.filter(w => negativeWords.includes(w)).length;
     const totalWords = words.length || 1;
     const rawScore = (positiveCount - negativeCount) / totalWords;
-    return (rawScore + 1) / 2; // Normalize to 0-1
+    return Math.max(0, Math.min(1, (rawScore + 1) / 2)); // Ensure 0-1 range
   }
 
   function getTopWords(text) {
@@ -784,97 +848,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     return Object.entries(wordCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([word, count]) => `${word} (${count})`)
-      .join(', ');
-  }
-
-  window.viewPreviousFeedback = () => {
-    const feedbackDisplay = feedbackList.length
-      ? feedbackList.map(f => `
-          <p>Rating: ${f.rating * 20}% (${f.rating} stars)<br>
-          Text: ${f.text}<br>
-          Category: ${f.category}<br>
-          Time: ${new Date(f.timestamp).toLocaleString()}</p>
-        `).join('')
-      : '<p>No previous feedback.</p>';
-    const modal = document.getElementById('feedbackModal');
-    const content = document.querySelector('#feedbackModal .modal-content');
-    content.innerHTML = `
-      <h2>Previous Feedback</h2>
-      ${feedbackDisplay}
-      <div id="analyticsSummary"></div>
-      <div id="analyticsGraphs">
-        <canvas id="ratingChart" aria-label="Bar chart of rating distribution"></canvas>
-        <canvas id="categoryChart" aria-label="Pie chart of feedback category distribution"></canvas>
-        <canvas id="sentimentChart" aria-label="Bar chart of sentiment distribution"></canvas>
-      </div>
-      <div class="modal-actions">
-        <button onclick="openFeedbackModal()" class="btn light" aria-label="Back to feedback form">Back</button>
-        <button onclick="closeFeedbackModal()" class="btn light" aria-label="Close feedback modal">Close</button>
-      </div>
-    `;
-    modal.classList.remove('hidden');
-    renderAnalytics(feedbackList, false);
-    resetInactivityTimer();
-  };
-
-  window.openAnalyticsModal = () => {
-    const modal = document.getElementById('analyticsModal');
-    modal.classList.remove('hidden');
-    isMyResults = false;
-    document.getElementById('myResultsBtn').classList.remove('hidden');
-    document.getElementById('allEvaluationsBtn').classList.add('hidden');
-    renderAnalytics(feedbackList, false);
-    resetInactivityTimer();
-  };
-
-  window.toggleMyResults = () => {
-    isMyResults = true;
-    document.getElementById('myResultsBtn').classList.add('hidden');
-    document.getElementById('allEvaluationsBtn').classList.remove('hidden');
-    const filteredFeedback = feedbackList.filter(f => f.deviceId === deviceId);
-    renderAnalytics(filteredFeedback, true);
-    resetInactivityTimer();
-  };
-
-  window.toggleAllEvaluations = () => {
-    isMyResults = false;
-    document.getElementById('myResultsBtn').classList.remove('hidden');
-    document.getElementById('allEvaluationsBtn').classList.add('hidden');
-    renderAnalytics(feedbackList, false);
-    resetInactivityTimer();
-  };
-
-  window.closeAnalyticsModal = () => {
-    document.getElementById('analyticsModal').classList.add('hidden');
-    resetInactivityTimer();
-  };
-
-  window.closeFeedbackModal = () => {
-    document.getElementById('feedbackModal').classList.add('hidden');
-    resetInactivityTimer();
-  };
-
-  window.closeShareModal = () => {
-    document.getElementById('shareModal').classList.add('hidden');
-    resetInactivityTimer();
-  };
-
-  function renderAnalytics(feedbackData, isDeviceSpecific) {
-    if (!feedbackData.length) {
-      document.getElementById('analyticsSummary').innerHTML = '<p>No feedback available.</p>';
-      document.getElementById('analyticsGraphs').style.display = 'none';
-      document.getElementById('analyticsTable').style.display = 'none';
-      return;
-    }
-    document.getElementById('analyticsGraphs').style.display = 'block';
-    document.getElementById('analyticsTable').style.display = 'table';
-
-    // Summary
-    const avgRating = feedbackData.reduce((sum, f) => sum + f.rating, 0) / feedbackData.length;
-    const avgSentiment = feedbackData.reduce((sum, f) => sum + f.sentiment, 0) / feedbackData.length;
-    const categories = { Negative: 0, Moderate: 0, Positive: 0 };
-    feedbackData.forEach(f => categories[f.category]++);
-    const total = feedback
+     
