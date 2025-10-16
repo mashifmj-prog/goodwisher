@@ -163,5 +163,11 @@
 </div>
 
 <script src="script.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(() => console.log('Service Worker Registered'));
+  }
+</script>
+<!-- Force redeploy Oct 16 2025 08:55 -->
 </body>
 </html>
